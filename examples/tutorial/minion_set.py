@@ -2,7 +2,7 @@ from minion_card import MinionCard
 from pygame_cards.set import CardsSet
 
 
-MY_COMMUNITY_OF_THE_RING = CardsSet(
+SUIT_CARDS = CardsSet(
     [
         MinionCard("Bilbo", 5, 2, 2),
         MinionCard("Gandalf", 10, 6, 8),
@@ -10,4 +10,4 @@ MY_COMMUNITY_OF_THE_RING = CardsSet(
     ]
 )
 
-print(MY_COMMUNITY_OF_THE_RING)
+print(SUIT_CARDS)

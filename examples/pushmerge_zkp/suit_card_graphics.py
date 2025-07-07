@@ -12,12 +12,12 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from minion_set import MY_COMMUNITY_OF_THE_RING
+from suit_set import SUIT_CARDS
 from pygame_cards.utils import position_for_centering
 
 
 @dataclass
-class MinionCardGraphics(AbstractCardGraphics):
+class SuitCardGraphics(AbstractCardGraphics):
     """A Graphics card for our lotr characters."""
 
     # Specify the type of card that this graphics accept
@@ -51,7 +51,6 @@ class MinionCardGraphics(AbstractCardGraphics):
         emoji_size = (100, 100)
         attack_emoji = load_emoji("⚔️", emoji_size)
         life_emoji = load_emoji("♥️", emoji_size)
-
         emoji_border_offset = 5
         surf.blit(
             attack_emoji,
@@ -72,24 +71,8 @@ class MinionCardGraphics(AbstractCardGraphics):
         return surf
 
 
-for card in MY_COMMUNITY_OF_THE_RING:
-    # Select the good file for each Card.
+for card in SUIT_CARDS:
     match card.name:
-        case "Bilbo":
-            file = (
-                "DALL·E 2022-08-30 20.58.30 - frodo from lotr being obsessed with the"
-                " ring, digital art.png"
-            )
-        case "Gandalf":
-            file = (
-                "DALL·E 2022-08-30 20.59.25 - gandalf from lotr looking very wise on"
-                " his horse, digital art.png"
-            )
-        case "Sam":
-            file = (
-                "DALL·E 2022-08-30 21.01.56 - sam the hobbit from lotr sharing some"
-                " elven bread, digital art.png"
-            )
         case "heart":
             file = (
                 "heart.png"
@@ -109,7 +92,7 @@ for card in MY_COMMUNITY_OF_THE_RING:
         case _:
             raise ValueError(f"Unkonwn character {card.name}")
 
-    card.graphics = MinionCardGraphics(
+    card.graphics = SuitCardGraphics(
         card,
         filepath=Path("examples/pushmerge_zkp/images", file),
     )
@@ -123,7 +106,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(size)
     screen.fill("black")
 
-    for i, card in enumerate(MY_COMMUNITY_OF_THE_RING):
+    for i, card in enumerate(SUIT_CARDS):
         position = (50 + i * (100 + card.graphics.size[0]), 100)
 
         # Simply blit the card on the main surface

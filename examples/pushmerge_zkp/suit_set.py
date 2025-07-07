@@ -2,7 +2,7 @@ from suit_card import SuitCard
 from pygame_cards.set import CardsSet
 
 
-MY_COMMUNITY_OF_THE_RING = CardsSet(
+SUIT_CARDS = CardsSet(
     [
         SuitCard("heart", 5, 2, 2),
         SuitCard("spade", 3, 4, 5),
@@ -11,4 +11,4 @@ MY_COMMUNITY_OF_THE_RING = CardsSet(
     ]
 )
 
-print(MY_COMMUNITY_OF_THE_RING)
+print(SUIT_CARDS)

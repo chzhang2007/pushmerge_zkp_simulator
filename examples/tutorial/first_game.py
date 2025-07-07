@@ -7,7 +7,7 @@ from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand
 from pygame_cards.manager import CardSetRights, CardsManager
 
-from minion_set import MY_COMMUNITY_OF_THE_RING
+from minion_set import SUIT_CARDS
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -23,7 +23,7 @@ manager = CardsManager()
 
 
 # Creates your card set
-my_cards = MY_COMMUNITY_OF_THE_RING.copy()
+my_cards = SUIT_CARDS.copy()
 
 
 card_size = (width / 7, height / 3 - 20)

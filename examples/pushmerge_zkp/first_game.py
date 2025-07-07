@@ -1,13 +1,13 @@
 """This is the first game we implement."""
 import sys
 import pygame
-from minion_card_graphics import MinionCardGraphics
+from suit_card_graphics import SuitCardGraphics
 from pygame_cards.abstract import AbstractCard
 from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand
 from pygame_cards.manager import CardSetRights, CardsManager
 
-from minion_set import MY_COMMUNITY_OF_THE_RING
+from suit_set import SUIT_CARDS
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -23,7 +23,7 @@ manager = CardsManager()
 
 
 # Creates your card set
-my_cards = MY_COMMUNITY_OF_THE_RING.copy()
+my_cards = SUIT_CARDS.copy()
 
 
 card_size = (width / 7, height / 3 - 20)
@@ -32,7 +32,7 @@ my_cards_graphics = AlignedHand(
     my_cards,
     card_set_size,
     card_size=card_size,
-    graphics_type=MinionCardGraphics,
+    graphics_type=SuitCardGraphics,
 )
 # Finally add the set to the manager
 manager.add_set(

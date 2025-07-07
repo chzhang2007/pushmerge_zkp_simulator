@@ -12,7 +12,7 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from minion_set import MY_COMMUNITY_OF_THE_RING
+from minion_set import SUIT_CARDS
 from pygame_cards.utils import position_for_centering
 
 
@@ -72,7 +72,7 @@ class MinionCardGraphics(AbstractCardGraphics):
         return surf
 
 
-for card in MY_COMMUNITY_OF_THE_RING:
+for card in SUIT_CARDS:
     # Select the good file for each Card.
     match card.name:
         case "Bilbo":
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(size)
     screen.fill("black")
 
-    for i, card in enumerate(MY_COMMUNITY_OF_THE_RING):
+    for i, card in enumerate(SUIT_CARDS):
         position = (50 + i * (100 + card.graphics.size[0]), 100)
 
         # Simply blit the card on the main surface
