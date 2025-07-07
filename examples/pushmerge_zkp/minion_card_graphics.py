@@ -90,6 +90,18 @@ for card in MY_COMMUNITY_OF_THE_RING:
                 "DALL·E 2022-08-30 21.01.56 - sam the hobbit from lotr sharing some"
                 " elven bread, digital art.png"
             )
+        case "heart":
+            file = (
+                "heart.png"
+            )
+        case "club":
+            file = (
+                "club.png"
+            )
+        case "diamond":
+            file = (
+                "diamond.png"
+            )
         case _:
             raise ValueError(f"Unkonwn character {card.name}")
 

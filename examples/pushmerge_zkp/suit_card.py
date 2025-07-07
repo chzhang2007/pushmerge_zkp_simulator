@@ -15,7 +15,7 @@ class SuitCard(AbstractCard):
 
 if __name__ == "__main__":
     card = SuitCard(
-        name="test",
+        name="heart",
         x=100,
         y=200,
         suit=0,
