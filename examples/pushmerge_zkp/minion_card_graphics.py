@@ -94,6 +94,10 @@ for card in MY_COMMUNITY_OF_THE_RING:
             file = (
                 "heart.png"
             )
+        case "spade":
+            file = (
+                "spade.png"
+            )
         case "club":
             file = (
                 "club.png"
