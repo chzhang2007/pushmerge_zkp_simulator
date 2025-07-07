@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 from time import sleep
 import pygame
-from examples.pushmerge_zkp.minion_card import MinionCard
+from suit_card import SuitCard
 
 from pygame_emojis import load_emoji
 
@@ -18,10 +18,10 @@ from pygame_cards.utils import position_for_centering
 
 @dataclass
 class MinionCardGraphics(AbstractCardGraphics):
-    """A Grphics card for our lotr characters."""
+    """A Graphics card for our lotr characters."""
 
     # Specify the type of card that this graphics accept
-    card: MinionCard
+    card: SuitCard
 
     # This will be the file where the character is
     filepath: Path = None

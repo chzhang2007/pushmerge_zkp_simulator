@@ -10,3 +10,5 @@ You can check [our official documentation](https://pygame-cards.readthedocs.io)
 
 
 To install packages, first activate the virtual environment: source .venv/bin/activate
+
+Install the Cairo graphics package on your device

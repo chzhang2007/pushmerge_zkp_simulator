@@ -1,12 +1,12 @@
-from minion_card import MinionCard
+from suit_card import SuitCard
 from pygame_cards.set import CardsSet
 
 
 MY_COMMUNITY_OF_THE_RING = CardsSet(
     [
-        MinionCard("Bilbo", 5, 2, 2),
-        MinionCard("Gandalf", 10, 6, 8),
-        MinionCard("Sam", 7, 1, 2),
+        SuitCard("Bilbo", 5, 2, 2),
+        SuitCard("Gandalf", 10, 6, 8),
+        SuitCard("Sam", 7, 1, 2),
     ]
 )
 
