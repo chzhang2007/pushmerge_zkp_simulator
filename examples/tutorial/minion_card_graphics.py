@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 from time import sleep
 import pygame
-from examples.tutorial.minion_card import MinionCard
+from minion_card import MinionCard
 
 from pygame_emojis import load_emoji
 
