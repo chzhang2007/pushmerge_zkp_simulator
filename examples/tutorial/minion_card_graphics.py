@@ -18,7 +18,7 @@ from pygame_cards.utils import position_for_centering
 
 @dataclass
 class MinionCardGraphics(AbstractCardGraphics):
-    """A Grphics card for our lotr characters."""
+    """A Graphics card for our lotr characters."""
 
     # Specify the type of card that this graphics accept
     card: MinionCard
@@ -95,7 +95,7 @@ for card in MY_COMMUNITY_OF_THE_RING:
 
     card.graphics = MinionCardGraphics(
         card,
-        filepath=Path("images", file),
+        filepath=Path("examples/pushmerge_zkp/images", file),
     )
 
 if __name__ == "__main__":

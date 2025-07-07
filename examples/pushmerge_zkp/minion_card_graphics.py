@@ -95,7 +95,7 @@ for card in MY_COMMUNITY_OF_THE_RING:
 
     card.graphics = MinionCardGraphics(
         card,
-        filepath=Path("images", file),
+        filepath=Path("examples/pushmerge_zkp/images", file),
     )
 
 if __name__ == "__main__":
