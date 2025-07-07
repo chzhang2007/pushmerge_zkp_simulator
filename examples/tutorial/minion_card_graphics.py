@@ -95,7 +95,7 @@ for card in SUIT_CARDS:
 
     card.graphics = MinionCardGraphics(
         card,
-        filepath=Path("examples/pushmerge_zkp/images", file),
+        filepath=Path("examples/tutorial/images", file),
     )
 
 if __name__ == "__main__":

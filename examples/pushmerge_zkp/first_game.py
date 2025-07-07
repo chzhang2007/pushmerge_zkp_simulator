@@ -43,17 +43,17 @@ manager.add_set(
 
 card_back = AbstractCard("")
 card_back.graphics_type = CardBackGraphics
-ennemy_cards = CardsSet([card_back, card_back, card_back])
-ennemy_cards_graphics = AlignedHand(ennemy_cards, card_set_size, card_size=card_size)
-manager.add_set(
-    ennemy_cards_graphics,
-    # Place them in front on the screen
-    (width / 4, 0),
-    # Remove the possibility to interact with enemy cards
-    CardSetRights(
-        draggable_in=False, draggable_out=False, highlight_hovered_card=False
-    ),
-)
+# ennemy_cards = CardsSet([card_back, card_back, card_back])
+# ennemy_cards_graphics = AlignedHand(ennemy_cards, card_set_size, card_size=card_size)
+# manager.add_set(
+#     ennemy_cards_graphics,
+#     # Place them in front on the screen
+#     (width / 4, 0),
+#     # Remove the possibility to interact with enemy cards
+#     CardSetRights(
+#         draggable_in=False, draggable_out=False, highlight_hovered_card=False
+#     ),
+# )
 
 battle_ground = CardsSet()
 battle_ground_graphics = AlignedHand(
@@ -80,16 +80,16 @@ clock = pygame.time.Clock()
 annimation_tick_left = 0
 
 
-def enemy_plays_cards():
-    """Make the enemy play his card"""
-    card_taken = ennemy_cards_graphics.cardset[0]
-    ennemy_cards_graphics.remove_card(card_taken)
-    battle_ground_graphics.append_card(card_taken)
+# def enemy_plays_cards():
+#     """Make the enemy play his card"""
+#     card_taken = ennemy_cards_graphics.cardset[0]
+#     ennemy_cards_graphics.remove_card(card_taken)
+#     battle_ground_graphics.append_card(card_taken)
 
 
-enemy_plays_cards()
+# enemy_plays_cards()
 
-while 1:
+while 1: # game loop
     screen.fill("black")
     time_delta = clock.tick(60) / 1000.0
 
@@ -99,7 +99,7 @@ while 1:
         if annimation_tick_left == 1:
             # Give back the cards from each player
             opp_card = battle_ground[0]
-            ennemy_cards_graphics.append_card(opp_card)
+            # ennemy_cards_graphics.append_card(opp_card)
             battle_ground_graphics.remove_card(opp_card)
 
             # My card was played second
@@ -107,7 +107,7 @@ while 1:
             my_cards_graphics.append_card(my_card)
             battle_ground_graphics.remove_card(my_card)
 
-            enemy_plays_cards()
+            # enemy_plays_cards()
 
         annimation_tick_left -= 1
 

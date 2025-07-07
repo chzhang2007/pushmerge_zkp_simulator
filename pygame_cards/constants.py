@@ -1,11 +1,11 @@
 """Constants for helping with dimensions and things."""
 
 # Size of differnt objects in pixels
-CARD_SIZE: tuple[int, int] = (110, 180)  # (width, height)
+CARD_SIZE: tuple[int, int] = (100, 160)  # (width, height)
 
 CARDSET_SIZE: tuple[int, int] = (900, 240)
 
-BOARD_SIZE: tuple[int, int] = (720, 560)
+BOARD_SIZE: tuple[int, int] = (900, 700)
 # The radius of the circled borders of the cards
 CARD_BORDER_RADIUS_RATIO: float = 0.05
 

@@ -40,33 +40,33 @@ class SuitCardGraphics(AbstractCardGraphics):
             # Rescale it to fit the surface
             surf.blit(pygame.transform.scale(picture, self.size), (0, 0))
 
-        # Create the name on top using pygame fonts
-        font = pygame.font.SysFont("urwgothic", 48)
-        name = font.render(self.card.name, True, pygame.Color(163, 146, 139))
+        # # Create the name on top using pygame fonts
+        # font = pygame.font.SysFont("urwgothic", 48)
+        # name = font.render(self.card.name, True, pygame.Color(163, 146, 139))
 
-        # Make sure the name is centered in the x direction.
-        surf.blit(name, (position_for_centering(name, surf)[0], 10))
+        # # Make sure the name is centered in the x direction.
+        # surf.blit(name, (position_for_centering(name, surf)[0], 10))
 
-        # Add some emojis for health and attack
-        emoji_size = (100, 100)
-        attack_emoji = load_emoji("⚔️", emoji_size)
-        life_emoji = load_emoji("♥️", emoji_size)
-        emoji_border_offset = 5
-        surf.blit(
-            attack_emoji,
-            # Do a bit of maths to guess the position
-            (
-                emoji_border_offset,
-                self.size[1] - emoji_border_offset - emoji_size[1],
-            ),
-        )
-        surf.blit(
-            life_emoji,
-            (
-                self.size[0] - emoji_border_offset - emoji_size[0],
-                self.size[1] - emoji_border_offset - emoji_size[1],
-            ),
-        )
+        # # Add some emojis for health and attack
+        # emoji_size = (100, 100)
+        # attack_emoji = load_emoji("⚔️", emoji_size)
+        # life_emoji = load_emoji("♥️", emoji_size)
+        # emoji_border_offset = 5
+        # surf.blit(
+        #     attack_emoji,
+        #     # Do a bit of maths to guess the position
+        #     (
+        #         emoji_border_offset,
+        #         self.size[1] - emoji_border_offset - emoji_size[1],
+        #     ),
+        # )
+        # surf.blit(
+        #     life_emoji,
+        #     (
+        #         self.size[0] - emoji_border_offset - emoji_size[0],
+        #         self.size[1] - emoji_border_offset - emoji_size[1],
+        #     ),
+        # )
 
         return surf
 
@@ -107,16 +107,16 @@ if __name__ == "__main__":
     screen.fill("black")
 
     for i, card in enumerate(SUIT_CARDS):
-        position = (50 + i * (100 + card.graphics.size[0]), 100)
+        position = (50 + i * (100 + card.graphics.size[0]), 100) # edit this to change card positions
 
         # Simply blit the card on the main surface
         screen.blit(card.graphics.surface, position)
 
-    # Save images for the documentation
-    pygame.image.save(
-        screen,
-        Path("images", f"card_from_tuto.png"),
-    )
+    # # Save images for the documentation
+    # pygame.image.save(
+    #     screen,
+    #     Path("images", f"card_from_tuto.png"),
+    # )
 
     while 1:
         for event in pygame.event.get():
