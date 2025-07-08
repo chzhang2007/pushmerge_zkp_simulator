@@ -1,12 +1,15 @@
+import random
 import sys
 import pygame
 from suit_card_graphics import SuitCardGraphics
+from int_card_graphics import IntCardGraphics
 from pygame_cards.abstract import AbstractCard
 from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand
 from pygame_cards.manager import CardSetRights, CardsManager
 
-from suit_set import SUIT_CARDS
+from suit_set import ABB_CARDS, AEB_CARDS, AEE_CARDS
+from int_set import INT_CARDS
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -22,22 +25,39 @@ manager = CardsManager()
 
 
 # Creates your card set
-my_cards = SUIT_CARDS.copy()
+abb_cards = ABB_CARDS.copy()
+aeb_cards = AEB_CARDS.copy()
+aee_cards = AEE_CARDS.copy()
+int_cards = INT_CARDS.copy()
+random.shuffle(int_cards)
 
 
-card_size = (width / 7, height / 3 - 20)
-card_set_size = (width / 2, height / 3)
-my_cards_graphics = AlignedHand(
-    my_cards,
-    card_set_size,
+card_size = (width / 14, height / 6 - 10)
+card_set_size_wide = (width / 4, height / 6)
+card_set_size_long = (width / 10, height / 2)
+abb_cards_graphics = AlignedHand(
+    abb_cards,
+    card_set_size_long,
     card_size=card_size,
     graphics_type=SuitCardGraphics,
 )
 # Finally add the set to the manager
 manager.add_set(
-    my_cards_graphics,
-    # Position on the screen
-    (width / 4, height - my_cards_graphics.size[1]),
+    abb_cards_graphics,
+    # Position on the screen of the entire set
+    (width / 6, abb_cards_graphics.size[1] + 20),
+)
+int_cards_graphics = AlignedHand(
+    int_cards,
+    card_set_size_wide,
+    card_size=card_size,
+    graphics_type=IntCardGraphics,
+)
+# Finally add the set to the manager
+manager.add_set(
+    int_cards_graphics,
+    # Position on the screen of the entire set
+    (width / 6, 0),
 )
 
 card_back = AbstractCard("")

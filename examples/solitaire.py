@@ -95,7 +95,7 @@ class ClondikePileGaphics(VerticalPileGraphic, CardBackOwner):
         return card.is_one_level_less_than(last_card, as_equals_1=True)
 
     def turn_top_card(self):
-        # Turn the top card only if all the cards were hiddent
+        # Turn the top card only if all the cards were hidden
         if self._n_cards_hidden == len(self.cardset):
             self._n_cards_hidden -= 1
         self.clear_cache()
@@ -137,6 +137,7 @@ class ClondikeDepotPileGaphics(Deck):
 
 
 card_set = CardSets.n52
+print(type(card_set))
 card_set.shuffle()
 
 N_PILES = 7

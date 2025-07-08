@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 from time import sleep
 import pygame
-from suit_card import SuitCard
+from int_card import IntCard
 
 from pygame_emojis import load_emoji
 
@@ -12,16 +12,15 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from suit_set import ABB_CARDS, AEB_CARDS, AEE_CARDS
+from int_set import INT_CARDS
 from pygame_cards.utils import position_for_centering
 
 
 @dataclass
-class SuitCardGraphics(AbstractCardGraphics):
-    """A Graphics card for our lotr characters."""
+class IntCardGraphics(AbstractCardGraphics):
 
     # Specify the type of card that this graphics accept
-    card: SuitCard
+    card: IntCard
 
     # This will be the file where the character is
     filepath: Path = None
@@ -71,28 +70,36 @@ class SuitCardGraphics(AbstractCardGraphics):
         return surf
 
 
-for card in ABB_CARDS + AEB_CARDS + AEE_CARDS:
+for card in INT_CARDS:
     match card.name:
-        case "heart":
+        case "0":
             file = (
-                "heart.png"
+                "0.png"
             )
-        case "spade":
+        case "1":
             file = (
-                "spade.png"
+                "1.png"
             )
-        case "club":
+        case "2":
             file = (
-                "club.png"
+                "2.png"
             )
-        case "diamond":
+        case "3":
             file = (
-                "diamond.png"
+                "3.png"
+            )
+        case "4":
+            file = (
+                "4.png"
+            )
+        case "5":
+            file = (
+                "5.png"
             )
         case _:
             raise ValueError(f"Unkonwn character {card.name}")
 
-    card.graphics = SuitCardGraphics(
+    card.graphics = IntCardGraphics(
         card,
         filepath=Path("examples/pushmerge_zkp/images", file),
     )
@@ -106,20 +113,8 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(size)
     screen.fill("black")
 
-    for i, card in enumerate(ABB_CARDS):
-        position = (20, 20 + i * (100 + card.graphics.size[1])) # edit this to change card positions within a block
-
-        # Simply blit the card on the main surface
-        screen.blit(card.graphics.surface, position)
-        
-    for i, card in enumerate(AEB_CARDS):
-        position = (50 + i * (100 + card.graphics.size[0]), 100) # edit this to change card positions within a block
-
-        # Simply blit the card on the main surface
-        screen.blit(card.graphics.surface, position)
-        
-    for i, card in enumerate(AEE_CARDS):
-        position = (50 + i * (100 + card.graphics.size[0]), 100) # edit this to change card positions
+    for i, card in enumerate(INT_CARDS):
+        position = (50 + i * (100 + card.graphics.size[0]), 20) # edit this to change card positions
 
         # Simply blit the card on the main surface
         screen.blit(card.graphics.surface, position)

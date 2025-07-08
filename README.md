@@ -12,3 +12,7 @@ You can check [our official documentation](https://pygame-cards.readthedocs.io)
 To install packages, first activate the virtual environment: source .venv/bin/activate
 
 Install the Cairo graphics package on your device
+
+To change card positions within a block: edit suit_card_graphics.py
+
+To change block positions on the screen: edit main.py
