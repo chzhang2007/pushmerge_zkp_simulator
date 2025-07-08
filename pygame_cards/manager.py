@@ -36,7 +36,7 @@ class CardSetRights:
         hoverd_card from the cardset when the card set is hovered
     """
 
-    clickable: bool = False
+    clickable: bool = True
     draggable_out: bool | Callable[[Card], bool] = False
     draggable_in: bool | Callable[[Card], bool] = False
     highlight_hovered_card: bool = True
