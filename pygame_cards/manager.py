@@ -62,7 +62,7 @@ class CardsManager(Manager):
     Capabilities :
 
     * Tracking which cardset and card are under the player mouse.
-    * Moving cards from on cardset to another
+    * Moving cards from one cardset to another
     * Add related events in the game loop
 
     The cards manager can be inherited from if you need to add special

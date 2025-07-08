@@ -25,21 +25,12 @@ manager = CardsManager()
 
 
 # Creates your card set
-abb_cards = ABB_CARDS.copy()
-aeb_cards = AEB_CARDS.copy()
-aee_cards = AEE_CARDS.copy()
+col_cards = [ABB_CARDS.copy(), AEB_CARDS.copy(), AEE_CARDS.copy()]
 int_cards = INT_CARDS.copy()
-# random.shuffle(int_cards)
 
 card_size = (width / 14, height / 6 - 10)
 card_set_size_wide = (width / 4, height / 6)
 card_set_size_long = (width / 12, height / 2)
-
-# def display_permutation():
-#     for i in range(len(int_cards)):
-#         number = int_cards[i].number
-        
-
 
 int_cards_graphics = AlignedHand(
     int_cards,
@@ -53,39 +44,28 @@ manager.add_set(
     # Position on the screen of the entire set
     (width / 6, 0),
 )
-abb_cards_graphics = AlignedHandVertical(
-    abb_cards,
-    card_set_size_long,
-    card_size=card_size,
-    graphics_type=SuitCardGraphics,
-)
+
+col_cards_graphics = [(AlignedHandVertical(
+                        col_cards[i],
+                        card_set_size_long,
+                        card_size=card_size,
+                        graphics_type=SuitCardGraphics,
+                    )) for i in range(len(col_cards))]
 # Finally add the set to the manager
 manager.add_set(
-    abb_cards_graphics,
+    col_cards_graphics[0],
     # Position on the screen of the entire set
     (width / 6 - 5, int_cards_graphics.size[1] + 20),
 )
-aeb_cards_graphics = AlignedHandVertical(
-    aeb_cards,
-    card_set_size_long,
-    card_size=card_size,
-    graphics_type=SuitCardGraphics,
-)
 # Finally add the set to the manager
 manager.add_set(
-    aeb_cards_graphics,
+    col_cards_graphics[1],
     # Position on the screen of the entire set
     (width / 4 - 9, int_cards_graphics.size[1] + 20),
 )
-aee_cards_graphics = AlignedHandVertical(
-    aee_cards,
-    card_set_size_long,
-    card_size=card_size,
-    graphics_type=SuitCardGraphics,
-)
 # Finally add the set to the manager
 manager.add_set(
-    aee_cards_graphics,
+    col_cards_graphics[2],
     # Position on the screen of the entire set
     (width / 3 - 9, int_cards_graphics.size[1] + 20),
 )
@@ -109,15 +89,24 @@ while 1: # game loop
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 0:
-            for card in int_cards:
+            index_list = [(i + 1) for i in range(len(int_cards))]
+            random.shuffle(index_list)
+            print(index_list)
+            for (i, card) in enumerate(int_cards):
+                card.name = str(index_list[i])
+                card.number = index_list[i]
                 card.face_up = False
                 card.graphics = IntCardGraphics(
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                print(card)
+                # col1_cards_graphics.remove_card(card_taken)
+                # col1_cards_graphics.append_card(card_taken)
+                
+                # highlight which ones shuffle
             stage = 1
             int_cards_graphics.clear_cache()
-            print(int_cards_graphics.surface)
         manager.process_events(event)
 
     manager.update(time_delta)
