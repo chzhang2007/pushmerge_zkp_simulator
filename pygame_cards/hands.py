@@ -104,7 +104,7 @@ class AlignedHand(BaseHand):
         )
 
         if total_x > self.size[0]:
-            self.logger.warning("Too many cards for hands size, rescaling will apply.")
+            # self.logger.warning("Too many cards for hands size, rescaling will apply.")
             offset = (self.size[0] - len(self.cardset) * self.card_size[0]) / (
                 len(self.cardset) - 1
             )
@@ -256,7 +256,7 @@ class AlignedHandVertical(BaseHand):
         )
 
         if total_y > self.size[1]:
-            self.logger.warning("Too many cards for hands size, rescaling will apply.")
+            # self.logger.warning("Too many cards for hands size, rescaling will apply.")
             offset = (self.size[1] - len(self.cardset) * self.card_size[1]) / (
                 len(self.cardset) - 1
             )
