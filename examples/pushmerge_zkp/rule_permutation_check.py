@@ -29,7 +29,7 @@ abb_cards = ABB_CARDS.copy()
 aeb_cards = AEB_CARDS.copy()
 aee_cards = AEE_CARDS.copy()
 int_cards = INT_CARDS.copy()
-random.shuffle(int_cards)
+# random.shuffle(int_cards)
 
 
 card_size = (width / 14, height / 6 - 10)
@@ -58,6 +58,30 @@ manager.add_set(
     abb_cards_graphics,
     # Position on the screen of the entire set
     (width / 6 - 5, int_cards_graphics.size[1] + 20),
+)
+aeb_cards_graphics = AlignedHandVertical(
+    aeb_cards,
+    card_set_size_long,
+    card_size=card_size,
+    graphics_type=SuitCardGraphics,
+)
+# Finally add the set to the manager
+manager.add_set(
+    aeb_cards_graphics,
+    # Position on the screen of the entire set
+    (width / 4 - 9, int_cards_graphics.size[1] + 20),
+)
+aee_cards_graphics = AlignedHandVertical(
+    aee_cards,
+    card_set_size_long,
+    card_size=card_size,
+    graphics_type=SuitCardGraphics,
+)
+# Finally add the set to the manager
+manager.add_set(
+    aee_cards_graphics,
+    # Position on the screen of the entire set
+    (width / 3 - 9, int_cards_graphics.size[1] + 20),
 )
 
 card_back = AbstractCard("")

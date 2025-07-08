@@ -18,7 +18,6 @@ from pygame_cards.utils import position_for_centering
 
 @dataclass
 class SuitCardGraphics(AbstractCardGraphics):
-    """A Graphics card for our lotr characters."""
 
     # Specify the type of card that this graphics accept
     card: SuitCard
@@ -74,21 +73,45 @@ class SuitCardGraphics(AbstractCardGraphics):
 for card in ABB_CARDS + AEB_CARDS + AEE_CARDS:
     match card.name:
         case "heart":
-            file = (
-                "heart.png"
-            )
+            if card.face_up:
+                file = (
+                    "heart.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
         case "spade":
-            file = (
-                "spade.png"
-            )
+            if card.face_up:
+                file = (
+                    "spade.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
         case "club":
-            file = (
-                "club.png"
-            )
+            if card.face_up:
+                file = (
+                    "club.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
         case "diamond":
-            file = (
-                "diamond.png"
-            )
+            if card.face_up:
+                file = (
+                    "diamond.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
         case _:
             raise ValueError(f"Unkonwn character {card.name}")
 
@@ -107,24 +130,22 @@ if __name__ == "__main__":
     screen.fill("black")
 
     for i, card in enumerate(ABB_CARDS):
-        # print(card.graphics.size) # (110, 180)
         position = (0, i * card.graphics.size[1]) # edit this to change card positions within a block
 
         # Simply blit the card on the main surface
         screen.blit(card.graphics.surface, position)
-    # screen.blit(card.graphics.surface, (0, 180))
         
-    # for i, card in enumerate(AEB_CARDS):
-    #     position = (50 + i * (100 + card.graphics.size[0]), 100) # edit this to change card positions within a block
-
-    #     # Simply blit the card on the main surface
-    #     screen.blit(card.graphics.surface, position)
-        
-    # for i, card in enumerate(AEE_CARDS):
-    #     position = (50 + i * (100 + card.graphics.size[0]), 100) # edit this to change card positions
+    for i, card in enumerate(AEB_CARDS):
+        position = (card.graphics.size[0] + 10, i * card.graphics.size[1]) # edit this to change card positions within a block
 
         # Simply blit the card on the main surface
-        # screen.blit(card.graphics.surface, position)
+        screen.blit(card.graphics.surface, position)
+        
+    for i, card in enumerate(AEE_CARDS):
+        position = (2 * card.graphics.size[0] + 20, i * card.graphics.size[1]) # edit this to change card positions
+
+        # Simply blit the card on the main surface
+        screen.blit(card.graphics.surface, position)
 
     # # Save images for the documentation
     # pygame.image.save(
