@@ -12,7 +12,7 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from int_set import INT_CARDS, INT_CARDS_FACE_DOWN
+from int_set import INT_CARDS
 from pygame_cards.utils import position_for_centering
 
 
@@ -68,9 +68,89 @@ class IntCardGraphics(AbstractCardGraphics):
         # )
 
         return surf
+    
+    def update_surface(self):
+        # Size is a property from AbstractCardGraphics
+        x, y = self.size
+
+        # Create the surface on which we will plot the card
+        surf = pygame.Surface(self.size)
+        for card in INT_CARDS:
+            match card.name:
+                case "0":
+                    if card.face_up:
+                        file = (
+                            "0.png"
+                        )
+                    else:
+                        # If the card is face down, we use the back of the card
+                        file = (
+                            "card_back.png"
+                        )
+                case "1":
+                    if card.face_up:
+                        file = (
+                            "1.png"
+                        )
+                    else:
+                        # If the card is face down, we use the back of the card
+                        file = (
+                            "card_back.png"
+                        )
+                case "2":
+                    if card.face_up:
+                        file = (
+                            "2.png"
+                        )
+                    else:
+                        # If the card is face down, we use the back of the card
+                        file = (
+                            "card_back.png"
+                        )
+                case "3":
+                    if card.face_up:
+                        file = (
+                            "3.png"
+                        )
+                    else:
+                        # If the card is face down, we use the back of the card
+                        file = (
+                            "card_back.png"
+                        )
+                case "4":
+                    if card.face_up:
+                        file = (
+                            "4.png"
+                        )
+                    else:
+                        # If the card is face down, we use the back of the card
+                        file = (
+                            "card_back.png"
+                        )
+                case "5":
+                    if card.face_up:
+                        file = (
+                            "5.png"
+                        )
+                    else:
+                        # If the card is face down, we use the back of the card
+                        file = (
+                            "card_back.png"
+                        )
+                case _:
+                    raise ValueError(f"Unkonwn character {card.name}")
+
+            card.graphics = IntCardGraphics(
+                card,
+                filepath=Path("examples/pushmerge_zkp/images", file),
+            )
+        if self.filepath is not None:
+            picture = pygame.image.load(self.filepath)
+            surf.blit(pygame.transform.scale(picture, self.size), (0, 0))
+        self.surface = surf
 
 
-for card in INT_CARDS + INT_CARDS_FACE_DOWN:
+for card in INT_CARDS:
     match card.name:
         case "0":
             if card.face_up:
