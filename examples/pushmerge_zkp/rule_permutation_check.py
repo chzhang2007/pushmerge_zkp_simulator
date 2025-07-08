@@ -9,7 +9,7 @@ from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
 from suit_set import ABB_CARDS, AEB_CARDS, AEE_CARDS
-from int_set import INT_CARDS
+from int_set import INT_CARDS, INT_CARDS_FACE_DOWN
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -18,7 +18,6 @@ pygame.init()
 screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
 # screen = pygame.display.set_mode((400, 300))
 size = width, height = screen.get_size()
-print(size)
 
 
 manager = CardsManager()
@@ -102,6 +101,20 @@ while 1: # game loop
             sys.exit()
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            print("hello")
+            int_cards = INT_CARDS_FACE_DOWN.copy()
+            int_cards_graphics = AlignedHand(
+                int_cards,
+                card_set_size_wide,
+                card_size=card_size,
+                graphics_type=IntCardGraphics,
+            )
+            manager.add_set(
+                int_cards_graphics,
+                # Position on the screen of the entire set
+                (width / 6, 0),
+            )
         manager.process_events(event)
 
     manager.update(time_delta)

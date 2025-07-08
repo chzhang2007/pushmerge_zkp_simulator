@@ -12,7 +12,7 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from int_set import INT_CARDS
+from int_set import INT_CARDS, INT_CARDS_FACE_DOWN
 from pygame_cards.utils import position_for_centering
 
 
@@ -70,32 +70,68 @@ class IntCardGraphics(AbstractCardGraphics):
         return surf
 
 
-for card in INT_CARDS:
+for card in INT_CARDS + INT_CARDS_FACE_DOWN:
     match card.name:
         case "0":
-            file = (
-                "0.png"
-            )
+            if card.face_up:
+                file = (
+                    "0.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
         case "1":
-            file = (
-                "1.png"
-            )
+            if card.face_up:
+                file = (
+                    "1.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
         case "2":
-            file = (
-                "2.png"
-            )
+            if card.face_up:
+                file = (
+                    "2.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
         case "3":
-            file = (
-                "3.png"
-            )
+            if card.face_up:
+                file = (
+                    "3.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
         case "4":
-            file = (
-                "4.png"
-            )
+            if card.face_up:
+                file = (
+                    "4.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
         case "5":
-            file = (
-                "5.png"
-            )
+            if card.face_up:
+                file = (
+                    "5.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
         case _:
             raise ValueError(f"Unkonwn character {card.name}")
 
