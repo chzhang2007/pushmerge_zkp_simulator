@@ -1,7 +1,7 @@
 """Constants for helping with dimensions and things."""
 
 # Size of differnt objects in pixels
-CARD_SIZE: tuple[int, int] = (110, 180)  # (width, height)
+CARD_SIZE: tuple[int, int] = (1312 / 14, 848 / 6 - 10)  # (width, height)
 
 CARDSET_SIZE: tuple[int, int] = (900, 240)
 
@@ -20,5 +20,6 @@ SCREEN_RESOLUTIONS: dict[str, tuple[int, int]] = {
     "4K": (4096, 2160),
 }
 
-# Ratio from card width of spacing between columns
+# Ratio from card width of spacing between rows and columns
+ROW_SPACING: float = 0.15
 COLUMN_SPACING: float = 0.15

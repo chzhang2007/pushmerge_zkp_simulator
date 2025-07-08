@@ -107,22 +107,24 @@ if __name__ == "__main__":
     screen.fill("black")
 
     for i, card in enumerate(ABB_CARDS):
-        position = (20, 20 + i * (100 + card.graphics.size[1])) # edit this to change card positions within a block
+        # print(card.graphics.size) # (110, 180)
+        position = (0, i * card.graphics.size[1]) # edit this to change card positions within a block
 
         # Simply blit the card on the main surface
         screen.blit(card.graphics.surface, position)
+    # screen.blit(card.graphics.surface, (0, 180))
         
-    for i, card in enumerate(AEB_CARDS):
-        position = (50 + i * (100 + card.graphics.size[0]), 100) # edit this to change card positions within a block
+    # for i, card in enumerate(AEB_CARDS):
+    #     position = (50 + i * (100 + card.graphics.size[0]), 100) # edit this to change card positions within a block
 
-        # Simply blit the card on the main surface
-        screen.blit(card.graphics.surface, position)
+    #     # Simply blit the card on the main surface
+    #     screen.blit(card.graphics.surface, position)
         
-    for i, card in enumerate(AEE_CARDS):
-        position = (50 + i * (100 + card.graphics.size[0]), 100) # edit this to change card positions
+    # for i, card in enumerate(AEE_CARDS):
+    #     position = (50 + i * (100 + card.graphics.size[0]), 100) # edit this to change card positions
 
         # Simply blit the card on the main surface
-        screen.blit(card.graphics.surface, position)
+        # screen.blit(card.graphics.surface, position)
 
     # # Save images for the documentation
     # pygame.image.save(

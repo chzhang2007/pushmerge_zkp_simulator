@@ -195,6 +195,158 @@ class AlignedHand(BaseHand):
         xs, _ = self.calculate_x_positions()
 
         return {card: (x, y) for card, x in zip(self.cardset, xs)}
+    
+class AlignedHandVertical(BaseHand):
+    """A hand of card with all the cards aligned vertically.
+
+    :param card_spacing: The offset proportion of the position between the cards.
+
+        * 0, means the cards are directly next to each other.
+        * Positive offset, means the card will be further
+            away from each other.
+        * Negative, means cards will be closer
+            to each other.
+
+    """
+
+    def __init__(
+        self,
+        *args,
+        card_spacing: float = constants.ROW_SPACING,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        self.card_spacing = card_spacing
+
+    @cached_property
+    def surface(self) -> pygame.Surface:
+        """The surface of the hand."""
+        surf = pygame.Surface(self.size, pygame.SRCALPHA)
+
+        y_positions, offset = self.calculate_y_positions()
+
+        for i, (card, y_pos) in enumerate(zip(self.cardset, y_positions)):
+            self.logger.debug(f"{card}")
+            card_surf = card.graphics.surface
+            card_surf = pygame.transform.scale(card_surf, self.card_size)
+
+            self.logger.debug(f"{card=},{y_pos=}")
+            surf.blit(card_surf, (self.calculate_x_position(), y_pos))
+
+        return surf
+
+    def remove_card(self, card: AbstractCard) -> None:
+        super().remove_card(card)
+
+    def calculate_x_position(self) -> int:
+        return self.size[0] / 2 - self.card_size[0] / 2
+
+    def calculate_y_positions(self) -> tuple[list[float], float]:
+        """Calculate the y position of the cards.
+
+        :return (y_positions, offset_value):
+            The y_positions is the positions of each card.
+            The offset_value is the value used to make the
+            spacing between the cards.
+        """
+        # calculate dimenstions required for the displayed surf
+        offset = self.card_spacing * self.card_size[1]
+        total_y = (
+            len(self.cardset) * self.card_size[1] + (len(self.cardset) - 1) * offset
+        )
+
+        if total_y > self.size[1]:
+            self.logger.warning("Too many cards for hands size, rescaling will apply.")
+            offset = (self.size[1] - len(self.cardset) * self.card_size[1]) / (
+                len(self.cardset) - 1
+            )
+        y_positions = [
+            i * self.card_size[1] + i * offset for i in range(len(self.cardset))
+        ]
+        # Revert the position in case of another overlap
+        y_positions = [
+            y_pos
+            if self.overlap_hide == CardOverlap.right
+            else self.size[1] - self.card_size[1] - y_pos
+            for y_pos in y_positions
+        ]
+        self.logger.debug(f"{y_positions=}")
+
+        return y_positions, offset
+
+    def with_hovered(
+        self, card: AbstractCard | None, radius: float = 20, **kwargs
+    ) -> pygame.Surface:
+        if card is None:
+            return pygame.Surface((0, 0))
+        index = self.cardset.index(card)
+        self.logger.debug(f"{index=}")
+        y_positions, _ = self.calculate_y_positions()
+        y_pos = y_positions[index]
+
+        card.graphics.size = self.card_size
+        highlighted_surf = outer_halo(card.graphics.surface, radius=radius, **kwargs)
+        # assume the center will be on it
+        out_surf = pygame.Surface(self.size, pygame.SRCALPHA)
+        highlighted_surf = pygame.transform.scale(
+            highlighted_surf,
+            (self.card_size[1] + 2 * radius, self.card_size[0] + 2 * radius),
+        )
+        out_surf.blit(
+            highlighted_surf,
+            (self.calculate_x_position() - radius, y_pos - radius),
+        )
+        out_surf.blit(
+            card.graphics.surface,
+            (self.calculate_x_position(), y_pos),
+        )
+        return out_surf
+
+    def get_card_at(self, pos: tuple[int, int]) -> AbstractCard | None:
+        s = self.surface.get_size()
+        if not (pos[0] < s[0] and pos[1] < s[1]):
+            self.logger.error(f"get_card_at({pos=}) not in {s}.")
+            return None
+
+        y_positions, offset = self.calculate_y_positions()
+        self.logger.debug(f"get_card_at({pos=}): {y_positions=}, {self.overlap_hide=}")
+
+        # TODO: make this work
+        for card_index, y_pos in enumerate(y_positions):
+            if pos[1] < y_pos or pos[1] > y_pos + self.card_size[1]:
+                self.logger.debug(
+                    f"get_card_at({pos=}):: {card_index=} is not Between the card"
+                    " boundaries"
+                )
+                continue
+            if (
+                self.overlap_hide == CardOverlap.right
+                # Check that is not under the next card
+                and pos[1] - y_pos
+                > self.card_size[1] + self.card_spacing * self.card_size[1]
+            ) or (
+                self.overlap_hide == CardOverlap.left
+                and pos[1] - y_pos < self.card_spacing * self.card_size[1]
+            ):
+                self.logger.debug(
+                    f"get_card_at({pos=}):: {card_index=} is  going to be under the"
+                    " next card"
+                )
+                continue
+            if y_pos - pos[1] > self.card_size[1] + offset:
+                self.logger.debug(f"get_card_at({pos=}): is in offset.")
+                continue  # Between two cards, in the offset
+
+            self.logger.debug(f"get_card_at({pos=}): found index {card_index}.")
+            return self.cardset[card_index]
+
+        return None
+
+    def get_card_positions(self) -> dict[AbstractCard, tuple[int, int]]:
+        x = self.calculate_x_position()
+        ys, _ = self.calculate_y_positions()
+
+        return {card: (x, y) for card, y in zip(self.cardset, ys)}
 
 
 class RoundedHand(BaseHand):

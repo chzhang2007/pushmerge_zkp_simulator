@@ -4,24 +4,24 @@ from pygame_cards.set import CardsSet
 
 ABB_CARDS = CardsSet(
     [
-        SuitCard("heart", 0),
-        SuitCard("spade", 1),
-        SuitCard("spade", 1),
+        SuitCard("heart", False),
+        SuitCard("spade", False),
+        SuitCard("spade", False),
     ]
 )
 
 AEB_CARDS = CardsSet(
     [
-        SuitCard("heart", 0),
-        SuitCard("club", 2),
-        SuitCard("spade", 1),
+        SuitCard("heart", False),
+        SuitCard("club", False),
+        SuitCard("spade", False),
     ]
 )
 
 AEE_CARDS = CardsSet(
     [
-        SuitCard("heart", 0),
-        SuitCard("club", 2),
-        SuitCard("club", 2),
+        SuitCard("heart", False),
+        SuitCard("club", False),
+        SuitCard("club", False),
     ]
 )

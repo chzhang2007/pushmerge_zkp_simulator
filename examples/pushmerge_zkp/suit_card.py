@@ -6,10 +6,10 @@ from dataclasses import dataclass
 
 @dataclass
 class SuitCard(AbstractCard):
-    suit: int # 0 = hearts, 1 = spades, 2 = clubs, 3 = diamonds
+    face_up: bool # False = face down, True = face up
 
 if __name__ == "__main__":
     card = SuitCard(
-        suit=0,
+        face_up=False,
     )
     print(card)
