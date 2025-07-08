@@ -10,7 +10,7 @@ from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
 from suit_set import ABB_CARDS, AEB_CARDS, AEE_CARDS
-from int_set import ID3
+from int_set import INT_CARDS
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -26,7 +26,7 @@ manager = CardsManager()
 
 # Creates your card set
 col_cards = [ABB_CARDS.copy(), AEB_CARDS.copy(), AEE_CARDS.copy()] # col_cards[i] is the (i + 1)th column of cards
-int_cards = ID3.copy()
+int_cards = INT_CARDS.copy()
 
 card_size = (width / 14, height / 6 - 10)
 card_set_size_wide = (width / 4, height / 6)

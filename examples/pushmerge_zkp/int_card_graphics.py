@@ -12,7 +12,7 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from int_set import INT_CARDS
+from int_set import ID3
 from pygame_cards.utils import position_for_centering
 
 
@@ -41,7 +41,7 @@ class IntCardGraphics(AbstractCardGraphics):
 
         return surf
 
-for card in INT_CARDS:
+for card in ID3:
     match card.name:
         case "0":
             if card.face_up:
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(size)
     screen.fill("black")
 
-    for i, card in enumerate(INT_CARDS):
+    for i, card in enumerate(ID3):
         position = (50 + i * (100 + card.graphics.size[0]), 20) # edit this to change card positions
 
         # Simply blit the card on the main surface
