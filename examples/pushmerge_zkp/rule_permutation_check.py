@@ -25,7 +25,7 @@ manager = CardsManager()
 
 
 # Creates your card set
-col_cards = [ABB_CARDS.copy(), AEB_CARDS.copy(), AEE_CARDS.copy()]
+col_cards = [ABB_CARDS.copy(), AEB_CARDS.copy(), AEE_CARDS.copy()] # col_cards[i] is the (i + 1)th column of cards
 int_cards = INT_CARDS.copy()
 
 card_size = (width / 14, height / 6 - 10)
@@ -86,12 +86,16 @@ while 1: # game loop
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
+        
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             sys.exit()
+        
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 0:
             index_list = [(i + 1) for i in range(len(int_cards))]
             random.shuffle(index_list)
             print(index_list)
+            
+            # flip the id cards face down and shuffle them
             for (i, card) in enumerate(int_cards):
                 card.name = str(index_list[i])
                 card.number = index_list[i]
@@ -100,13 +104,34 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
-                print(card)
-                # col1_cards_graphics.remove_card(card_taken)
-                # col1_cards_graphics.append_card(card_taken)
-                
-                # highlight which ones shuffle
+
+            # shuffle the columns (TODO: highlight that the columns shuffled)
+            for (i, column) in enumerate(col_cards_graphics):
+                for j in range(3):
+                    column.append_card(col_cards_graphics[index_list[i] - 1].cardset[j])
+            for column in col_cards_graphics:
+                for j in range(3):
+                    column.remove_card(column.cardset[0])
+            
             stage = 1
             int_cards_graphics.clear_cache()
+            for i in range(3):
+                col_cards_graphics[i].clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 1:
+            # flip the rule cards face up
+            for (i, column) in enumerate(col_cards_graphics):
+                for card in column.cardset:
+                    card.face_up = True
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
+                    )
+            stage = 2       
+            int_cards_graphics.clear_cache()
+            for i in range(3):
+                col_cards_graphics[i].clear_cache() 
+                
         manager.process_events(event)
 
     manager.update(time_delta)
