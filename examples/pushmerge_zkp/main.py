@@ -12,7 +12,7 @@ from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
 from suit_set import GRID_STATE, BB_CARDS, BD_CARDS, BE_CARDS, DB_CARDS, DD_CARDS, DE_CARDS, EB_CARDS, ED_CARDS, EE_CARDS
-from int_set import ID4, ID20, ENCODING_MOVE_1
+from int_set import ID4, ID4Q, ID20, ENCODING_MOVE_1, ENCODING_3_LENGTH_4
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -173,7 +173,7 @@ while 1: # game loop
             grid_state_m_graphics.clear_cache()
             
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 4:
-            # place the id of matrix N
+            # place the id row of matrix N
             id_cards_n = ID4
             id_cards_n_graphics = AlignedHand(
                 id_cards_n,
@@ -253,6 +253,41 @@ while 1: # game loop
             stage = 5
             id_cards_m_graphics.clear_cache()
             id_cards_n_graphics.clear_cache()
+            grid_state_m_graphics.clear_cache()
+            for column in col_cards_n_graphics:
+                column.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 5:
+            # place the id row of matrix Q
+            id_cards_q = ID4
+            id_cards_q_graphics = AlignedHand(
+                id_cards_q,
+                card_set_size_wide,
+                card_size=card_size,
+                graphics_type=IntCardGraphics,
+            )
+            manager.add_set(
+                id_cards_q_graphics,
+                (width / 2, 4 * grid_state_m_graphics.size[1]),
+            )
+            
+            # place an encoding row under matrix N for the chosen pile cut
+            enc_cards_n = ENCODING_3_LENGTH_4
+            enc_cards_n_graphics = AlignedHand(
+                enc_cards_n,
+                card_set_size_wide,
+                card_size=card_size,
+                graphics_type=IntCardGraphics,
+            )
+            manager.add_set(
+                enc_cards_n_graphics,
+                (0, 7 * grid_state_m_graphics.size[1] + 10),
+            )
+            
+            stage = 6
+            id_cards_m_graphics.clear_cache()
+            id_cards_n_graphics.clear_cache()
+            id_cards_q_graphics.clear_cache()
             grid_state_m_graphics.clear_cache()
             for column in col_cards_n_graphics:
                 column.clear_cache()

@@ -11,6 +11,15 @@ ID4 = CardsSet(
     ]
 )
 
+ID4Q = CardsSet(
+    [
+        IntCard("1", 1, True),
+        IntCard("2", 2, True),
+        IntCard("3", 3, True),
+        IntCard("4", 4, True),
+    ]
+)
+
 ID5 = CardsSet(
     [
         IntCard("1", 1, True),
@@ -122,6 +131,15 @@ ENCODING_MOVE_1 = CardsSet(
         IntCard("0", 0, False),
         IntCard("0", 0, False),
         IntCard("0", 0, False),
+        IntCard("0", 0, False),
+    ]
+)
+
+ENCODING_3_LENGTH_4 = CardsSet(
+    [
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("1", 1, False),
         IntCard("0", 0, False),
     ]
 )
