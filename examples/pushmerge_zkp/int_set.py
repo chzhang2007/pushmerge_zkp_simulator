@@ -100,3 +100,28 @@ ENCODING = CardsSet(
         IntCard("0", 0, False),
     ]
 )
+
+ENCODING_MOVE_1 = CardsSet(
+    [
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("1", 1, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+        IntCard("0", 0, False),
+    ]
+)
