@@ -9,8 +9,8 @@ from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
-from suit_set import ABB_CARDS, AEB_CARDS, AEE_CARDS
-from int_set import ID3
+from suit_set import ABB_CARDS, AEB_CARDS, AEE_CARDS, AED_CARDS
+from int_set import ID4
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -25,11 +25,11 @@ manager = CardsManager()
 
 
 # Creates your card set
-col_cards = [ABB_CARDS.copy(), AEB_CARDS.copy(), AEE_CARDS.copy()] # col_cards[i] is the (i + 1)th column of cards
-int_cards = ID3.copy()
+col_cards = [ABB_CARDS.copy(), AEB_CARDS.copy(), AEE_CARDS.copy(), AED_CARDS.copy()] # col_cards[i] is the (i + 1)th column of cards
+int_cards = ID4.copy()
 
 card_size = (width / 14, height / 6 - 10)
-card_set_size_wide = (width / 4, height / 6)
+card_set_size_wide = (width / 3, height / 6)
 card_set_size_long = (width / 12, height / 2)
 
 int_cards_graphics = AlignedHand(
@@ -65,6 +65,11 @@ manager.add_set(
     col_cards_graphics[2],
     # Position on the screen of the entire set
     (width / 3 - 9, int_cards_graphics.size[1] + 20),
+)
+manager.add_set(
+    col_cards_graphics[3],
+    # Position on the screen of the entire set
+    (5 * width / 12 - 12, int_cards_graphics.size[1] + 20),
 )
 
 card_back = AbstractCard("")
@@ -111,7 +116,7 @@ while 1: # game loop
             
             stage = 1
             int_cards_graphics.clear_cache()
-            for i in range(3):
+            for i in range(4):
                 col_cards_graphics[i].clear_cache()
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 1:
@@ -125,7 +130,7 @@ while 1: # game loop
                     )
             stage = 2       
             int_cards_graphics.clear_cache()
-            for i in range(3):
+            for i in range(4):
                 col_cards_graphics[i].clear_cache()
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 2:
@@ -162,7 +167,7 @@ while 1: # game loop
 
             stage = 3
             int_cards_graphics.clear_cache()
-            for i in range(3):
+            for i in range(4):
                 col_cards_graphics[i].clear_cache()
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 3:
@@ -185,7 +190,7 @@ while 1: # game loop
                 )
             
             int_cards_graphics.clear_cache()
-            for i in range(3):
+            for i in range(4):
                 col_cards_graphics[i].clear_cache()
     
         manager.process_events(event)

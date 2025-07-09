@@ -2,11 +2,12 @@ from int_card import IntCard
 from pygame_cards.set import CardsSet
 
 
-ID3 = CardsSet(
+ID4 = CardsSet(
     [
         IntCard("1", 1, True),
         IntCard("2", 2, True),
         IntCard("3", 3, True),
+        IntCard("4", 4, True),
     ]
 )
 
@@ -17,6 +18,31 @@ ID5 = CardsSet(
         IntCard("3", 3, True),
         IntCard("4", 4, True),
         IntCard("5", 5, True),
+    ]
+)
+
+ID20 = CardsSet(
+    [
+        IntCard("1", 1, True),
+        IntCard("2", 2, True),
+        IntCard("3", 3, True),
+        IntCard("4", 4, True),
+        IntCard("5", 5, True),
+        IntCard("6", 6, True),
+        IntCard("7", 7, True),
+        IntCard("8", 8, True),
+        IntCard("9", 9, True),
+        IntCard("10", 10, True),
+        IntCard("11", 11, True),
+        IntCard("12", 12, True),
+        IntCard("13", 13, True),
+        IntCard("14", 14, True),
+        IntCard("15", 15, True),
+        IntCard("16", 16, True),
+        IntCard("17", 17, True),
+        IntCard("18", 18, True),
+        IntCard("19", 19, True),
+        IntCard("20", 20, True),
     ]
 )
 

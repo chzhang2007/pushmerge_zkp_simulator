@@ -12,7 +12,7 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from int_set import ID3, ID5, DUMMY_ONE, DUMMY_TWO, DUMMY_THREE, DUMMY_FOUR, DUMMY_FIVE, ENCODING
+from int_set import ID4, ID5, ID20, DUMMY_ONE, DUMMY_TWO, DUMMY_THREE, DUMMY_FOUR, DUMMY_FIVE, ENCODING
 from pygame_cards.utils import position_for_centering
 
 
@@ -41,7 +41,7 @@ class IntCardGraphics(AbstractCardGraphics):
 
         return surf
 
-for card in ID3 + ID5 + DUMMY_ONE + DUMMY_TWO + DUMMY_THREE + DUMMY_FOUR + DUMMY_FIVE + ENCODING:
+for card in ID4 + ID5 + ID20 + DUMMY_ONE + DUMMY_TWO + DUMMY_THREE + DUMMY_FOUR + DUMMY_FIVE + ENCODING:
     match card.name:
         case "0":
             if card.face_up:
@@ -103,6 +103,156 @@ for card in ID3 + ID5 + DUMMY_ONE + DUMMY_TWO + DUMMY_THREE + DUMMY_FOUR + DUMMY
                 file = (
                     "card_back.png"
                 )
+        case "6":
+            if card.face_up:
+                file = (
+                    "6.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "7":
+            if card.face_up:
+                file = (
+                    "7.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "8":
+            if card.face_up:
+                file = (
+                    "8.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "9":
+            if card.face_up:
+                file = (
+                    "9.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "10":
+            if card.face_up:
+                file = (
+                    "10.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "11":
+            if card.face_up:
+                file = (
+                    "11.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "12":
+            if card.face_up:
+                file = (
+                    "12.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "13":
+            if card.face_up:
+                file = (
+                    "13.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "14":
+            if card.face_up:
+                file = (
+                    "14.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "15":
+            if card.face_up:
+                file = (
+                    "15.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "16":
+            if card.face_up:
+                file = (
+                    "16.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "17":
+            if card.face_up:
+                file = (
+                    "17.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "18":
+            if card.face_up:
+                file = (
+                    "18.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "19":
+            if card.face_up:
+                file = (
+                    "19.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "20":
+            if card.face_up:
+                file = (
+                    "20.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
         case _:
             raise ValueError(f"Unkonwn character {card.name}")
 
@@ -120,7 +270,7 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode(size)
     screen.fill("black")
 
-    for i, card in enumerate(ID3):
+    for i, card in enumerate(ID4):
         position = (50 + i * (100 + card.graphics.size[0]), 20) # edit this to change card positions
 
         # Simply blit the card on the main surface

@@ -26,11 +26,44 @@ AEE_CARDS = CardsSet(
     ]
 )
 
+AED_CARDS = CardsSet(
+    [
+        SuitCard("heart", False),
+        SuitCard("club", False),
+        SuitCard("diamond", False),
+    ]
+)
+
 DUMMY_LENGTH_4 = CardsSet(
     [
         SuitCard("diamond", False),
         SuitCard("diamond", False),
         SuitCard("diamond", False),
         SuitCard("diamond", False),
+    ]
+)
+
+GRID_STATE = CardsSet(
+    [
+        SuitCard("diamond", True),
+        SuitCard("diamond", True),
+        SuitCard("diamond", True),
+        SuitCard("diamond", True),
+        SuitCard("diamond", True),
+        SuitCard("diamond", True),
+        SuitCard("spade", True),
+        SuitCard("club", True),
+        SuitCard("club", True),
+        SuitCard("diamond", True),
+        SuitCard("diamond", True),
+        SuitCard("heart", True),
+        SuitCard("spade", True),
+        SuitCard("spade", True),
+        SuitCard("diamond", True),
+        SuitCard("diamond", True),
+        SuitCard("diamond", True),
+        SuitCard("diamond", True),
+        SuitCard("diamond", True),
+        SuitCard("diamond", True),
     ]
 )
