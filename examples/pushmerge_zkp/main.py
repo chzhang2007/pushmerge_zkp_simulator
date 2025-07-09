@@ -141,15 +141,34 @@ while 1: # game loop
                 else:
                     card.name = "0"
                     card.number = 0
+            stage = 2
+            id_cards_m_graphics.clear_cache()
+            grid_state_m_graphics.clear_cache()
+            enc_cards_m_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 2:
+            # turn the encoding row face up
+            for card in enc_cards_m_graphics.cardset:
                 card.face_up = True
                 card.graphics = IntCardGraphics(
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
                 )
-            stage = 2
-            id_cards_m_graphics.clear_cache()
-            grid_state_m_graphics.clear_cache()
+            stage = 3
             enc_cards_m_graphics.clear_cache()
+        
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 3:
+            # turn the chosen card face-up
+            for i in range(len(enc_cards_m_graphics.cardset)):
+                if enc_cards_m_graphics.cardset[i].name == "1":
+                    grid_state_m_graphics.cardset[i].face_up = True
+                    grid_state_m_graphics.cardset[i].graphics = SuitCardGraphics(
+                        grid_state_m_graphics.cardset[i],
+                        filepath=Path("examples/pushmerge_zkp/images", f"{grid_state_m_graphics.cardset[i].name}.png"),
+                    )
+            stage = 4
+            grid_state_m_graphics.clear_cache()
+                    
 
         manager.process_events(event)
 
