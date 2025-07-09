@@ -703,6 +703,66 @@ while 1: # game loop
             enc_cards_m_graphics.clear_cache()
             for column in col_cards_n_graphics:
                 column.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 21:
+            index_list = [(i + 1) for i in range(len(id_cards_m))]
+            random.shuffle(index_list)
+            
+            # shuffle the id cards of M and turn them face-up
+            int_card_numbers = [card.number for card in id_cards_m]
+            for (i, card) in enumerate(id_cards_m_graphics.cardset):
+                card.name = str(int_card_numbers[index_list[i] - 1])
+                card.number = int_card_numbers[index_list[i] - 1]
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", f"{card.number}.png"),
+                )
+                
+            # shuffle the grid state of M
+            grid_state_m_temp = []
+            for i in range(len(grid_state_m)):
+                grid_state_m_temp.append(grid_state_m[index_list[i] - 1])
+            grid_state_m = grid_state_m_temp
+            grid_state_m_graphics.cardset = grid_state_m_temp
+
+            stage = 22
+            id_cards_m_graphics.clear_cache()
+            for column in col_cards_n_graphics:
+                column.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 22:
+            # return the grid state of M to its original positions
+            grid_state_m_temp = [0 for _ in range(20)]
+            for (i, card) in enumerate(grid_state_m_graphics.cardset):
+                grid_state_m_temp[id_cards_m[i].number - 1] = card
+            grid_state_m = grid_state_m_temp
+            grid_state_m_graphics.cardset = grid_state_m_temp
+            
+            # return the id cards of M to (1, 2, ..., 20)
+            for (i, card) in enumerate(id_cards_m):
+                card.name = str(i + 1)
+                card.number = i + 1
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
+                )
+            
+            stage = 23
+            id_cards_m_graphics.clear_cache()
+            grid_state_m_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 23:
+            for card in id_cards_m_graphics.cardset:
+                card.face_up = False
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                )
+                
+            stage = 24
+            id_cards_m_graphics.clear_cache()
 
         manager.process_events(event)
 
