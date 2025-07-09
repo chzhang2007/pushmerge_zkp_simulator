@@ -18,14 +18,6 @@ AEB_CARDS = CardsSet(
     ]
 )
 
-AEE_CARDS = CardsSet(
-    [
-        SuitCard("heart", False),
-        SuitCard("club", False),
-        SuitCard("club", False),
-    ]
-)
-
 AED_CARDS = CardsSet(
     [
         SuitCard("heart", False),
@@ -34,10 +26,79 @@ AED_CARDS = CardsSet(
     ]
 )
 
-DUMMY_LENGTH_4 = CardsSet(
+AEE_CARDS = CardsSet(
+    [
+        SuitCard("heart", False),
+        SuitCard("club", False),
+        SuitCard("club", False),
+    ]
+)
+
+BB_CARDS = CardsSet(
+    [
+        SuitCard("spade", False),
+        SuitCard("spade", False),
+    ]
+)
+
+BD_CARDS = CardsSet(
+    [
+        SuitCard("spade", False),
+        SuitCard("diamond", False),
+    ]
+)
+
+BE_CARDS = CardsSet(
+    [
+        SuitCard("spade", False),
+        SuitCard("club", False),
+    ]
+)
+
+DB_CARDS = CardsSet(
+    [
+        SuitCard("diamond", False),
+        SuitCard("spade", False),
+    ]
+)
+
+DD_CARDS = CardsSet(
     [
         SuitCard("diamond", False),
         SuitCard("diamond", False),
+    ]
+)
+
+DE_CARDS = CardsSet(
+    [
+        SuitCard("diamond", False),
+        SuitCard("club", False),
+    ]
+)
+
+EB_CARDS = CardsSet(
+    [
+        SuitCard("club", False),
+        SuitCard("spade", False),
+    ]
+)
+
+ED_CARDS = CardsSet(
+    [
+        SuitCard("club", False),
+        SuitCard("diamond", False),
+    ]
+)
+
+EE_CARDS = CardsSet(
+    [
+        SuitCard("club", False),
+        SuitCard("club", False),
+    ]
+)
+
+DUMMY_LENGTH_2 = CardsSet(
+    [
         SuitCard("diamond", False),
         SuitCard("diamond", False),
     ]
