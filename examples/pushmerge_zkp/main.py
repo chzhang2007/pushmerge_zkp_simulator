@@ -67,8 +67,8 @@ clock = pygame.time.Clock()
 stage = 0 # 0 = everything in M face-up, 1 = everything in M face-down, 2 = add encoder row for chosen pile cut
 
 encoding_1 = 0
-
 p_shuffled = 0
+removed_col_n = 0
 
 while 1: # game loop
     screen.fill("black")
@@ -362,6 +362,7 @@ while 1: # game loop
             col_cards_q = []
             for i in range(4):
                 if enc_cards_n_graphics.cardset[i].name == "1":
+                    removed_col_n = i
                     name0 = col_cards_n_graphics[i].cardset[0].name
                     name1 = col_cards_n_graphics[i].cardset[1].name
                     col_cards_n_graphics[i].cardset[0].name = "blank"
@@ -532,6 +533,36 @@ while 1: # game loop
             stage = 13
             id_cards_q_graphics.clear_cache()
             for column in col_cards_q_graphics:
+                column.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 13:
+            # return the cards in column 1 of matrix Q to their original positions in matrix N
+            col_cards_n_graphics[removed_col_n].remove_all_cards()
+            col_cards_n_graphics[removed_col_n].append_card(
+                col_cards_q_graphics[0].cardset[1]
+            )
+            col_cards_n_graphics[removed_col_n].append_card(
+                col_cards_q_graphics[0].cardset[2]
+            )
+
+            # return the agent card to its original position in matrix M
+            grid_state_m_graphics.cardset[p_shuffled].name = "heart"
+            grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
+                grid_state_m_graphics.cardset[p_shuffled],
+                filepath=Path("examples/pushmerge_zkp/images", "heart.png"),
+            )
+
+            # discard matrix Q
+            for i in range(4):
+                id_cards_q_graphics.remove_card(id_cards_q_graphics.cardset[0])
+            for column in col_cards_q_graphics:
+                for j in range(3):
+                    column.remove_card(column.cardset[0])
+                    
+            stage = 14
+            id_cards_q_graphics.clear_cache()
+            grid_state_m_graphics.clear_cache()
+            for column in col_cards_n_graphics:
                 column.clear_cache()
 
         manager.process_events(event)
