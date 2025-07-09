@@ -9,7 +9,6 @@ from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
-# from suit_set import DUMMY_LENGTH_4
 from int_set import ID5, DUMMY_ONE, DUMMY_TWO, DUMMY_THREE, DUMMY_FOUR, DUMMY_FIVE, ENCODING
 from pygame_cards.set import CardsSet
 

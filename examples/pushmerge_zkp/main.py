@@ -1,5 +1,6 @@
 import random
 import sys
+import copy
 import pygame
 from pathlib import Path
 from suit_card_graphics import SuitCardGraphics
@@ -65,6 +66,8 @@ clock = pygame.time.Clock()
 
 stage = 0 # 0 = everything in M face-up, 1 = everything in M face-down, 2 = add encoder row for chosen pile cut
 
+encoding_1 = 0
+
 while 1: # game loop
     screen.fill("black")
     time_delta = clock.tick(60) / 1000.0
@@ -94,6 +97,7 @@ while 1: # game loop
             grid_state_m_graphics.clear_cache()
         
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 1:
+            # add encoding row for chosen pile cut
             enc_cards_m = ENCODING_MOVE_1.copy()
             enc_cards_m_graphics = AlignedHand(
                 enc_cards_m,
@@ -106,6 +110,46 @@ while 1: # game loop
                 # Position on the screen of the entire set
                 (0, 2 * grid_state_m_graphics.size[1] + 10),
             )
+            
+            # generate random pile shifting shuffle
+            index_list = [(i + 1) for i in range(len(id_cards_m))]
+            offset = random.randint(0, len(id_cards_m) - 1)
+            for i in range(len(index_list)):
+                index_list[i] = (index_list[i] + offset) % len(id_cards_m)
+                if index_list[i] == 0:
+                    index_list[i] = len(id_cards_m)
+            
+            # flip the id cards face down and shuffle them
+            for (i, card) in enumerate(id_cards_m):
+                if enc_cards_m_graphics.cardset[i].name == "1":
+                    encoding_1 = card.number
+                card.name = str(index_list[i])
+                card.number = index_list[i]
+
+            # shuffle the columns
+            grid_state_m_temp = []
+            for i in range(len(grid_state_m)):
+                grid_state_m_temp.append(grid_state_m[index_list[i] - 1])
+            grid_state_m = grid_state_m_temp
+            grid_state_m_graphics.cardset = grid_state_m_temp
+                    
+            # shuffle the encoding row
+            for (i, card) in enumerate(enc_cards_m):
+                if index_list[i] == encoding_1:
+                    card.name = "1"
+                    card.number = 1
+                else:
+                    card.name = "0"
+                    card.number = 0
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
+                )
+            stage = 2
+            id_cards_m_graphics.clear_cache()
+            grid_state_m_graphics.clear_cache()
+            enc_cards_m_graphics.clear_cache()
 
         manager.process_events(event)
 
