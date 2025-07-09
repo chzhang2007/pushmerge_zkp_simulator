@@ -473,8 +473,32 @@ while 1: # game loop
             stage = 11
             for column in col_cards_q_graphics:
                 column.clear_cache()
-                
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 11:   
+        
+        # simulate all legal moves
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 11:
+            for i in range(4):
+                if col_cards_q_graphics[i].cardset[1].name == "spade" and col_cards_q_graphics[i].cardset[2].name == "spade":
+                    col_cards_q_graphics[i].cardset[1].name = "club"
+                    col_cards_q_graphics[i].cardset[1].graphics = SuitCardGraphics(
+                        col_cards_q_graphics[i].cardset[1],
+                        filepath=Path("examples/pushmerge_zkp/images", "club.png"),
+                    )
+                else:
+                    col_cards_q_graphics[i].cardset[0].name = "club"
+                    col_cards_q_graphics[i].cardset[0].graphics = SuitCardGraphics(
+                        col_cards_q_graphics[i].cardset[0],
+                        filepath=Path("examples/pushmerge_zkp/images", "club.png"),
+                    )
+                    col_cards_q_graphics[i].cardset[1].name = "heart"
+                    col_cards_q_graphics[i].cardset[1].graphics = SuitCardGraphics(
+                        col_cards_q_graphics[i].cardset[1],
+                        filepath=Path("examples/pushmerge_zkp/images", "heart.png"),
+                    )
+            stage = 12
+            for column in col_cards_q_graphics:
+                column.clear_cache()
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 12:
             index_list = [(i + 1) for i in range(len(id_cards_q))]
             random.shuffle(index_list)
             
@@ -487,6 +511,12 @@ while 1: # game loop
                         filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                     )
             
+            stage = 13
+            for column in col_cards_q_graphics:
+                column.clear_cache()
+
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 13:
             # shuffle the id cards
             int_card_numbers = [card.number for card in id_cards_q]
             for (i, card) in enumerate(id_cards_q_graphics.cardset):
@@ -506,12 +536,12 @@ while 1: # game loop
                 for j in range(3):
                     column.remove_card(column.cardset[0]) 
                       
-            stage = 12
+            stage = 14
             id_cards_q_graphics.clear_cache()
             for column in col_cards_q_graphics:
                 column.clear_cache()
-                
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 12:
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 14:
             # return rule cards to their original positions
             for (i, column) in enumerate(col_cards_q_graphics):
                 for j in range(3):
@@ -530,12 +560,12 @@ while 1: # game loop
                     filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
                 )
             
-            stage = 13
+            stage = 15
             id_cards_q_graphics.clear_cache()
             for column in col_cards_q_graphics:
                 column.clear_cache()
-                
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 13:
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 15:
             # return the cards in column 1 of matrix Q to their original positions in matrix N
             col_cards_n_graphics[removed_col_n].remove_all_cards()
             col_cards_n_graphics[removed_col_n].append_card(
@@ -559,9 +589,118 @@ while 1: # game loop
                 for j in range(3):
                     column.remove_card(column.cardset[0])
                     
-            stage = 14
+            stage = 16
             id_cards_q_graphics.clear_cache()
             grid_state_m_graphics.clear_cache()
+            for column in col_cards_n_graphics:
+                column.clear_cache()
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 16:
+            # discard the encoding row of matrix N
+            for i in range(4):
+                enc_cards_n_graphics.remove_card(enc_cards_n_graphics.cardset[0])
+            
+            # shuffle the id cards of N
+            int_card_numbers = [card.number for card in id_cards_n]
+            for (i, card) in enumerate(id_cards_n_graphics.cardset):
+                card.name = str(int_card_numbers[index_list[i] - 1])
+                card.number = int_card_numbers[index_list[i] - 1]
+                card.face_up = False
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                )
+                
+            # shuffle the columns of N
+            for (i, column) in enumerate(col_cards_n_graphics):
+                for j in range(2):
+                    column.append_card(col_cards_n_graphics[index_list[i] - 1].cardset[j])
+            for column in col_cards_n_graphics:
+                for j in range(2):
+                    column.remove_card(column.cardset[0])
+
+            stage = 17
+            id_cards_n_graphics.clear_cache()
+            for column in col_cards_n_graphics:
+                column.clear_cache()
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 17:
+            # turn the id cards of N face-up
+            for card in id_cards_n_graphics.cardset:
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
+                )
+            stage = 18
+            id_cards_n_graphics.clear_cache()
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 18:
+            # return rule cards to their original positions
+            for (i, column) in enumerate(col_cards_n_graphics):
+                for j in range(2):
+                    col_cards_n_graphics[id_cards_n[i].number - 1].append_card(column.cardset[j])
+            for column in col_cards_n_graphics:
+                for j in range(2):
+                    column.remove_card(column.cardset[0])
+            
+            # return id cards to (1, 2, 3, 4)
+            for (i, card) in enumerate(id_cards_n):
+                card.name = str(i + 1)
+                card.number = i + 1
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
+                )
+            
+            stage = 19
+            id_cards_n_graphics.clear_cache()
+            for column in col_cards_n_graphics:
+                column.clear_cache()
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 19:
+            p0 = [(p_shuffled - 5) % 20, (p_shuffled - 1) % 20, (p_shuffled + 1) % 20, (p_shuffled + 5) % 20]
+            p1 = [(p_shuffled - 10) % 20, (p_shuffled - 2) % 20, (p_shuffled + 2) % 20, (p_shuffled + 10) % 20]
+            # return the cards in column 1 of matrix N to their original positions in matrix M
+            for i in range(4):
+                grid_state_m_graphics.cardset[p0[i]].name = col_cards_n_graphics[i].cardset[0].name
+                grid_state_m_graphics.cardset[p0[i]].face_up = False
+                grid_state_m_graphics.cardset[p0[i]].graphics = SuitCardGraphics(
+                    grid_state_m_graphics.cardset[p0[i]],
+                    filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                )
+                grid_state_m_graphics.cardset[p1[i]].name = col_cards_n_graphics[i].cardset[1].name
+                grid_state_m_graphics.cardset[p1[i]].face_up = False
+                grid_state_m_graphics.cardset[p1[i]].graphics = SuitCardGraphics(
+                    grid_state_m_graphics.cardset[p1[i]],
+                    filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                )
+                
+            # turn the agent card face-down
+            grid_state_m_graphics.cardset[p_shuffled].face_up = False
+            grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
+                grid_state_m_graphics.cardset[p_shuffled],
+                filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+            )
+            
+            # discard matrix N
+            for i in range(4):
+                id_cards_n_graphics.remove_card(id_cards_n_graphics.cardset[0])
+            for column in col_cards_n_graphics:
+                for j in range(2):
+                    column.remove_card(column.cardset[0])
+            stage = 20
+            grid_state_m_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 20:
+            # discard the encoding row of matrix M
+            for i in range(20):
+                enc_cards_m_graphics.remove_card(enc_cards_m_graphics.cardset[0])
+
+            stage = 21
+            id_cards_m_graphics.clear_cache()
+            enc_cards_m_graphics.clear_cache()
             for column in col_cards_n_graphics:
                 column.clear_cache()
 

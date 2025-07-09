@@ -179,7 +179,7 @@ while 1: # game loop
                 for j in range(3):
                     column.remove_card(column.cardset[0])
             
-            # return id cards to (1, 2, 3)
+            # return id cards to (1, 2, 3, 4)
             for (i, card) in enumerate(int_cards):
                 card.name = str(i + 1)
                 card.number = i + 1
