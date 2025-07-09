@@ -25,3 +25,12 @@ AEE_CARDS = CardsSet(
         SuitCard("club", False),
     ]
 )
+
+DUMMY_LENGTH_4 = CardsSet(
+    [
+        SuitCard("diamond", False),
+        SuitCard("diamond", False),
+        SuitCard("diamond", False),
+        SuitCard("diamond", False),
+    ]
+)

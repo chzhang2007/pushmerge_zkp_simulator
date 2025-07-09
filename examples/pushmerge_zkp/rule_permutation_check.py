@@ -51,19 +51,16 @@ col_cards_graphics = [(AlignedHandVertical(
                         card_size=card_size,
                         graphics_type=SuitCardGraphics,
                     )) for i in range(len(col_cards))]
-# Finally add the set to the manager
 manager.add_set(
     col_cards_graphics[0],
     # Position on the screen of the entire set
     (width / 6 - 5, int_cards_graphics.size[1] + 20),
 )
-# Finally add the set to the manager
 manager.add_set(
     col_cards_graphics[1],
     # Position on the screen of the entire set
     (width / 4 - 9, int_cards_graphics.size[1] + 20),
 )
-# Finally add the set to the manager
 manager.add_set(
     col_cards_graphics[2],
     # Position on the screen of the entire set

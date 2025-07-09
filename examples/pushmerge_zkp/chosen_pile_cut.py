@@ -9,8 +9,8 @@ from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
-from suit_set import ABB_CARDS, AEB_CARDS, AEE_CARDS
-from int_set import INT_CARDS
+# from suit_set import DUMMY_LENGTH_4
+from int_set import ID5, DUMMY_ONE, DUMMY_TWO, DUMMY_THREE, DUMMY_FOUR, DUMMY_FIVE, ENCODING
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -25,22 +25,22 @@ manager = CardsManager()
 
 
 # Creates your card set
-col_cards = [ABB_CARDS.copy(), AEB_CARDS.copy(), AEE_CARDS.copy()] # col_cards[i] is the (i + 1)th column of cards
-int_cards = INT_CARDS.copy()
+id_cards = ID5.copy()
+col_cards = [DUMMY_ONE.copy(), DUMMY_TWO.copy(), DUMMY_THREE.copy(), DUMMY_FOUR.copy(), DUMMY_FIVE.copy()] # col_cards[i] is the (i + 1)th column of cards
+enc_cards = ENCODING.copy()
 
-card_size = (width / 14, height / 6 - 10)
-card_set_size_wide = (width / 4, height / 6)
-card_set_size_long = (width / 12, height / 2)
+card_size = (width / 16, height / 8 - 10)
+card_set_size_wide = (width / 3, height / 8)
+card_set_size_long = (width / 15, height / 2)
 
-int_cards_graphics = AlignedHand(
-    int_cards,
+id_cards_graphics = AlignedHand(
+    id_cards,
     card_set_size_wide,
     card_size=card_size,
     graphics_type=IntCardGraphics,
 )
-# Finally add the set to the manager
 manager.add_set(
-    int_cards_graphics,
+    id_cards_graphics,
     # Position on the screen of the entire set
     (width / 6, 0),
 )
@@ -55,19 +55,39 @@ col_cards_graphics = [(AlignedHandVertical(
 manager.add_set(
     col_cards_graphics[0],
     # Position on the screen of the entire set
-    (width / 6 - 5, int_cards_graphics.size[1] + 20),
+    (width / 6 - 5, id_cards_graphics.size[1] + 10),
 )
-# Finally add the set to the manager
 manager.add_set(
     col_cards_graphics[1],
     # Position on the screen of the entire set
-    (width / 4 - 9, int_cards_graphics.size[1] + 20),
+    (width * 7 / 30, id_cards_graphics.size[1] + 10),
 )
-# Finally add the set to the manager
 manager.add_set(
     col_cards_graphics[2],
     # Position on the screen of the entire set
-    (width / 3 - 9, int_cards_graphics.size[1] + 20),
+    (width * 3 / 10 + 2, id_cards_graphics.size[1] + 10),
+)
+manager.add_set(
+    col_cards_graphics[3],
+    # Position on the screen of the entire set
+    (width * 11 / 30 + 2, id_cards_graphics.size[1] + 10),
+)
+manager.add_set(
+    col_cards_graphics[4],
+    # Position on the screen of the entire set
+    (width * 13 / 30 + 3, id_cards_graphics.size[1] + 10),
+)
+
+enc_cards_graphics = AlignedHand(
+    enc_cards,
+    card_set_size_wide,
+    card_size=card_size,
+    graphics_type=IntCardGraphics,
+)
+manager.add_set(
+    enc_cards_graphics,
+    # Position on the screen of the entire set
+    (width / 6, 5 * id_cards_graphics.size[1] + 15),
 )
 
 card_back = AbstractCard("")
@@ -91,11 +111,18 @@ while 1: # game loop
             sys.exit()
         
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 0:
-            index_list = [(i + 1) for i in range(len(int_cards))]
-            random.shuffle(index_list)
+            index_list = [(i + 1) for i in range(len(id_cards))]
+            offset = random.randint(0, len(id_cards) - 1)
+            for i in range(len(index_list)):
+                index_list[i] = (index_list[i] + offset) % len(id_cards)
+                if index_list[i] == 0:
+                    index_list[i] = len(id_cards)
+            encoding_1 = 0
             
             # flip the id cards face down and shuffle them
-            for (i, card) in enumerate(int_cards):
+            for (i, card) in enumerate(id_cards):
+                if enc_cards_graphics.cardset[i].name == "1":
+                    encoding_1 = card.number
                 card.name = str(index_list[i])
                 card.number = index_list[i]
                 card.face_up = False
@@ -106,49 +133,80 @@ while 1: # game loop
 
             # shuffle the columns (TODO: highlight that the columns shuffled)
             for (i, column) in enumerate(col_cards_graphics):
-                for j in range(3):
+                for j in range(4):
                     column.append_card(col_cards_graphics[index_list[i] - 1].cardset[j])
             for column in col_cards_graphics:
-                for j in range(3):
+                for j in range(4):
                     column.remove_card(column.cardset[0])
+                    
+            # shuffle the encoding row
+            for (i, card) in enumerate(enc_cards):
+                if index_list[i] == encoding_1:
+                    card.name = "1"
+                    card.number = 1
+                else:
+                    card.name = "0"
+                    card.number = 0
             
             stage = 1
-            int_cards_graphics.clear_cache()
-            for i in range(3):
+            id_cards_graphics.clear_cache()
+            for i in range(len(col_cards_graphics)):
                 col_cards_graphics[i].clear_cache()
+            enc_cards_graphics.clear_cache()
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 1:
-            # flip the rule cards face up
-            for (i, column) in enumerate(col_cards_graphics):
-                for card in column.cardset:
-                    card.face_up = True
-                    card.graphics = SuitCardGraphics(
-                        card,
-                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
-                    )
+            # flip the encoding row face up
+            for (i, card) in enumerate(enc_cards):
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
+                )
+                if card.name == "1":
+                    for col_card in col_cards_graphics[i].cardset:
+                        col_card.face_up = True
+                        col_card.graphics = SuitCardGraphics(
+                            col_card,
+                            filepath=Path("examples/pushmerge_zkp/images", f"{col_card.name}.png"),
+                        )
+            
             stage = 2       
-            int_cards_graphics.clear_cache()
-            for i in range(3):
+            id_cards_graphics.clear_cache()
+            for i in range(len(col_cards_graphics)):
                 col_cards_graphics[i].clear_cache()
+            enc_cards_graphics.clear_cache()
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 2:
-            index_list = [(i + 1) for i in range(len(int_cards))]
-            random.shuffle(index_list)
+            index_list = [(i + 1) for i in range(len(id_cards))]
+            offset = random.randint(0, len(id_cards) - 1)
+            for i in range(len(index_list)):
+                index_list[i] = (index_list[i] + offset) % len(id_cards)
+                if index_list[i] == 0:
+                    index_list[i] = len(id_cards)
             
-            # flip the rule cards face down
-            for (i, column) in enumerate(col_cards_graphics):
-                for card in column.cardset:
-                    card.face_up = False
-                    card.graphics = SuitCardGraphics(
-                        card,
-                        filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
-                    )
+            # flip the encoding (and column) cards face down
+            for (i, card) in enumerate(enc_cards):
+                if card.name == "1":
+                    for col_card in col_cards_graphics[i].cardset:
+                        col_card.face_up = False
+                        col_card.graphics = SuitCardGraphics(
+                            col_card,
+                            filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                        )
+                card.face_up = False
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                )
             
             # shuffle the id cards
-            int_card_numbers = [card.number for card in int_cards]
-            for (i, card) in enumerate(int_cards):
-                card.name = str(int_card_numbers[index_list[i] - 1])
-                card.number = int_card_numbers[index_list[i] - 1]
+            encoding_1 = 0
+            id_card_numbers = [card.number for card in id_cards]
+            for (i, card) in enumerate(id_cards):
+                if enc_cards_graphics.cardset[i].name == "1":
+                    encoding_1 = id_card_numbers[i]
+                card.name = str(id_card_numbers[index_list[i] - 1])
+                card.number = id_card_numbers[index_list[i] - 1]
                 card.face_up = True
                 card.graphics = IntCardGraphics(
                     card,
@@ -157,28 +215,41 @@ while 1: # game loop
                 
             # shuffle the columns
             for (i, column) in enumerate(col_cards_graphics):
-                for j in range(3):
+                for j in range(4):
                     column.append_card(col_cards_graphics[index_list[i] - 1].cardset[j])
             for column in col_cards_graphics:
-                for j in range(3):
+                for j in range(4):
                     column.remove_card(column.cardset[0])
-
+                    
+            # shuffle the encoding row
+            for (i, card) in enumerate(enc_cards):
+                if id_cards[i].number == encoding_1:
+                    card.name = "1"
+                    card.number = 1
+                else:
+                    card.name = "0"
+                    card.number = 0
+                
             stage = 3
-            int_cards_graphics.clear_cache()
-            for i in range(3):
+            id_cards_graphics.clear_cache()
+            for i in range(len(col_cards_graphics)):
                 col_cards_graphics[i].clear_cache()
+            enc_cards_graphics.clear_cache()
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 3:
             # return rule cards to their original positions
             for (i, column) in enumerate(col_cards_graphics):
-                for j in range(3):
-                    col_cards_graphics[int_cards[i].number - 1].append_card(column.cardset[j])
+                for j in range(4):
+                    col_cards_graphics[id_cards[i].number - 1].append_card(column.cardset[j])
             for column in col_cards_graphics:
-                for j in range(3):
+                for j in range(4):
                     column.remove_card(column.cardset[0])
             
-            # return id cards to (1, 2, 3)
-            for (i, card) in enumerate(int_cards):
+            # return id cards to their original positions
+            encoding_1 = 0
+            for (i, card) in enumerate(id_cards):
+                if enc_cards_graphics.cardset[i].name == "1":
+                    encoding_1 = card.number
                 card.name = str(i + 1)
                 card.number = i + 1
                 card.face_up = True
@@ -186,10 +257,20 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
                 )
-            
-            int_cards_graphics.clear_cache()
+                
+            # return encoding row to its original positions
+            for (i, card) in enumerate(enc_cards):
+                if id_cards[i].number == encoding_1:
+                    card.name = "1"
+                    card.number = 1
+                else:
+                    card.name = "0"
+                    card.number = 0
+
+            id_cards_graphics.clear_cache()
             for i in range(3):
                 col_cards_graphics[i].clear_cache()
+            enc_cards_graphics.clear_cache()
     
         manager.process_events(event)
 

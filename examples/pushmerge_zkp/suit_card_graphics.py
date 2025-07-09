@@ -12,7 +12,7 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from suit_set import ABB_CARDS, AEB_CARDS, AEE_CARDS
+from suit_set import ABB_CARDS, AEB_CARDS, AEE_CARDS, DUMMY_LENGTH_4
 from pygame_cards.utils import position_for_centering
 
 
@@ -42,7 +42,7 @@ class SuitCardGraphics(AbstractCardGraphics):
         return surf
 
 
-for card in ABB_CARDS + AEB_CARDS + AEE_CARDS:
+for card in ABB_CARDS + AEB_CARDS + AEE_CARDS + DUMMY_LENGTH_4:
     match card.name:
         case "heart":
             if card.face_up:
