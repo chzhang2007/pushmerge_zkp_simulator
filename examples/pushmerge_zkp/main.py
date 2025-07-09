@@ -256,10 +256,11 @@ while 1: # game loop
             grid_state_m_graphics.clear_cache()
             for column in col_cards_n_graphics:
                 column.clear_cache()
+            enc_cards_m_graphics.clear_cache()
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 5:
             # place the id row of matrix Q
-            id_cards_q = ID4
+            id_cards_q = ID4Q
             id_cards_q_graphics = AlignedHand(
                 id_cards_q,
                 card_set_size_wide,
@@ -273,6 +274,7 @@ while 1: # game loop
             
             # place an encoding row under matrix N for the chosen pile cut
             enc_cards_n = ENCODING_3_LENGTH_4
+            encoding_1 = 3
             enc_cards_n_graphics = AlignedHand(
                 enc_cards_n,
                 card_set_size_wide,
@@ -291,7 +293,64 @@ while 1: # game loop
             grid_state_m_graphics.clear_cache()
             for column in col_cards_n_graphics:
                 column.clear_cache()
+            enc_cards_m_graphics.clear_cache()
+            enc_cards_n_graphics.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 6:
+            index_list = [(i + 1) for i in range(len(id_cards_n))]
+            offset = random.randint(0, len(id_cards_n) - 1)
+            for i in range(len(index_list)):
+                index_list[i] = (index_list[i] + offset) % len(id_cards_n)
+                if index_list[i] == 0:
+                    index_list[i] = len(id_cards_n)
+            
+            # flip the id cards face down and shuffle them
+            for (i, card) in enumerate(id_cards_n_graphics.cardset):
+                card.name = str(index_list[i])
+                card.number = index_list[i]
+                card.face_up = False
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                )
+
+            # shuffle the columns (TODO: highlight that the columns shuffled)
+            for (i, column) in enumerate(col_cards_n_graphics):
+                for j in range(2):
+                    column.append_card(col_cards_n_graphics[index_list[i] - 1].cardset[j])
+            for column in col_cards_n_graphics:
+                for j in range(2):
+                    column.remove_card(column.cardset[0])
                     
+            # shuffle the encoding row
+            for (i, card) in enumerate(enc_cards_n_graphics.cardset):
+                if index_list[i] == encoding_1:
+                    card.name = "1"
+                    card.number = 1
+                else:
+                    card.name = "0"
+                    card.number = 0
+
+            stage = 7
+            id_cards_m_graphics.clear_cache()
+            id_cards_n_graphics.clear_cache()
+            id_cards_q_graphics.clear_cache()
+            grid_state_m_graphics.clear_cache()
+            for column in col_cards_n_graphics:
+                column.clear_cache()
+            enc_cards_m_graphics.clear_cache()
+            enc_cards_n_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 7:
+            # turn encoding row face-up
+            for card in enc_cards_n_graphics.cardset:
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
+                )
+            stage = 8
+            enc_cards_n_graphics.clear_cache()
 
         manager.process_events(event)
 
