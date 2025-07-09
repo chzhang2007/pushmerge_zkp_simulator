@@ -97,6 +97,38 @@ EE_CARDS = CardsSet(
     ]
 )
 
+ABB_CARDSQ = CardsSet(
+    [
+        SuitCard("heart", False),
+        SuitCard("spade", False),
+        SuitCard("spade", False),
+    ]
+)
+
+AEB_CARDSQ = CardsSet(
+    [
+        SuitCard("heart", False),
+        SuitCard("club", False),
+        SuitCard("spade", False),
+    ]
+)
+
+AED_CARDSQ = CardsSet(
+    [
+        SuitCard("heart", False),
+        SuitCard("club", False),
+        SuitCard("diamond", False),
+    ]
+)
+
+AEE_CARDSQ = CardsSet(
+    [
+        SuitCard("heart", False),
+        SuitCard("club", False),
+        SuitCard("club", False),
+    ]
+)
+
 DUMMY_LENGTH_2 = CardsSet(
     [
         SuitCard("diamond", False),

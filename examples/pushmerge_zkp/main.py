@@ -11,7 +11,7 @@ from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
-from suit_set import GRID_STATE, BB_CARDS, BD_CARDS, BE_CARDS, DB_CARDS, DD_CARDS, DE_CARDS, EB_CARDS, ED_CARDS, EE_CARDS
+from suit_set import GRID_STATE, BB_CARDS, BD_CARDS, BE_CARDS, DB_CARDS, DD_CARDS, DE_CARDS, EB_CARDS, ED_CARDS, EE_CARDS, ABB_CARDSQ, AEB_CARDSQ, AED_CARDSQ, AEE_CARDSQ
 from int_set import ID4, ID4Q, ID20, ENCODING_MOVE_1, ENCODING_3_LENGTH_4
 from pygame_cards.set import CardsSet
 
@@ -211,12 +211,12 @@ while 1: # game loop
                 else:
                     col_cards_n.append(EE_CARDS.copy())
                     
-                col_cards_n_graphics = [(AlignedHandVertical(
-                                        col_cards_n[i],
-                                        card_set_size_long,
-                                        card_size=card_size,
-                                        graphics_type=SuitCardGraphics,
-                                    )) for i in range(len(col_cards_n))]
+            col_cards_n_graphics = [(AlignedHandVertical(
+                                    col_cards_n[i],
+                                    card_set_size_long,
+                                    card_size=card_size,
+                                    graphics_type=SuitCardGraphics,
+                                )) for i in range(len(col_cards_n))]
             manager.add_set(
                 col_cards_n_graphics[0],
                 # Position on the screen of the entire set
@@ -351,7 +351,103 @@ while 1: # game loop
                 )
             stage = 8
             enc_cards_n_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 8:
+            # take the chosen column and move it to matrix Q
+            grid_state_m_graphics.cardset[p_shuffled].name = "blank"
+            grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
+                grid_state_m_graphics.cardset[p_shuffled],
+                filepath=Path("examples/pushmerge_zkp/images", "blank.png"),
+            )
+            col_cards_q = []
+            for i in range(4):
+                if enc_cards_n_graphics.cardset[i].name == "1":
+                    name0 = col_cards_n_graphics[i].cardset[0].name
+                    name1 = col_cards_n_graphics[i].cardset[1].name
+                    col_cards_n_graphics[i].cardset[0].name = "blank"
+                    col_cards_n_graphics[i].cardset[0].graphics = SuitCardGraphics(
+                        col_cards_n_graphics[i].cardset[0],
+                        filepath=Path("examples/pushmerge_zkp/images", "blank.png"),
+                    )
+                    col_cards_n_graphics[i].cardset[1].name = "blank"
+                    col_cards_n_graphics[i].cardset[1].graphics = SuitCardGraphics(
+                        col_cards_n_graphics[i].cardset[1],
+                        filepath=Path("examples/pushmerge_zkp/images", "blank.png"),
+                    )
+                    if name0 == "spade" and name1 == "spade":
+                        col_cards_q.append(ABB_CARDSQ.copy())
+                        col_cards_q.append(AEB_CARDSQ.copy())
+                        col_cards_q.append(AED_CARDSQ.copy())
+                        col_cards_q.append(AEE_CARDSQ.copy())
+                    elif name0 == "club" and name1 == "spade":
+                        col_cards_q.append(AEB_CARDSQ.copy())
+                        col_cards_q.append(ABB_CARDSQ.copy())
+                        col_cards_q.append(AED_CARDSQ.copy())
+                        col_cards_q.append(AEE_CARDSQ.copy())
+                    elif name0 == "club" and name1 == "diamond":
+                        col_cards_q.append(AED_CARDSQ.copy())
+                        col_cards_q.append(ABB_CARDSQ.copy())
+                        col_cards_q.append(AEB_CARDSQ.copy())
+                        col_cards_q.append(AEE_CARDSQ.copy())
+                    else:
+                        col_cards_q.append(AEE_CARDSQ.copy())
+                        col_cards_q.append(ABB_CARDSQ.copy())
+                        col_cards_q.append(AEB_CARDSQ.copy())
+                        col_cards_q.append(AED_CARDSQ.copy())
 
+            col_cards_q_graphics = [(AlignedHandVertical(
+                                    col_cards_q[i],
+                                    card_set_size_long,
+                                    card_size=card_size,
+                                    graphics_type=SuitCardGraphics,
+                                )) for i in range(len(col_cards_q))]
+            manager.add_set(
+                col_cards_q_graphics[0],
+                # Position on the screen of the entire set
+                (width / 2, 5 * id_cards_n_graphics.size[1] + 10),
+            )
+            manager.add_set(
+                col_cards_q_graphics[1],
+                # Position on the screen of the entire set
+                (width / 2 + width / 20 + 6, 5 * id_cards_n_graphics.size[1] + 10),
+            )
+            manager.add_set(
+                col_cards_q_graphics[2],
+                # Position on the screen of the entire set
+                (width / 2 + width / 10 + 12, 5 * id_cards_n_graphics.size[1] + 10),
+            )
+            manager.add_set(
+                col_cards_q_graphics[3],
+                # Position on the screen of the entire set
+                (width / 2 + width * 3 / 20 + 20, 5 * id_cards_n_graphics.size[1] + 10),
+            )
+            
+            for card in id_cards_q_graphics.cardset:
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
+                )
+            for column in col_cards_q_graphics:
+                for card in column.cardset:
+                    card.face_up = True
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
+                    )
+            
+            stage = 8
+            id_cards_m_graphics.clear_cache()
+            id_cards_n_graphics.clear_cache()
+            id_cards_q_graphics.clear_cache()
+            grid_state_m_graphics.clear_cache()
+            for column in col_cards_n_graphics:
+                column.clear_cache()
+            for column in col_cards_q_graphics:
+                column.clear_cache()
+            enc_cards_m_graphics.clear_cache()
+            enc_cards_n_graphics.clear_cache()
+            
         manager.process_events(event)
 
     manager.update(time_delta)
