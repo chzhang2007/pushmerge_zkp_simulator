@@ -583,11 +583,12 @@ while 1: # game loop
                 col_cards_q_graphics[0].cardset[2]
             )
 
-            # return the agent card to its original position in matrix M
-            grid_state_m_graphics.cardset[p_shuffled].name = "heart"
+            # return q[0][0] to the agent's original position in matrix M
+            grid_state_m_graphics.cardset[p_shuffled].name = col_cards_q_graphics[0].cardset[0].name
+            grid_state_m_graphics.cardset[p_shuffled].face_up = False
             grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
                 grid_state_m_graphics.cardset[p_shuffled],
-                filepath=Path("examples/pushmerge_zkp/images", "heart.png"),
+                filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
             )
 
             # discard matrix Q
@@ -684,13 +685,6 @@ while 1: # game loop
                     grid_state_m_graphics.cardset[p1[i]],
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
-                
-            # turn the agent card face-down
-            grid_state_m_graphics.cardset[p_shuffled].face_up = False
-            grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
-                grid_state_m_graphics.cardset[p_shuffled],
-                filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
-            )
             
             # discard matrix N
             for i in range(4):
@@ -1335,11 +1329,12 @@ while 1: # game loop
                 col_cards_q_graphics[0].cardset[2]
             )
 
-            # return the agent card to its original position in matrix M
-            grid_state_m_graphics.cardset[p_shuffled].name = "heart"
+            # return q[0][0] to the agent's original position in matrix M
+            grid_state_m_graphics.cardset[p_shuffled].name = col_cards_q_graphics[0].cardset[0].name
+            grid_state_m_graphics.cardset[p_shuffled].face_up = False
             grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
                 grid_state_m_graphics.cardset[p_shuffled],
-                filepath=Path("examples/pushmerge_zkp/images", "heart.png"),
+                filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
             )
 
             # discard matrix Q
@@ -1436,13 +1431,6 @@ while 1: # game loop
                     grid_state_m_graphics.cardset[p1[i]],
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
-                
-            # turn the agent card face-down
-            grid_state_m_graphics.cardset[p_shuffled].face_up = False
-            grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
-                grid_state_m_graphics.cardset[p_shuffled],
-                filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
-            )
             
             # discard matrix N
             for i in range(4):
@@ -1611,6 +1599,20 @@ while 1: # game loop
                 
         # START OF MOVE CHECK 3
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 47:
+            for card in id_cards_m_graphics.cardset:
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
+                )
+            
+            for card in grid_state_m_graphics.cardset:
+                card.face_up = True
+                card.graphics = SuitCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
+                )
+            
             # add encoding row for chosen pile cut
             enc_cards_m = ENCODING_MOVE_3
             enc_cards_m_graphics = AlignedHand(
@@ -2087,11 +2089,12 @@ while 1: # game loop
                 col_cards_q_graphics[0].cardset[2]
             )
 
-            # return the agent card to its original position in matrix M
-            grid_state_m_graphics.cardset[p_shuffled].name = "heart"
+            # return q[0][0] to the agent's original position in matrix M
+            grid_state_m_graphics.cardset[p_shuffled].name = col_cards_q_graphics[0].cardset[0].name
+            grid_state_m_graphics.cardset[p_shuffled].face_up = False
             grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
                 grid_state_m_graphics.cardset[p_shuffled],
-                filepath=Path("examples/pushmerge_zkp/images", "heart.png"),
+                filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
             )
 
             # discard matrix Q
@@ -2188,13 +2191,6 @@ while 1: # game loop
                     grid_state_m_graphics.cardset[p1[i]],
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
-                
-            # turn the agent card face-down
-            grid_state_m_graphics.cardset[p_shuffled].face_up = False
-            grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
-                grid_state_m_graphics.cardset[p_shuffled],
-                filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
-            )
             
             # discard matrix N
             for i in range(4):
@@ -2839,11 +2835,12 @@ while 1: # game loop
                 col_cards_q_graphics[0].cardset[2]
             )
 
-            # return the agent card to its original position in matrix M
-            grid_state_m_graphics.cardset[p_shuffled].name = "heart"
+            # return q[0][0] to the agent's original position in matrix M
+            grid_state_m_graphics.cardset[p_shuffled].name = col_cards_q_graphics[0].cardset[0].name
+            grid_state_m_graphics.cardset[p_shuffled].face_up = False
             grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
                 grid_state_m_graphics.cardset[p_shuffled],
-                filepath=Path("examples/pushmerge_zkp/images", "heart.png"),
+                filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
             )
 
             # discard matrix Q
@@ -2940,13 +2937,6 @@ while 1: # game loop
                     grid_state_m_graphics.cardset[p1[i]],
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
-                
-            # turn the agent card face-down
-            grid_state_m_graphics.cardset[p_shuffled].face_up = False
-            grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
-                grid_state_m_graphics.cardset[p_shuffled],
-                filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
-            )
             
             # discard matrix N
             for i in range(4):
