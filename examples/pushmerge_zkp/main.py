@@ -11,7 +11,7 @@ from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
-from suit_set import GRID_STATE, BB_CARDS, BD_CARDS, BE_CARDS, DB_CARDS, DD_CARDS, DE_CARDS, EB_CARDS, ED_CARDS, EE_CARDS, ABB_CARDSQ, AEB_CARDSQ, AED_CARDSQ, AEE_CARDSQ
+from suit_set import GRID_STATE, BB_CARDS, BD_CARDS, BE_CARDS, DB_CARDS, DD_CARDS, DE_CARDS, EB_CARDS, ED_CARDS, ED_CARDS2, EE_CARDS, ABB_CARDSQ, AEB_CARDSQ, AED_CARDSQ, AEE_CARDSQ
 from int_set import ID4, ID4Q, ID20, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_4, ENCODING_1_LENGTH_4, ENCODING_2_LENGTH_4, ENCODING_3_LENGTH_4, ENCODING_4_LENGTH_4
 from pygame_cards.set import CardsSet
 
@@ -193,6 +193,7 @@ while 1: # game loop
             p0 = [(p_shuffled - 5) % 20, (p_shuffled - 1) % 20, (p_shuffled + 1) % 20, (p_shuffled + 5) % 20]
             p1 = [(p_shuffled - 10) % 20, (p_shuffled - 2) % 20, (p_shuffled + 2) % 20, (p_shuffled + 10) % 20]
 
+            ed_used = False
             for i in range(4):
                 if grid_state_m_graphics.cardset[p0[i]].name == "spade" and grid_state_m_graphics.cardset[p1[i]].name == "spade":
                     col_cards_n.append(BB_CARDS.copy())
@@ -208,8 +209,11 @@ while 1: # game loop
                     col_cards_n.append(DE_CARDS.copy())
                 elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "spade":
                     col_cards_n.append(EB_CARDS.copy())
-                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond":
+                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond" and ed_used == False:
                     col_cards_n.append(ED_CARDS.copy())
+                    ed_used = True
+                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond" and ed_used == True:
+                    col_cards_n.append(ED_CARDS2.copy())
                 else:
                     col_cards_n.append(EE_CARDS.copy())
                     
@@ -945,6 +949,7 @@ while 1: # game loop
             p0 = [(p_shuffled - 5) % 20, (p_shuffled - 1) % 20, (p_shuffled + 1) % 20, (p_shuffled + 5) % 20]
             p1 = [(p_shuffled - 10) % 20, (p_shuffled - 2) % 20, (p_shuffled + 2) % 20, (p_shuffled + 10) % 20]
 
+            ed_used = False
             for i in range(4):
                 if grid_state_m_graphics.cardset[p0[i]].name == "spade" and grid_state_m_graphics.cardset[p1[i]].name == "spade":
                     col_cards_n.append(BB_CARDS.copy())
@@ -960,8 +965,11 @@ while 1: # game loop
                     col_cards_n.append(DE_CARDS.copy())
                 elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "spade":
                     col_cards_n.append(EB_CARDS.copy())
-                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond":
+                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond" and ed_used == False:
                     col_cards_n.append(ED_CARDS.copy())
+                    ed_used = True
+                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond" and ed_used == True:
+                    col_cards_n.append(ED_CARDS2.copy())
                 else:
                     col_cards_n.append(EE_CARDS.copy())
                     
@@ -1599,20 +1607,6 @@ while 1: # game loop
                 
         # START OF MOVE CHECK 3
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 47:
-            for card in id_cards_m_graphics.cardset:
-                card.face_up = True
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
-                )
-            
-            for card in grid_state_m_graphics.cardset:
-                card.face_up = True
-                card.graphics = SuitCardGraphics(
-                    card,
-                    filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
-                )
-            
             # add encoding row for chosen pile cut
             enc_cards_m = ENCODING_MOVE_3
             enc_cards_m_graphics = AlignedHand(
@@ -1705,6 +1699,7 @@ while 1: # game loop
             p0 = [(p_shuffled - 5) % 20, (p_shuffled - 1) % 20, (p_shuffled + 1) % 20, (p_shuffled + 5) % 20]
             p1 = [(p_shuffled - 10) % 20, (p_shuffled - 2) % 20, (p_shuffled + 2) % 20, (p_shuffled + 10) % 20]
 
+            ed_used = False
             for i in range(4):
                 if grid_state_m_graphics.cardset[p0[i]].name == "spade" and grid_state_m_graphics.cardset[p1[i]].name == "spade":
                     col_cards_n.append(BB_CARDS.copy())
@@ -1720,8 +1715,11 @@ while 1: # game loop
                     col_cards_n.append(DE_CARDS.copy())
                 elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "spade":
                     col_cards_n.append(EB_CARDS.copy())
-                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond":
+                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond" and ed_used == False:
                     col_cards_n.append(ED_CARDS.copy())
+                    ed_used = True
+                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond" and ed_used == True:
+                    col_cards_n.append(ED_CARDS2.copy())
                 else:
                     col_cards_n.append(EE_CARDS.copy())
                     
@@ -1788,7 +1786,7 @@ while 1: # game loop
             
             # place an encoding row under matrix N for the chosen pile cut
             enc_cards_n = ENCODING_1_LENGTH_4.copy()
-            encoding_1 = 3
+            encoding_1 = 1
             enc_cards_n_graphics = AlignedHand(
                 enc_cards_n,
                 card_set_size_wide,
@@ -2451,6 +2449,7 @@ while 1: # game loop
             p0 = [(p_shuffled - 5) % 20, (p_shuffled - 1) % 20, (p_shuffled + 1) % 20, (p_shuffled + 5) % 20]
             p1 = [(p_shuffled - 10) % 20, (p_shuffled - 2) % 20, (p_shuffled + 2) % 20, (p_shuffled + 10) % 20]
 
+            ed_used = False
             for i in range(4):
                 if grid_state_m_graphics.cardset[p0[i]].name == "spade" and grid_state_m_graphics.cardset[p1[i]].name == "spade":
                     col_cards_n.append(BB_CARDS.copy())
@@ -2466,8 +2465,11 @@ while 1: # game loop
                     col_cards_n.append(DE_CARDS.copy())
                 elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "spade":
                     col_cards_n.append(EB_CARDS.copy())
-                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond":
+                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond" and ed_used == False:
                     col_cards_n.append(ED_CARDS.copy())
+                    ed_used = True
+                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond" and ed_used == True:
+                    col_cards_n.append(ED_CARDS2.copy())
                 else:
                     col_cards_n.append(EE_CARDS.copy())
                     

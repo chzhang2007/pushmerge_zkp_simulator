@@ -12,7 +12,7 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from suit_set import ABB_CARDS, AEB_CARDS, AEE_CARDS, AED_CARDS, DUMMY_LENGTH_2, GRID_STATE, BB_CARDS, BD_CARDS, BE_CARDS, DB_CARDS, DD_CARDS, DE_CARDS, EB_CARDS, ED_CARDS, EE_CARDS, ABB_CARDSQ, AEB_CARDSQ, AED_CARDSQ, AEE_CARDSQ
+from suit_set import ABB_CARDS, AEB_CARDS, AEE_CARDS, AED_CARDS, DUMMY_LENGTH_2, GRID_STATE, BB_CARDS, BD_CARDS, BE_CARDS, DB_CARDS, DD_CARDS, DE_CARDS, EB_CARDS, ED_CARDS, ED_CARDS2, EE_CARDS, ABB_CARDSQ, AEB_CARDSQ, AED_CARDSQ, AEE_CARDSQ
 from pygame_cards.utils import position_for_centering
 
 
@@ -42,7 +42,7 @@ class SuitCardGraphics(AbstractCardGraphics):
         return surf
 
 
-for card in ABB_CARDS + AEB_CARDS + AEE_CARDS + AED_CARDS + DUMMY_LENGTH_2 + GRID_STATE + BB_CARDS + BD_CARDS + BE_CARDS + DB_CARDS + DD_CARDS + DE_CARDS + EB_CARDS + ED_CARDS + EE_CARDS + ABB_CARDSQ + AEB_CARDSQ + AED_CARDSQ + AEE_CARDSQ:
+for card in ABB_CARDS + AEB_CARDS + AEE_CARDS + AED_CARDS + DUMMY_LENGTH_2 + GRID_STATE + BB_CARDS + BD_CARDS + BE_CARDS + DB_CARDS + DD_CARDS + DE_CARDS + EB_CARDS + ED_CARDS + ED_CARDS2 + EE_CARDS + ABB_CARDSQ + AEB_CARDSQ + AED_CARDSQ + AEE_CARDSQ:
     match card.name:
         case "heart":
             if card.face_up:

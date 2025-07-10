@@ -90,6 +90,13 @@ ED_CARDS = CardsSet(
     ]
 )
 
+ED_CARDS2 = CardsSet(
+    [
+        SuitCard("club", False),
+        SuitCard("diamond", False),
+    ]
+)
+
 EE_CARDS = CardsSet(
     [
         SuitCard("club", False),
