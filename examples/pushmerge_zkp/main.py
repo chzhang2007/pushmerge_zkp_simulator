@@ -115,7 +115,7 @@ while 1: # game loop
                 (0, 2 * grid_state_m_graphics.size[1] + 10),
             )
             
-            # generate random pile shifting shuffle
+            # generate random pile shifting shuffle (1 shuffle)
             index_list = [(i + 1) for i in range(len(id_cards_m))]
             offset = random.randint(0, len(id_cards_m) - 1)
             for i in range(len(index_list)):
@@ -309,7 +309,7 @@ while 1: # game loop
             enc_cards_n_graphics.clear_cache()
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 6:
-            index_list = [(i + 1) for i in range(len(id_cards_n))]
+            index_list = [(i + 1) for i in range(len(id_cards_n))] # 2 shuffles
             offset = random.randint(0, len(id_cards_n) - 1)
             for i in range(len(index_list)):
                 index_list[i] = (index_list[i] + offset) % len(id_cards_n)
@@ -448,7 +448,7 @@ while 1: # game loop
             enc_cards_n_graphics.clear_cache()
             
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 9:
-            index_list = [(i + 1) for i in range(len(id_cards_q))]
+            index_list = [(i + 1) for i in range(len(id_cards_q))] # 3 shuffles
             random.shuffle(index_list)
             # shuffle the id row of matrix Q and turn it face-down
             for (i, card) in enumerate(id_cards_q):
@@ -529,7 +529,7 @@ while 1: # game loop
 
 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 13:
-            # shuffle the id cards
+            # shuffle the id cards (4 shuffles)
             int_card_numbers = [card.number for card in id_cards_q]
             for (i, card) in enumerate(id_cards_q_graphics.cardset):
                 card.name = str(int_card_numbers[index_list[i] - 1])
@@ -613,7 +613,7 @@ while 1: # game loop
             for i in range(4):
                 enc_cards_n_graphics.remove_card(enc_cards_n_graphics.cardset[0])
             
-            # shuffle the id cards of N
+            # shuffle the id cards of N (5 shuffles)
             int_card_numbers = [card.number for card in id_cards_n]
             for (i, card) in enumerate(id_cards_n_graphics.cardset):
                 card.name = str(int_card_numbers[index_list[i] - 1])
@@ -714,7 +714,7 @@ while 1: # game loop
             index_list = [(i + 1) for i in range(len(id_cards_m))]
             random.shuffle(index_list)
             
-            # shuffle the id cards of M and turn them face-up
+            # shuffle the id cards of M and turn them face-up (6 shuffles)
             int_card_numbers = [card.number for card in id_cards_m]
             for (i, card) in enumerate(id_cards_m_graphics.cardset):
                 card.name = str(int_card_numbers[index_list[i] - 1])
