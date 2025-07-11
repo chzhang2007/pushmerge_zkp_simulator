@@ -30,6 +30,13 @@ manager = CardsManager()
 id_cards_m = ID20
 grid_state_m = GRID_STATE
 
+# TO CHANGE INPUT: MODIFY HERE
+number_of_moves = 4
+encoding_rows_m = [ENCODING_MOVE_1.copy(), ENCODING_MOVE_2.copy(), ENCODING_MOVE_3.copy(), ENCODING_MOVE_4.copy()]
+encoding_rows_n = [ENCODING_3_LENGTH_4.copy(), ENCODING_3_LENGTH_4.copy(), ENCODING_1_LENGTH_4.copy(), ENCODING_3_LENGTH_4.copy()]
+encoding_1_m = [12, 12, 13, 8]
+encoding_1_n = [3, 3, 1, 3]
+
 card_size = (width / 21, height / 9 - 10)
 card_set_size_wide = (width - 10, height / 9)
 card_set_size_long = (width / 21, height / 2)
@@ -66,7 +73,6 @@ clock = pygame.time.Clock()
 
 stage = 0 # 0 = everything in M face-up, 1 = everything in M face-down, 2 = add encoder row for chosen pile cut
 
-encoding_1 = 0
 p_shuffled = 0
 removed_col_n = 0
 
@@ -125,8 +131,6 @@ while 1: # game loop
             
             # flip the id cards face down and shuffle them
             for (i, card) in enumerate(id_cards_m):
-                if enc_cards_m_graphics.cardset[i].name == "1":
-                    encoding_1 = card.number
                 card.name = str(index_list[i])
                 card.number = index_list[i]
 
@@ -139,7 +143,7 @@ while 1: # game loop
                     
             # shuffle the encoding row
             for (i, card) in enumerate(enc_cards_m):
-                if index_list[i] == encoding_1:
+                if index_list[i] == encoding_1_m[0]:
                     card.name = "1"
                     card.number = 1
                 else:
@@ -280,7 +284,6 @@ while 1: # game loop
             
             # place an encoding row under matrix N for the chosen pile cut
             enc_cards_n = ENCODING_3_LENGTH_4.copy()
-            encoding_1 = 3
             enc_cards_n_graphics = AlignedHand(
                 enc_cards_n,
                 card_set_size_wide,
@@ -336,7 +339,7 @@ while 1: # game loop
                     
             # shuffle the encoding row
             for (i, card) in enumerate(enc_cards_n_graphics.cardset):
-                if index_list[i] == encoding_1:
+                if index_list[i] == encoding_1_n[0]:
                     card.name = "1"
                     card.number = 1
                 else:
@@ -881,8 +884,6 @@ while 1: # game loop
             
             # flip the id cards face down and shuffle them
             for (i, card) in enumerate(id_cards_m):
-                if enc_cards_m_graphics.cardset[i].name == "1":
-                    encoding_1 = card.number
                 card.name = str(index_list[i])
                 card.number = index_list[i]
 
@@ -895,7 +896,7 @@ while 1: # game loop
                     
             # shuffle the encoding row
             for (i, card) in enumerate(enc_cards_m):
-                if index_list[i] == encoding_1:
+                if index_list[i] == encoding_1_m[1]:
                     card.name = "1"
                     card.number = 1
                 else:
@@ -1036,7 +1037,6 @@ while 1: # game loop
             
             # place an encoding row under matrix N for the chosen pile cut
             enc_cards_n = ENCODING_3_LENGTH_4.copy()
-            encoding_1 = 3
             enc_cards_n_graphics = AlignedHand(
                 enc_cards_n,
                 card_set_size_wide,
@@ -1086,7 +1086,7 @@ while 1: # game loop
                     
             # shuffle the encoding row
             for (i, card) in enumerate(enc_cards_n_graphics.cardset):
-                if index_list[i] == encoding_1:
+                if index_list[i] == encoding_1_n[1]:
                     card.name = "1"
                     card.number = 1
                 else:
@@ -1631,8 +1631,6 @@ while 1: # game loop
             
             # flip the id cards face down and shuffle them
             for (i, card) in enumerate(id_cards_m):
-                if enc_cards_m_graphics.cardset[i].name == "1":
-                    encoding_1 = card.number
                 card.name = str(index_list[i])
                 card.number = index_list[i]
 
@@ -1645,7 +1643,7 @@ while 1: # game loop
                     
             # shuffle the encoding row
             for (i, card) in enumerate(enc_cards_m):
-                if index_list[i] == encoding_1:
+                if index_list[i] == encoding_1_m[2]:
                     card.name = "1"
                     card.number = 1
                 else:
@@ -1786,7 +1784,6 @@ while 1: # game loop
             
             # place an encoding row under matrix N for the chosen pile cut
             enc_cards_n = ENCODING_1_LENGTH_4.copy()
-            encoding_1 = 1
             enc_cards_n_graphics = AlignedHand(
                 enc_cards_n,
                 card_set_size_wide,
@@ -1836,7 +1833,7 @@ while 1: # game loop
                     
             # shuffle the encoding row
             for (i, card) in enumerate(enc_cards_n_graphics.cardset):
-                if index_list[i] == encoding_1:
+                if index_list[i] == encoding_1_n[2]:
                     card.name = "1"
                     card.number = 1
                 else:
@@ -2381,8 +2378,6 @@ while 1: # game loop
             
             # flip the id cards face down and shuffle them
             for (i, card) in enumerate(id_cards_m):
-                if enc_cards_m_graphics.cardset[i].name == "1":
-                    encoding_1 = card.number
                 card.name = str(index_list[i])
                 card.number = index_list[i]
 
@@ -2395,7 +2390,7 @@ while 1: # game loop
                     
             # shuffle the encoding row
             for (i, card) in enumerate(enc_cards_m):
-                if index_list[i] == encoding_1:
+                if index_list[i] == encoding_1_m[3]:
                     card.name = "1"
                     card.number = 1
                 else:
@@ -2536,7 +2531,6 @@ while 1: # game loop
             
             # place an encoding row under matrix N for the chosen pile cut
             enc_cards_n = ENCODING_3_LENGTH_4.copy()
-            encoding_1 = 3
             enc_cards_n_graphics = AlignedHand(
                 enc_cards_n,
                 card_set_size_wide,
@@ -2586,7 +2580,7 @@ while 1: # game loop
                     
             # shuffle the encoding row
             for (i, card) in enumerate(enc_cards_n_graphics.cardset):
-                if index_list[i] == encoding_1:
+                if index_list[i] == encoding_1_n[3]:
                     card.name = "1"
                     card.number = 1
                 else:
