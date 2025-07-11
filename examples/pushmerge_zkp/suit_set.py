@@ -41,7 +41,49 @@ BB_CARDS = CardsSet(
     ]
 )
 
+BB_CARDS2 = CardsSet(
+    [
+        SuitCard("spade", False),
+        SuitCard("spade", False),
+    ]
+)
+
+BB_CARDS3 = CardsSet(
+    [
+        SuitCard("spade", False),
+        SuitCard("spade", False),
+    ]
+)
+
+BB_CARDS4 = CardsSet(
+    [
+        SuitCard("spade", False),
+        SuitCard("spade", False),
+    ]
+)
+
 BD_CARDS = CardsSet(
+    [
+        SuitCard("spade", False),
+        SuitCard("diamond", False),
+    ]
+)
+
+BD_CARDS2 = CardsSet(
+    [
+        SuitCard("spade", False),
+        SuitCard("diamond", False),
+    ]
+)
+
+BD_CARDS3 = CardsSet(
+    [
+        SuitCard("spade", False),
+        SuitCard("diamond", False),
+    ]
+)
+
+BD_CARDS4 = CardsSet(
     [
         SuitCard("spade", False),
         SuitCard("diamond", False),
@@ -55,7 +97,49 @@ BE_CARDS = CardsSet(
     ]
 )
 
+BE_CARDS2 = CardsSet(
+    [
+        SuitCard("spade", False),
+        SuitCard("club", False),
+    ]
+)
+
+BE_CARDS3 = CardsSet(
+    [
+        SuitCard("spade", False),
+        SuitCard("club", False),
+    ]
+)
+
+BE_CARDS4 = CardsSet(
+    [
+        SuitCard("spade", False),
+        SuitCard("club", False),
+    ]
+)
+
 DB_CARDS = CardsSet(
+    [
+        SuitCard("diamond", False),
+        SuitCard("spade", False),
+    ]
+)
+
+DB_CARDS2 = CardsSet(
+    [
+        SuitCard("diamond", False),
+        SuitCard("spade", False),
+    ]
+)
+
+DB_CARDS3 = CardsSet(
+    [
+        SuitCard("diamond", False),
+        SuitCard("spade", False),
+    ]
+)
+
+DB_CARDS4 = CardsSet(
     [
         SuitCard("diamond", False),
         SuitCard("spade", False),
@@ -69,6 +153,27 @@ DD_CARDS = CardsSet(
     ]
 )
 
+DD_CARDS2 = CardsSet(
+    [
+        SuitCard("diamond", False),
+        SuitCard("diamond", False),
+    ]
+)
+
+DD_CARDS3 = CardsSet(
+    [
+        SuitCard("diamond", False),
+        SuitCard("diamond", False),
+    ]
+)
+
+DD_CARDS4 = CardsSet(
+    [
+        SuitCard("diamond", False),
+        SuitCard("diamond", False),
+    ]
+)
+
 DE_CARDS = CardsSet(
     [
         SuitCard("diamond", False),
@@ -76,7 +181,49 @@ DE_CARDS = CardsSet(
     ]
 )
 
+DE_CARDS2 = CardsSet(
+    [
+        SuitCard("diamond", False),
+        SuitCard("club", False),
+    ]
+)
+
+DE_CARDS3 = CardsSet(
+    [
+        SuitCard("diamond", False),
+        SuitCard("club", False),
+    ]
+)
+
+DE_CARDS4 = CardsSet(
+    [
+        SuitCard("diamond", False),
+        SuitCard("club", False),
+    ]
+)
+
 EB_CARDS = CardsSet(
+    [
+        SuitCard("club", False),
+        SuitCard("spade", False),
+    ]
+)
+
+EB_CARDS2 = CardsSet(
+    [
+        SuitCard("club", False),
+        SuitCard("spade", False),
+    ]
+)
+
+EB_CARDS3 = CardsSet(
+    [
+        SuitCard("club", False),
+        SuitCard("spade", False),
+    ]
+)
+
+EB_CARDS4 = CardsSet(
     [
         SuitCard("club", False),
         SuitCard("spade", False),
@@ -97,7 +244,42 @@ ED_CARDS2 = CardsSet(
     ]
 )
 
+ED_CARDS3 = CardsSet(
+    [
+        SuitCard("club", False),
+        SuitCard("diamond", False),
+    ]
+)
+
+ED_CARDS4 = CardsSet(
+    [
+        SuitCard("club", False),
+        SuitCard("diamond", False),
+    ]
+)
+
 EE_CARDS = CardsSet(
+    [
+        SuitCard("club", False),
+        SuitCard("club", False),
+    ]
+)
+
+EE_CARDS2 = CardsSet(
+    [
+        SuitCard("club", False),
+        SuitCard("club", False),
+    ]
+)
+
+EE_CARDS3 = CardsSet(
+    [
+        SuitCard("club", False),
+        SuitCard("club", False),
+    ]
+)
+
+EE_CARDS4 = CardsSet(
     [
         SuitCard("club", False),
         SuitCard("club", False),

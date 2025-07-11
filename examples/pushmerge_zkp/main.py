@@ -11,7 +11,7 @@ from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
-from suit_set import GRID_STATE, BB_CARDS, BD_CARDS, BE_CARDS, DB_CARDS, DD_CARDS, DE_CARDS, EB_CARDS, ED_CARDS, ED_CARDS2, EE_CARDS, ABB_CARDSQ, AEB_CARDSQ, AED_CARDSQ, AEE_CARDSQ
+from suit_set import GRID_STATE, BB_CARDS, BB_CARDS2, BB_CARDS3, BB_CARDS4, BD_CARDS, BD_CARDS2, BD_CARDS3, BD_CARDS4, BE_CARDS, BE_CARDS2, BE_CARDS3, BE_CARDS4, DB_CARDS, DB_CARDS2, DB_CARDS3, DB_CARDS4, DD_CARDS, DD_CARDS2, DD_CARDS3, DD_CARDS4, DE_CARDS, DE_CARDS2, DE_CARDS3, DE_CARDS4, EB_CARDS, EB_CARDS2, EB_CARDS3, EB_CARDS4, ED_CARDS, ED_CARDS2, ED_CARDS3, ED_CARDS4, EE_CARDS, EE_CARDS2, EE_CARDS3, EE_CARDS4, ABB_CARDSQ, AEB_CARDSQ, AED_CARDSQ, AEE_CARDSQ
 from int_set import ID4, ID4Q, ID20, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_4, ENCODING_1_LENGTH_4, ENCODING_2_LENGTH_4, ENCODING_3_LENGTH_4, ENCODING_4_LENGTH_4
 from pygame_cards.set import CardsSet
 
@@ -19,7 +19,6 @@ pygame.init()
 
 
 screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
-# screen = pygame.display.set_mode((400, 300))
 size = width, height = screen.get_size()
 
 
@@ -66,6 +65,16 @@ manager.add_set(
 
 card_back = AbstractCard("")
 card_back.graphics_type = CardBackGraphics
+
+bb_cards = [BB_CARDS.copy(), BB_CARDS2.copy(), BB_CARDS3.copy(), BB_CARDS4.copy()]
+bd_cards = [BD_CARDS.copy(), BD_CARDS2.copy(), BD_CARDS3.copy(), BD_CARDS4.copy()]
+be_cards = [BE_CARDS.copy(), BE_CARDS2.copy(), BE_CARDS3.copy(), BE_CARDS4.copy()]
+db_cards = [DB_CARDS.copy(), DB_CARDS2.copy(), DB_CARDS3.copy(), DB_CARDS4.copy()]
+dd_cards = [DD_CARDS.copy(), DD_CARDS2.copy(), DD_CARDS3.copy(), DD_CARDS4.copy()]
+de_cards = [DE_CARDS.copy(), DE_CARDS2.copy(), DE_CARDS3.copy(), DE_CARDS4.copy()]
+eb_cards = [EB_CARDS.copy(), EB_CARDS2.copy(), EB_CARDS3.copy(), EB_CARDS4.copy()]
+ed_cards = [ED_CARDS.copy(), ED_CARDS2.copy(), ED_CARDS3.copy(), ED_CARDS4.copy()]
+ee_cards = [EE_CARDS.copy(), EE_CARDS2.copy(), EE_CARDS3.copy(), EE_CARDS4.copy()]
 
 pygame.display.flip()
 
@@ -209,30 +218,44 @@ while 1: # game loop
             p0 = [(p_shuffled - 5) % 20, (p_shuffled - 1) % 20, (p_shuffled + 1) % 20, (p_shuffled + 5) % 20]
             p1 = [(p_shuffled - 10) % 20, (p_shuffled - 2) % 20, (p_shuffled + 2) % 20, (p_shuffled + 10) % 20]
 
-            ed_used = False
+            bb_index = 0
+            bd_index = 0
+            be_index = 0
+            db_index = 0
+            dd_index = 0
+            de_index = 0
+            eb_index = 0
+            ed_index = 0
+            ee_index = 0
             for i in range(4):
                 if grid_state_m_graphics.cardset[p0[i]].name == "spade" and grid_state_m_graphics.cardset[p1[i]].name == "spade":
-                    col_cards_n.append(BB_CARDS.copy())
+                    col_cards_n.append(bb_cards[bb_index].copy())
+                    bb_index += 1
                 elif grid_state_m_graphics.cardset[p0[i]].name == "spade" and grid_state_m_graphics.cardset[p1[i]].name == "diamond":
-                    col_cards_n.append(BD_CARDS.copy())
+                    col_cards_n.append(bd_cards[bd_index].copy())
+                    bd_index += 1
                 elif grid_state_m_graphics.cardset[p0[i]].name == "spade" and grid_state_m_graphics.cardset[p1[i]].name == "club":
-                    col_cards_n.append(BE_CARDS.copy())
+                    col_cards_n.append(be_cards[be_index].copy())
+                    be_index += 1
                 elif grid_state_m_graphics.cardset[p0[i]].name == "diamond" and grid_state_m_graphics.cardset[p1[i]].name == "spade":
-                    col_cards_n.append(DB_CARDS.copy())
+                    col_cards_n.append(db_cards[db_index].copy())
+                    db_index += 1
                 elif grid_state_m_graphics.cardset[p0[i]].name == "diamond" and grid_state_m_graphics.cardset[p1[i]].name == "diamond":
-                    col_cards_n.append(DD_CARDS.copy())
+                    col_cards_n.append(dd_cards[dd_index].copy())
+                    dd_index += 1
                 elif grid_state_m_graphics.cardset[p0[i]].name == "diamond" and grid_state_m_graphics.cardset[p1[i]].name == "club":
-                    col_cards_n.append(DE_CARDS.copy())
+                    col_cards_n.append(de_cards[de_index].copy())
+                    de_index += 1
                 elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "spade":
-                    col_cards_n.append(EB_CARDS.copy())
-                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond" and ed_used == False:
-                    col_cards_n.append(ED_CARDS.copy())
-                    ed_used = True
-                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond" and ed_used == True:
-                    col_cards_n.append(ED_CARDS2.copy())
+                    col_cards_n.append(eb_cards[eb_index].copy())
+                    eb_index += 1
+                elif grid_state_m_graphics.cardset[p0[i]].name == "club" and grid_state_m_graphics.cardset[p1[i]].name == "diamond":
+                    col_cards_n.append(ed_cards[ed_index].copy())
+                    ed_index += 1
                 else:
-                    col_cards_n.append(EE_CARDS.copy())
-                    
+                    col_cards_n.append(ee_cards[ee_index].copy())
+                    ee_index += 1
+
             col_cards_n_graphics = [(AlignedHandVertical(
                                     col_cards_n[i],
                                     card_set_size_long,
@@ -785,6 +808,72 @@ while 1: # game loop
             stage = 0
             current_move += 1
             id_cards_m_graphics.clear_cache()
+            
+            for i in range(4):
+                bb_cards[i][0].name = "spade"
+                bb_cards[i][1].name = "spade"
+                bd_cards[i][0].name = "spade"
+                bd_cards[i][1].name = "diamond"
+                be_cards[i][0].name = "spade"
+                be_cards[i][1].name = "club"
+                db_cards[i][0].name = "diamond"
+                db_cards[i][1].name = "spade"
+                dd_cards[i][0].name = "diamond"
+                dd_cards[i][1].name = "diamond"
+                de_cards[i][0].name = "diamond"
+                de_cards[i][1].name = "club"
+                eb_cards[i][0].name = "club"
+                eb_cards[i][1].name = "spade"
+                ed_cards[i][0].name = "club"
+                ed_cards[i][1].name = "diamond"
+                ee_cards[i][0].name = "club"
+                ee_cards[i][1].name = "club"
+                for j in range(2):
+                    bb_cards[i][j].face_up = False
+                    bb_cards[i][j].graphics = SuitCardGraphics(
+                        bb_cards[i][j],
+                        filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                    )
+                    bd_cards[i][j].face_up = False
+                    bd_cards[i][j].graphics = SuitCardGraphics(
+                        bd_cards[i][j],
+                        filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                    )
+                    be_cards[i][j].face_up = False
+                    be_cards[i][j].graphics = SuitCardGraphics(
+                        be_cards[i][j],
+                        filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                    )
+                    db_cards[i][j].face_up = False
+                    db_cards[i][j].graphics = SuitCardGraphics(
+                        db_cards[i][j],
+                        filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                    )
+                    dd_cards[i][j].face_up = False
+                    dd_cards[i][j].graphics = SuitCardGraphics(
+                        dd_cards[i][j],
+                        filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                    )
+                    de_cards[i][j].face_up = False
+                    de_cards[i][j].graphics = SuitCardGraphics(
+                        de_cards[i][j],
+                        filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                    )
+                    eb_cards[i][j].face_up = False
+                    eb_cards[i][j].graphics = SuitCardGraphics(
+                        eb_cards[i][j],
+                        filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                    )
+                    ed_cards[i][j].face_up = False
+                    ed_cards[i][j].graphics = SuitCardGraphics(
+                        ed_cards[i][j],
+                        filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                    )
+                    ee_cards[i][j].face_up = False
+                    ee_cards[i][j].graphics = SuitCardGraphics(
+                        ee_cards[i][j],
+                        filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                    )
             
             ABB_CARDSQ[0].name = "heart"
             ABB_CARDSQ[1].name = "spade"
