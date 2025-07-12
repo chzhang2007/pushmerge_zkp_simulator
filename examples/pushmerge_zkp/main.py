@@ -27,13 +27,17 @@ manager = CardsManager()
 id_cards_m = ID20
 
 
-# TO CHANGE INPUT: MODIFY HERE
-grid_state_m = GRID_STATE
+# TO CHANGE INPUT: MODIFY HERE (INPUTS RESTRICTED TO A 2x3 GRID)
+grid_state_m = GRID_STATE # initial grid state
 number_of_moves = 4
+# to modify encoding_rows_m, go into int_set.py and modify the sets ENCODING_MOVE_1, ENCODING_MOVE_2, etc.
 encoding_rows_m = [ENCODING_MOVE_1.copy(), ENCODING_MOVE_2.copy(), ENCODING_MOVE_3.copy(), ENCODING_MOVE_4.copy()]
+# to modify encoding_rows_n, simply modify this array
 encoding_rows_n = [ENCODING_3_LENGTH_4.copy(), ENCODING_3_LENGTH_4.copy(), ENCODING_1_LENGTH_4.copy(), ENCODING_3_LENGTH_4.copy()]
+# modify encoding_1_m and encoding_1_n (1-indexed) to match encoding_rows_m and encoding_rows_n
 encoding_1_m = [12, 12, 13, 8]
 encoding_1_n = [3, 3, 1, 3]
+# modify the target position (1-indexed) to match the Push Merge instance
 target_pos = 9
 
 card_size = (width / 21, height / 9 - 10)

@@ -1,18 +1,9 @@
-# Pygame Cards
+# Push Merge ZKP Simulator
 
-A simple card games for pygame.
+This codebase is modified from [Pygame Cards by ScienceGamez](https://github.com/ScienceGamez/pygame_cards), which handles graphics and interaction with the mouse and pygame events. The documentation for Pygame Cards can be found [here](https://pygame-cards.readthedocs.io).
 
-Handles graphics and interaction with the mouse and pygame events.
+You can run the Push Merge ZKP simulator in the file examples/pushmerge_zkp/main.py.
 
-You can check [our official documentation](https://pygame-cards.readthedocs.io)
-
-[![Documentation Status](https://readthedocs.org/projects/pygame-cards/badge/?version=latest)](https://pygame-cards.readthedocs.io/en/latest/?badge=latest)
-
-
-To install packages, first activate the virtual environment: source .venv/bin/activate
-
-Install the Cairo graphics package on your device
-
-To change card positions within a block: edit suit_card_graphics.py
-
-To change block positions on the screen: edit main.py
+Troubleshooting:
+* You may need to create a virtual environment to handle dependencies. If so, to install packages, first activate the virtual environment using the following command: source .venv/bin/activate.
+* To run the code, you may need to install the Cairo graphics package on your device.
