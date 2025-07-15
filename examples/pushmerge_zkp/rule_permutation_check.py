@@ -145,7 +145,13 @@ while 1: # game loop
                         card,
                         filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                     )
-            
+                    
+            stage = 3
+            int_cards_graphics.clear_cache()
+            for i in range(4):
+                col_cards_graphics[i].clear_cache()
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 3:
             # shuffle the id cards
             int_card_numbers = [card.number for card in int_cards]
             for (i, card) in enumerate(int_cards):
@@ -165,12 +171,12 @@ while 1: # game loop
                 for j in range(3):
                     column.remove_card(column.cardset[0])
 
-            stage = 3
+            stage = 4
             int_cards_graphics.clear_cache()
             for i in range(4):
                 col_cards_graphics[i].clear_cache()
-                
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 3:
+
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 4:
             # return rule cards to their original positions
             for (i, column) in enumerate(col_cards_graphics):
                 for j in range(3):

@@ -83,6 +83,13 @@ enc_cards_graphics = AlignedHand(
     card_size=card_size,
     graphics_type=IntCardGraphics,
 )
+
+for card in enc_cards:
+    card.graphics = IntCardGraphics(
+        card,
+        filepath=Path("examples/pushmerge_zkp/images", "blank.png"),
+    )
+
 manager.add_set(
     enc_cards_graphics,
     # Position on the screen of the entire set
@@ -108,8 +115,19 @@ while 1: # game loop
         
         elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             sys.exit()
-        
+            
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 0:
+            # add encoding row
+            for card in enc_cards:
+                card.face_up = False
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                )
+            stage = 1
+            enc_cards_graphics.clear_cache()
+        
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 1:
             index_list = [(i + 1) for i in range(len(id_cards))]
             offset = random.randint(0, len(id_cards) - 1)
             for i in range(len(index_list)):
@@ -147,13 +165,13 @@ while 1: # game loop
                     card.name = "0"
                     card.number = 0
             
-            stage = 1
+            stage = 2
             id_cards_graphics.clear_cache()
             for i in range(len(col_cards_graphics)):
                 col_cards_graphics[i].clear_cache()
             enc_cards_graphics.clear_cache()
                 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 1:
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 2:
             # flip the encoding row face up
             for (i, card) in enumerate(enc_cards):
                 card.face_up = True
@@ -161,21 +179,54 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", f"{card.name}.png"),
                 )
-                if card.name == "1":
-                    for col_card in col_cards_graphics[i].cardset:
-                        col_card.face_up = True
-                        col_card.graphics = SuitCardGraphics(
-                            col_card,
-                            filepath=Path("examples/pushmerge_zkp/images", f"{col_card.name}.png"),
-                        )
             
-            stage = 2       
+            stage = 3
             id_cards_graphics.clear_cache()
             for i in range(len(col_cards_graphics)):
                 col_cards_graphics[i].clear_cache()
             enc_cards_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 3:
+            # remove chosen column from the matrix
+            for (i, card) in enumerate(enc_cards):
+                if card.name == "1":
+                    for col_card in col_cards_graphics[i].cardset:
+                        col_card.graphics = SuitCardGraphics(
+                            col_card,
+                            filepath=Path("examples/pushmerge_zkp/images", "blank.png"),
+                        )
+            stage = 4
+            id_cards_graphics.clear_cache()
+            for i in range(len(col_cards_graphics)):
+                col_cards_graphics[i].clear_cache()
+            enc_cards_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 4:
+            # return chosen column to the matrix
+            for (i, card) in enumerate(enc_cards):
+                if card.name == "1":
+                    for col_card in col_cards_graphics[i].cardset:
+                        col_card.graphics = SuitCardGraphics(
+                            col_card,
+                            filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                        )
+            stage = 5
+            id_cards_graphics.clear_cache()
+            for i in range(len(col_cards_graphics)):
+                col_cards_graphics[i].clear_cache()
+            enc_cards_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 5:
+            # remove encoding row from the matrix
+            for (i, card) in enumerate(enc_cards):
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", "blank.png"),
+                )
+            stage = 6
+            enc_cards_graphics.clear_cache()
                 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 2:
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 6:
             index_list = [(i + 1) for i in range(len(id_cards))]
             offset = random.randint(0, len(id_cards) - 1)
             for i in range(len(index_list)):
@@ -192,11 +243,11 @@ while 1: # game loop
                             col_card,
                             filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                         )
-                card.face_up = False
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
-                )
+                # card.face_up = False
+                # card.graphics = IntCardGraphics(
+                #     card,
+                #     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                # )
             
             # shuffle the id cards
             encoding_1 = 0
@@ -221,21 +272,21 @@ while 1: # game loop
                     column.remove_card(column.cardset[0])
                     
             # shuffle the encoding row
-            for (i, card) in enumerate(enc_cards):
-                if id_cards[i].number == encoding_1:
-                    card.name = "1"
-                    card.number = 1
-                else:
-                    card.name = "0"
-                    card.number = 0
+            # for (i, card) in enumerate(enc_cards):
+            #     if id_cards[i].number == encoding_1:
+            #         card.name = "1"
+            #         card.number = 1
+            #     else:
+            #         card.name = "0"
+            #         card.number = 0
                 
-            stage = 3
+            stage = 7
             id_cards_graphics.clear_cache()
             for i in range(len(col_cards_graphics)):
                 col_cards_graphics[i].clear_cache()
             enc_cards_graphics.clear_cache()
                 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 3:
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 7:
             # return rule cards to their original positions
             for (i, column) in enumerate(col_cards_graphics):
                 for j in range(4):
@@ -258,13 +309,13 @@ while 1: # game loop
                 )
                 
             # return encoding row to its original positions
-            for (i, card) in enumerate(enc_cards):
-                if id_cards[i].number == encoding_1:
-                    card.name = "1"
-                    card.number = 1
-                else:
-                    card.name = "0"
-                    card.number = 0
+            # for (i, card) in enumerate(enc_cards):
+            #     if id_cards[i].number == encoding_1:
+            #         card.name = "1"
+            #         card.number = 1
+            #     else:
+            #         card.name = "0"
+            #         card.number = 0
 
             id_cards_graphics.clear_cache()
             for i in range(3):
