@@ -39,6 +39,8 @@ encoding_1_m = [12, 12, 13, 8]
 encoding_1_n = [3, 3, 1, 3]
 # modify the target position (1-indexed) to match the Push Merge instance
 target_pos = 9
+# if tutorial, face-down cards will be visible
+tutorial = True
 
 card_size = (width / 21, height / 9 - 10)
 card_set_size_wide = (width - 10, height / 9)
@@ -108,12 +110,22 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             for card in grid_state_m_graphics.cardset:
                 card.face_up = False
                 card.graphics = SuitCardGraphics(
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             stage = 0
             id_cards_m_graphics.clear_cache()
             grid_state_m_graphics.clear_cache()
@@ -145,6 +157,12 @@ while 1: # game loop
                 # Position on the screen of the entire set
                 (0, 2 * grid_state_m_graphics.size[1] + 10),
             )
+            if tutorial:
+                for (i, card) in enumerate(enc_cards_m_graphics.cardset):
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             
             # generate random pile shifting shuffle (1 shuffle)
             index_list = [(i + 1) for i in range(len(id_cards_m))]
@@ -158,6 +176,11 @@ while 1: # game loop
             for (i, card) in enumerate(id_cards_m):
                 card.name = str(index_list[i])
                 card.number = index_list[i]
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
 
             # shuffle the columns
             grid_state_m_temp = []
@@ -174,6 +197,11 @@ while 1: # game loop
                 else:
                     card.name = "0"
                     card.number = 0
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             stage = 1
             id_cards_m_graphics.clear_cache()
             grid_state_m_graphics.clear_cache()
@@ -216,6 +244,12 @@ while 1: # game loop
                 id_cards_n_graphics,
                 (0, 4 * grid_state_m_graphics.size[1]),
             )
+            if tutorial:
+                for (i, card) in enumerate(id_cards_n_graphics.cardset):
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
 
             # place the second and third rows of matrix N
             col_cards_n = []
@@ -271,21 +305,45 @@ while 1: # game loop
                 # Position on the screen of the entire set
                 (0, 5 * id_cards_n_graphics.size[1] + 10),
             )
+            if tutorial:
+                for (i, card) in enumerate(col_cards_n_graphics[0].cardset):
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             manager.add_set(
                 col_cards_n_graphics[1],
                 # Position on the screen of the entire set
                 (width / 20 + 6, 5 * id_cards_n_graphics.size[1] + 10),
             )
+            if tutorial:
+                for (i, card) in enumerate(col_cards_n_graphics[1].cardset):
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             manager.add_set(
                 col_cards_n_graphics[2],
                 # Position on the screen of the entire set
                 (width / 10 + 12, 5 * id_cards_n_graphics.size[1] + 10),
             )
+            if tutorial:
+                for (i, card) in enumerate(col_cards_n_graphics[2].cardset):
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             manager.add_set(
                 col_cards_n_graphics[3],
                 # Position on the screen of the entire set
                 (width * 3 / 20 + 20, 5 * id_cards_n_graphics.size[1] + 10),
             )
+            if tutorial:
+                for (i, card) in enumerate(col_cards_n_graphics[3].cardset):
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             
             for i in range(4):
                 grid_state_m_graphics.cardset[p0[i]].name = "blank"
@@ -320,7 +378,13 @@ while 1: # game loop
                 id_cards_q_graphics,
                 (width / 2, 4 * grid_state_m_graphics.size[1]),
             )
-            
+            if tutorial:
+                for (i, card) in enumerate(id_cards_q_graphics.cardset):
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
+
             # place an encoding row under matrix N for the chosen pile cut
             enc_cards_n = encoding_rows_n[current_move].copy()
             enc_cards_n_graphics = AlignedHand(
@@ -333,13 +397,25 @@ while 1: # game loop
                 enc_cards_n_graphics,
                 (0, 7 * grid_state_m_graphics.size[1] + 10),
             )
+            if tutorial:
+                for (i, card) in enumerate(enc_cards_n_graphics.cardset):
+                    card.face_up = False
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             for (i, card) in enumerate(enc_cards_n_graphics.cardset):
                 card.face_up = False
                 card.graphics = IntCardGraphics(
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
-            
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
+
             stage = 5
             id_cards_m_graphics.clear_cache()
             id_cards_n_graphics.clear_cache()
@@ -351,7 +427,7 @@ while 1: # game loop
             enc_cards_n_graphics.clear_cache()
 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 5:
-            index_list = [(i + 1) for i in range(len(id_cards_n))] # 2 shuffles
+            index_list = [(i + 1) for i in range(len(id_cards_n))]
             offset = random.randint(0, len(id_cards_n) - 1)
             for i in range(len(index_list)):
                 index_list[i] = (index_list[i] + offset) % len(id_cards_n)
@@ -367,6 +443,11 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
 
             # shuffle the columns (TODO: highlight that the columns shuffled)
             for (i, column) in enumerate(col_cards_n_graphics):
@@ -384,6 +465,11 @@ while 1: # game loop
                 else:
                     card.name = "0"
                     card.number = 0
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
 
             stage = 6
             id_cards_m_graphics.clear_cache()
@@ -461,21 +547,45 @@ while 1: # game loop
                 # Position on the screen of the entire set
                 (width / 2, 5 * id_cards_n_graphics.size[1] + 10),
             )
+            if tutorial:
+                for (i, card) in enumerate(col_cards_q_graphics[0].cardset):
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             manager.add_set(
                 col_cards_q_graphics[1],
                 # Position on the screen of the entire set
                 (width / 2 + width / 20 + 6, 5 * id_cards_n_graphics.size[1] + 10),
             )
+            if tutorial:
+                for (i, card) in enumerate(col_cards_q_graphics[1].cardset):
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             manager.add_set(
                 col_cards_q_graphics[2],
                 # Position on the screen of the entire set
                 (width / 2 + width / 10 + 12, 5 * id_cards_n_graphics.size[1] + 10),
             )
+            if tutorial:
+                for (i, card) in enumerate(col_cards_q_graphics[2].cardset):
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             manager.add_set(
                 col_cards_q_graphics[3],
                 # Position on the screen of the entire set
                 (width / 2 + width * 3 / 20 + 20, 5 * id_cards_n_graphics.size[1] + 10),
             )
+            if tutorial:
+                for (i, card) in enumerate(col_cards_q_graphics[3].cardset):
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
 
             stage = 8
             id_cards_m_graphics.clear_cache()
@@ -490,7 +600,7 @@ while 1: # game loop
             enc_cards_n_graphics.clear_cache()
 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 8:
-            index_list = [(i + 1) for i in range(len(id_cards_q))] # 3 shuffles
+            index_list = [(i + 1) for i in range(len(id_cards_q))]
             random.shuffle(index_list)
             # shuffle the id row of matrix Q and turn it face-down
             for (i, card) in enumerate(id_cards_q):
@@ -501,6 +611,11 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             
             # shuffle the columns of matrix Q
             for (i, column) in enumerate(col_cards_q_graphics):
@@ -564,6 +679,11 @@ while 1: # game loop
                         card,
                         filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                     )
+                    if tutorial:
+                        card.graphics = SuitCardGraphics(
+                            card,
+                            filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                        )
             
             stage = 12
             for column in col_cards_q_graphics:
@@ -571,7 +691,7 @@ while 1: # game loop
 
 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 12:
-            # shuffle the id cards (4 shuffles)
+            # shuffle the id cards
             int_card_numbers = [card.number for card in id_cards_q]
             for (i, card) in enumerate(id_cards_q_graphics.cardset):
                 card.name = str(int_card_numbers[index_list[i] - 1])
@@ -636,6 +756,11 @@ while 1: # game loop
                 grid_state_m_graphics.cardset[p_shuffled],
                 filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
             )
+            if tutorial:
+                grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
+                    grid_state_m_graphics.cardset[p_shuffled],
+                    filepath=Path("examples/pushmerge_zkp/images", f"{grid_state_m_graphics.cardset[p_shuffled].name}_tutorial.png"),
+                )
 
             # discard matrix Q
             for i in range(4):
@@ -654,8 +779,8 @@ while 1: # game loop
             # discard the encoding row of matrix N
             for i in range(4):
                 enc_cards_n_graphics.remove_card(enc_cards_n_graphics.cardset[0])
-            
-            # shuffle the id cards of N (5 shuffles)
+
+            # shuffle the id cards of N
             int_card_numbers = [card.number for card in id_cards_n]
             for (i, card) in enumerate(id_cards_n_graphics.cardset):
                 card.name = str(int_card_numbers[index_list[i] - 1])
@@ -665,7 +790,12 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
-                
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
+
             # shuffle the columns of N
             for (i, column) in enumerate(col_cards_n_graphics):
                 for j in range(2):
@@ -725,12 +855,22 @@ while 1: # game loop
                     grid_state_m_graphics.cardset[p0[i]],
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    grid_state_m_graphics.cardset[p0[i]].graphics = SuitCardGraphics(
+                        grid_state_m_graphics.cardset[p0[i]],
+                        filepath=Path("examples/pushmerge_zkp/images", f"{grid_state_m_graphics.cardset[p0[i]].name}_tutorial.png"),
+                    )
                 grid_state_m_graphics.cardset[p1[i]].name = col_cards_n_graphics[i].cardset[1].name
                 grid_state_m_graphics.cardset[p1[i]].face_up = False
                 grid_state_m_graphics.cardset[p1[i]].graphics = SuitCardGraphics(
                     grid_state_m_graphics.cardset[p1[i]],
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    grid_state_m_graphics.cardset[p1[i]].graphics = SuitCardGraphics(
+                        grid_state_m_graphics.cardset[p1[i]],
+                        filepath=Path("examples/pushmerge_zkp/images", f"{grid_state_m_graphics.cardset[p1[i]].name}_tutorial.png"),
+                    )
             
             # discard matrix N
             for i in range(4):
@@ -756,7 +896,7 @@ while 1: # game loop
             index_list = [(i + 1) for i in range(len(id_cards_m))]
             random.shuffle(index_list)
             
-            # shuffle the id cards of M and turn them face-up (6 shuffles)
+            # shuffle the id cards of M and turn them face-up
             int_card_numbers = [card.number for card in id_cards_m]
             for (i, card) in enumerate(id_cards_m_graphics.cardset):
                 card.name = str(int_card_numbers[index_list[i] - 1])
@@ -773,17 +913,27 @@ while 1: # game loop
                 grid_state_m_temp.append(grid_state_m[index_list[i] - 1])
             grid_state_m = grid_state_m_temp
             grid_state_m_graphics.cardset = grid_state_m_temp
+            if tutorial:
+                for (i, card) in enumerate(grid_state_m_graphics.cardset):
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
 
             stage = 21
             id_cards_m_graphics.clear_cache()
-            for column in col_cards_n_graphics:
-                column.clear_cache()
+            grid_state_m_graphics.clear_cache()
 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 21:
             # return the grid state of M to its original positions
             grid_state_m_temp = [0 for _ in range(20)]
             for (i, card) in enumerate(grid_state_m_graphics.cardset):
                 grid_state_m_temp[id_cards_m[i].number - 1] = card
+                if tutorial:
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             grid_state_m = grid_state_m_temp
             grid_state_m_graphics.cardset = grid_state_m_temp
             
@@ -808,6 +958,11 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
                 
             stage = 0
             current_move += 1
@@ -838,46 +993,91 @@ while 1: # game loop
                         bb_cards[i][j],
                         filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                     )
+                    if tutorial:
+                        bb_cards[i][j].graphics = SuitCardGraphics(
+                            bb_cards[i][j],
+                            filepath=Path("examples/pushmerge_zkp/images", f"{bb_cards[i][j].name}_tutorial.png"),
+                        )
                     bd_cards[i][j].face_up = False
                     bd_cards[i][j].graphics = SuitCardGraphics(
                         bd_cards[i][j],
                         filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                     )
+                    if tutorial:
+                        bd_cards[i][j].graphics = SuitCardGraphics(
+                            bd_cards[i][j],
+                            filepath=Path("examples/pushmerge_zkp/images", f"{bd_cards[i][j].name}_tutorial.png"),
+                        )
                     be_cards[i][j].face_up = False
                     be_cards[i][j].graphics = SuitCardGraphics(
                         be_cards[i][j],
                         filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                     )
+                    if tutorial:
+                        be_cards[i][j].graphics = SuitCardGraphics(
+                            be_cards[i][j],
+                            filepath=Path("examples/pushmerge_zkp/images", f"{be_cards[i][j].name}_tutorial.png"),
+                        )
                     db_cards[i][j].face_up = False
                     db_cards[i][j].graphics = SuitCardGraphics(
                         db_cards[i][j],
                         filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                     )
+                    if tutorial:
+                        db_cards[i][j].graphics = SuitCardGraphics(
+                            db_cards[i][j],
+                            filepath=Path("examples/pushmerge_zkp/images", f"{db_cards[i][j].name}_tutorial.png"),
+                        )
                     dd_cards[i][j].face_up = False
                     dd_cards[i][j].graphics = SuitCardGraphics(
                         dd_cards[i][j],
                         filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                     )
+                    if tutorial:
+                        dd_cards[i][j].graphics = SuitCardGraphics(
+                            dd_cards[i][j],
+                            filepath=Path("examples/pushmerge_zkp/images", f"{dd_cards[i][j].name}_tutorial.png"),
+                        )
                     de_cards[i][j].face_up = False
                     de_cards[i][j].graphics = SuitCardGraphics(
                         de_cards[i][j],
                         filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                     )
+                    if tutorial:
+                        de_cards[i][j].graphics = SuitCardGraphics(
+                            de_cards[i][j],
+                            filepath=Path("examples/pushmerge_zkp/images", f"{de_cards[i][j].name}_tutorial.png"),
+                        )
                     eb_cards[i][j].face_up = False
                     eb_cards[i][j].graphics = SuitCardGraphics(
                         eb_cards[i][j],
                         filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                     )
+                    if tutorial:
+                        eb_cards[i][j].graphics = SuitCardGraphics(
+                            eb_cards[i][j],
+                            filepath=Path("examples/pushmerge_zkp/images", f"{eb_cards[i][j].name}_tutorial.png"),
+                        )
                     ed_cards[i][j].face_up = False
                     ed_cards[i][j].graphics = SuitCardGraphics(
                         ed_cards[i][j],
                         filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                     )
+                    if tutorial:
+                        ed_cards[i][j].graphics = SuitCardGraphics(
+                            ed_cards[i][j],
+                            filepath=Path("examples/pushmerge_zkp/images", f"{ed_cards[i][j].name}_tutorial.png"),
+                        )
                     ee_cards[i][j].face_up = False
                     ee_cards[i][j].graphics = SuitCardGraphics(
                         ee_cards[i][j],
                         filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                     )
+                    if tutorial:
+                        ee_cards[i][j].graphics = SuitCardGraphics(
+                            ee_cards[i][j],
+                            filepath=Path("examples/pushmerge_zkp/images", f"{ee_cards[i][j].name}_tutorial.png"),
+                        )
             
             ABB_CARDSQ[0].name = "heart"
             ABB_CARDSQ[1].name = "spade"
@@ -888,6 +1088,11 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             AEB_CARDSQ[0].name = "heart"
             AEB_CARDSQ[1].name = "club"
             AEB_CARDSQ[2].name = "spade"
@@ -897,6 +1102,11 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             AED_CARDSQ[0].name = "heart"
             AED_CARDSQ[1].name = "club"
             AED_CARDSQ[2].name = "diamond"
@@ -906,6 +1116,11 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             AEE_CARDSQ[0].name = "heart"
             AEE_CARDSQ[1].name = "club"
             AEE_CARDSQ[2].name = "club"
@@ -915,6 +1130,11 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             for (i, card) in enumerate(ENCODING_1_LENGTH_4):
                 if i == 0:
                     card.name = "1"
@@ -927,6 +1147,11 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             for (i, card) in enumerate(ENCODING_2_LENGTH_4):
                 if i == 1:
                     card.name = "1"
@@ -939,6 +1164,11 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             for (i, card) in enumerate(ENCODING_3_LENGTH_4):
                 if i == 2:
                     card.name = "1"
@@ -951,6 +1181,11 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
             for (i, card) in enumerate(ENCODING_4_LENGTH_4):
                 if i == 3:
                     card.name = "1"
@@ -963,6 +1198,11 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
                 )
+                if tutorial:
+                    card.graphics = IntCardGraphics(
+                        card,
+                        filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
+                    )
 
         manager.process_events(event)
 
