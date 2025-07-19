@@ -62,7 +62,6 @@ grid_state_m_graphics = AlignedHand(
         card_size=card_size,
         graphics_type=SuitCardGraphics,
 )
-
 manager.add_set(
     grid_state_m_graphics,
     # Position on the screen of the entire set
@@ -141,7 +140,7 @@ while 1: # game loop
                 current_move += 1
                 grid_state_m_graphics.clear_cache()
             
-        # START OF MOVE CHECK 1
+        # START OF MOVE CHECK
         
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 0:
             # add encoding row for chosen pile cut
@@ -164,7 +163,7 @@ while 1: # game loop
                         filepath=Path("examples/pushmerge_zkp/images", f"{card.name}_tutorial.png"),
                     )
             
-            # generate random pile shifting shuffle (1 shuffle)
+            # generate random pile shifting shuffle
             index_list = [(i + 1) for i in range(len(id_cards_m))]
             offset = random.randint(0, len(id_cards_m) - 1)
             for i in range(len(index_list)):
