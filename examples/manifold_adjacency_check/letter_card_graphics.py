@@ -12,7 +12,7 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from letter_set import ADJACENCY_COL_1, ADJACENCY_COL_2, ADJACENCY_COL_3, ADJACENCY_COL_4, ADJACENCY_COL_5, ADJACENCY_COL_6
+from letter_set import ADJACENCY_COL_1, ADJACENCY_COL_2, ADJACENCY_COL_3, ADJACENCY_COL_4, ADJACENCY_COL_5, ADJACENCY_COL_6, ADJACENCY_COL_1_COPY, ADJACENCY_COL_2_COPY, ADJACENCY_COL_3_COPY, ADJACENCY_COL_4_COPY, ADJACENCY_COL_5_COPY, ADJACENCY_COL_6_COPY
 from pygame_cards.utils import position_for_centering
 
 
@@ -42,7 +42,7 @@ class LetterCardGraphics(AbstractCardGraphics):
         return surf
 
 
-for card in ADJACENCY_COL_1 + ADJACENCY_COL_2 + ADJACENCY_COL_3 + ADJACENCY_COL_4 + ADJACENCY_COL_5 + ADJACENCY_COL_6:
+for card in ADJACENCY_COL_1 + ADJACENCY_COL_2 + ADJACENCY_COL_3 + ADJACENCY_COL_4 + ADJACENCY_COL_5 + ADJACENCY_COL_6 + ADJACENCY_COL_1_COPY + ADJACENCY_COL_2_COPY + ADJACENCY_COL_3_COPY + ADJACENCY_COL_4_COPY + ADJACENCY_COL_5_COPY + ADJACENCY_COL_6_COPY:
     match card.name:
         case "N":
             if card.face_up:

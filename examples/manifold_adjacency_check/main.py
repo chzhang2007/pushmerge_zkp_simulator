@@ -12,9 +12,9 @@ from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
-from suit_set import MANIFOLD_STATE
+from suit_set import MANIFOLD_STATE, AE, AG
 from int_set import ID6, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3
-from letter_set import ADJACENCY_COL_1, ADJACENCY_COL_2, ADJACENCY_COL_3, ADJACENCY_COL_4, ADJACENCY_COL_5, ADJACENCY_COL_6
+from letter_set import ADJACENCY_COL_1, ADJACENCY_COL_2, ADJACENCY_COL_3, ADJACENCY_COL_4, ADJACENCY_COL_5, ADJACENCY_COL_6, ADJACENCY_COL_1_COPY, ADJACENCY_COL_2_COPY, ADJACENCY_COL_3_COPY, ADJACENCY_COL_4_COPY, ADJACENCY_COL_5_COPY, ADJACENCY_COL_6_COPY
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -39,6 +39,7 @@ encoding_1 = [4, 5, 6]
 encoding_2 = [5, 6, 3]
 # to modify the adjacency matrix, go into letter_set.py and modify the sets
 adjacency_matrix = [ADJACENCY_COL_1.copy(), ADJACENCY_COL_2.copy(), ADJACENCY_COL_3.copy(), ADJACENCY_COL_4.copy(), ADJACENCY_COL_5.copy(), ADJACENCY_COL_6.copy()]
+adjacency_matrix_copy = [ADJACENCY_COL_1_COPY.copy(), ADJACENCY_COL_2_COPY.copy(), ADJACENCY_COL_3_COPY.copy(), ADJACENCY_COL_4_COPY.copy(), ADJACENCY_COL_5_COPY.copy(), ADJACENCY_COL_6_COPY.copy()]
 # modify the target position (1-indexed) to match the manifold reachability instance
 target_pos = 3
 # if tutorial, face-down cards will be visible
@@ -199,14 +200,6 @@ while 1: # game loop
             for column in adjacency_matrix_graphics:
                 for j in range(6):
                     column.remove_card(column.cardset[0])
-            
-            for column in adjacency_matrix_graphics:
-                for card in column.cardset:
-                    card.face_up = True
-                    card.graphics = LetterCardGraphics(
-                        card,
-                        filepath=Path("examples/manifold_adjacency_check/images", f"{card.name}.png"),
-                    )
 
             stage = 1
             id_cards_m_graphics.clear_cache()
@@ -229,18 +222,67 @@ while 1: # game loop
             grid_state_m_graphics.clear_cache()
             enc_cards_m_graphics.clear_cache()
             
-        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 2:
-        #     id_cards_n = ID4.copy()
-        #     id_cards_n_graphics = AlignedHand(
-        #         id_cards_n,
-        #         card_set_size_wide,
-        #         card_size=card_size,
-        #         graphics_type=IntCardGraphics,
-        #     )
-        #     manager.add_set(
-        #         id_cards_n_graphics,
-        #         (0, 4 * grid_state_m_graphics.size[1]),
-        #     )
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 2:
+            grid_state_n = AE.copy()
+            adjacency_matrix_n = [adjacency_matrix_copy[encoding_1[current_move] - 1], 
+                                  adjacency_matrix_copy[encoding_2[current_move] - 1]]
+            for (i, card) in enumerate(enc_cards_m_graphics.cardset):
+                if card.name == "1":
+                    grid_state_m_graphics.cardset[i].name = "blank"
+                    grid_state_m_graphics.cardset[i].graphics = SuitCardGraphics(
+                        grid_state_m_graphics.cardset[i],
+                        filepath=Path("examples/manifold_adjacency_check/images", "blank.png"),
+                    )
+                    for adj_card in adjacency_matrix_graphics[i].cardset:
+                        adj_card.graphics = LetterCardGraphics(
+                            adj_card,
+                            filepath=Path("examples/manifold_adjacency_check/images", "blank.png"),
+                        )
+                elif card.name == "2":
+                    if grid_state_m_graphics.cardset[i].name == "spade":
+                        grid_state_n = AG.copy()
+                    grid_state_m_graphics.cardset[i].name = "blank"
+                    grid_state_m_graphics.cardset[i].graphics = SuitCardGraphics(
+                        grid_state_m_graphics.cardset[i],
+                        filepath=Path("examples/manifold_adjacency_check/images", "blank.png"),
+                    )
+                    for adj_card in adjacency_matrix_graphics[i].cardset:
+                        adj_card.graphics = LetterCardGraphics(
+                            adj_card,
+                            filepath=Path("examples/manifold_adjacency_check/images", "blank.png"),
+                        )
+
+            grid_state_n_graphics = AlignedHand(
+                grid_state_n,
+                card_set_size_wide,
+                card_size=card_size,
+                graphics_type=SuitCardGraphics,
+            )
+            manager.add_set(
+                grid_state_n_graphics,
+                (9 * (card_set_size_long[0] + 7), 0),
+            )
+
+            adjacency_matrix_n_graphics = [AlignedHandVertical(
+                adjacency_matrix_n[i],
+                card_set_size_long,
+                card_size=card_size,
+                graphics_type=LetterCardGraphics,
+            ) for i in range(len(adjacency_matrix_n))]
+            
+            for i in range(2):
+                manager.add_set(
+                    adjacency_matrix_n_graphics[i],
+                    ((9 + i) * (card_set_size_long[0] + 7), card_set_size_wide[1]),
+                )
+            
+            stage = 3
+            grid_state_m_graphics.clear_cache()
+            grid_state_n_graphics.clear_cache()
+            for adj_graphics in adjacency_matrix_graphics:
+                adj_graphics.clear_cache()
+            for adj_graphics in adjacency_matrix_n_graphics:
+                adj_graphics.clear_cache()
 
         manager.process_events(event)
 

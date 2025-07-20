@@ -20,24 +20,9 @@ AE = CardsSet(
     ]
 )
 
-AE_2 = CardsSet(
-    [
-        SuitCard("heart", False),
-        SuitCard("club", False),
-    ]
-)
-
 AG = CardsSet(
     [
         SuitCard("heart", False),
         SuitCard("spade", False),
     ]
 )
-
-AG_2 = CardsSet(
-    [
-        SuitCard("heart", False),
-        SuitCard("spade", False),
-    ]
-)
-
