@@ -13,7 +13,7 @@ from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
 from suit_set import MANIFOLD_STATE, AE, AG
-from int_set import ID6, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3
+from int_set import ID2, ID6, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3
 from letter_set import ADJACENCY_COL_1, ADJACENCY_COL_2, ADJACENCY_COL_3, ADJACENCY_COL_4, ADJACENCY_COL_5, ADJACENCY_COL_6, ADJACENCY_COL_1_COPY, ADJACENCY_COL_2_COPY, ADJACENCY_COL_3_COPY, ADJACENCY_COL_4_COPY, ADJACENCY_COL_5_COPY, ADJACENCY_COL_6_COPY
 from pygame_cards.set import CardsSet
 
@@ -283,6 +283,22 @@ while 1: # game loop
                 adj_graphics.clear_cache()
             for adj_graphics in adjacency_matrix_n_graphics:
                 adj_graphics.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 3:
+            # form the id row of matrix Q
+            id_cards_q = ID2.copy()
+            id_cards_q_graphics = AlignedHand(
+                id_cards_q,
+                card_set_size_wide,
+                card_size=card_size,
+                graphics_type=IntCardGraphics,
+            )
+            manager.add_set(
+                id_cards_q_graphics,
+                (9 * (card_set_size_long[0] + 7), 8 * grid_state_m_graphics.size[1]),
+            )
+            
+            stage = 4
 
         manager.process_events(event)
 

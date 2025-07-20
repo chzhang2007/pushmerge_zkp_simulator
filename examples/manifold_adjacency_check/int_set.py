@@ -1,6 +1,12 @@
 from int_card import IntCard
 from pygame_cards.set import CardsSet
 
+ID2 = CardsSet(
+    [
+        IntCard("1", True),
+        IntCard("2", True),
+    ]
+)
 
 ID6 = CardsSet(
     [
