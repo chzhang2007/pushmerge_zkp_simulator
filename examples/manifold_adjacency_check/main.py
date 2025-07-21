@@ -354,6 +354,50 @@ while 1: # game loop
             id_cards_q_graphics.clear_cache()
             for row in grid_state_q_graphics:
                 row.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 6:
+            # turn the grid state rows of matrix Q face up
+            for row in grid_state_q_graphics:
+                for card in row.cardset:
+                    card.face_up = True
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/manifold_adjacency_check/images", f"{card.name}.png"),
+                    )
+                    
+            stage = 7
+            for row in grid_state_q_graphics:
+                row.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 7:
+            # simulate the replacement rule for each row in matrix Q
+            for i in range(2):
+                if grid_state_q_graphics[i].cardset[1].name == "spade":
+                    grid_state_q_graphics[i].cardset[0].name = "diamond"
+                    grid_state_q_graphics[i].cardset[0].graphics = SuitCardGraphics(
+                        grid_state_q_graphics[i].cardset[0],
+                        filepath=Path("examples/manifold_adjacency_check/images", "diamond.png"),
+                    )
+                    grid_state_q_graphics[i].cardset[1].name = "heart"
+                    grid_state_q_graphics[i].cardset[1].graphics = SuitCardGraphics(
+                        grid_state_q_graphics[i].cardset[1],
+                        filepath=Path("examples/manifold_adjacency_check/images", "heart.png"),
+                    )
+                else:
+                    grid_state_q_graphics[i].cardset[0].name = "club"
+                    grid_state_q_graphics[i].cardset[0].graphics = SuitCardGraphics(
+                        grid_state_q_graphics[i].cardset[0],
+                        filepath=Path("examples/manifold_adjacency_check/images", "club.png"),
+                    )
+                    grid_state_q_graphics[i].cardset[1].name = "heart"
+                    grid_state_q_graphics[i].cardset[1].graphics = SuitCardGraphics(
+                        grid_state_q_graphics[i].cardset[1],
+                        filepath=Path("examples/manifold_adjacency_check/images", "heart.png"),
+                    )
+                    
+            stage = 8
+            for row in grid_state_q_graphics:
+                row.clear_cache()
 
         manager.process_events(event)
 
