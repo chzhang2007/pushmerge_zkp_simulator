@@ -285,7 +285,7 @@ while 1: # game loop
                 adj_graphics.clear_cache()
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 3:
-            # form the id row of matrix Q
+            # form the id column of matrix Q
             id_cards_q = ID2.copy()
             id_cards_q_graphics = AlignedHandVertical(
                 id_cards_q,
@@ -328,6 +328,32 @@ while 1: # game loop
                 
             stage = 5
             grid_state_n_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 5:
+            # turn the id column of matrix Q face down
+            for card in id_cards_q_graphics.cardset:
+                card.face_up = False
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/manifold_adjacency_check/images", "card_back.png"),
+                )
+                
+            # shuffle the rows of matrix Q
+            shuffle = random.choice([0, 1])
+            if shuffle == 1:
+                id_cards_q_graphics.cardset[0].name = "2"
+                id_cards_q_graphics.cardset[1].name = "1"
+                if grid_state_q_graphics[0].cardset[1].name == "club":
+                    grid_state_q_graphics[0].cardset[1].name = "spade"
+                    grid_state_q_graphics[1].cardset[1].name = "club"
+                else:
+                    grid_state_q_graphics[0].cardset[1].name = "club"
+                    grid_state_q_graphics[1].cardset[1].name = "spade"
+            
+            stage = 6
+            id_cards_q_graphics.clear_cache()
+            for row in grid_state_q_graphics:
+                row.clear_cache()
 
         manager.process_events(event)
 
