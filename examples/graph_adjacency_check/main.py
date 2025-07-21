@@ -638,6 +638,70 @@ while 1: # game loop
             stage = 20
             for adj_graphics in adjacency_matrix_n_graphics:
                 adj_graphics.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 20:
+            # discard the encoding column
+            enc_cards_n_graphics.remove_all_cards()
+            
+            # shuffle the rows of matrix N
+            index_list = [(i + 1) for i in range(len(id_cards_n_graphics.cardset))]
+            random.shuffle(index_list)
+            
+            # shuffle the id column
+            id_card_numbers = [int(card.name) for card in id_cards_n_graphics.cardset]
+            for (i, card) in enumerate(id_cards_n_graphics.cardset):
+                card.name = str(id_card_numbers[index_list[i] - 1])
+                card.number = id_card_numbers[index_list[i] - 1]
+                
+            # shuffle the rows of the adjacency matrix
+            for i in range(len(id_cards_n_graphics.cardset)):
+                adjacency_matrix_n_graphics[0].append_card(adjacency_matrix_n_graphics[0].cardset[index_list[i] - 1])
+                adjacency_matrix_n_graphics[1].append_card(adjacency_matrix_n_graphics[1].cardset[index_list[i] - 1])
+
+            for i in range(len(id_cards_n_graphics.cardset)):
+                adjacency_matrix_n_graphics[0].remove_card(adjacency_matrix_n_graphics[0].cardset[0])
+                adjacency_matrix_n_graphics[1].remove_card(adjacency_matrix_n_graphics[1].cardset[0])
+            
+            stage = 21
+            id_cards_n_graphics.clear_cache()
+            for adj_graphics in adjacency_matrix_n_graphics:
+                adj_graphics.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 21:
+            # turn the id column face up
+            for card in id_cards_n_graphics.cardset:
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/graph_adjacency_check/images", f"{card.name}.png"),
+                )
+                
+            stage = 22
+            id_cards_n_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 22:
+            # return the rows of the adjacency matrix to their original positions
+            adjacency_matrix_n_temp = [[0 for _ in range(6)] for _ in range(2)]
+            for (i, card) in enumerate(adjacency_matrix_n_graphics[0].cardset):
+                adjacency_matrix_n_temp[0][id_cards_n[i].number - 1] = card
+            for (i, card) in enumerate(adjacency_matrix_n_graphics[1].cardset):
+                adjacency_matrix_n_temp[1][id_cards_n[i].number - 1] = card
+            adjacency_matrix_n = adjacency_matrix_n_temp
+            adjacency_matrix_n_graphics[0].cardset = adjacency_matrix_n_temp[0]
+            adjacency_matrix_n_graphics[1].cardset = adjacency_matrix_n_temp[1]
+
+            # return the id column to its original ordering
+            for (i, card) in enumerate(id_cards_n_graphics.cardset):
+                card.name = str(i + 1)
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/graph_adjacency_check/images", f"{card.name}.png"),
+                )
+            
+            stage = 23
+            id_cards_n_graphics.clear_cache()
+            for adj_graphics in adjacency_matrix_n_graphics:
+                adj_graphics.clear_cache()
 
         manager.process_events(event)
 
