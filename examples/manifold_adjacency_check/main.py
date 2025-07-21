@@ -398,6 +398,91 @@ while 1: # game loop
             stage = 8
             for row in grid_state_q_graphics:
                 row.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 8:
+            # turn the grid state rows of matrix Q face down
+            for row in grid_state_q_graphics:
+                for card in row.cardset:
+                    card.face_up = False
+                    card.graphics = SuitCardGraphics(
+                        card,
+                        filepath=Path("examples/manifold_adjacency_check/images", "card_back.png"),
+                    )
+                    
+            # shuffle the rows of matrix Q
+            shuffle = random.choice([0, 1])
+            if shuffle == 1:
+                id_cards_q_graphics.cardset[0].name = str(3 - int(id_cards_q_graphics.cardset[0].name))
+                id_cards_q_graphics.cardset[1].name = str(3 - int(id_cards_q_graphics.cardset[0].name))
+                if grid_state_q_graphics[0].cardset[0].name == "club":
+                    grid_state_q_graphics[0].cardset[0].name = "diamond"
+                    grid_state_q_graphics[1].cardset[0].name = "club"
+                else:
+                    grid_state_q_graphics[0].cardset[0].name = "club"
+                    grid_state_q_graphics[1].cardset[0].name = "diamond"
+
+            stage = 9
+            id_cards_q_graphics.clear_cache()
+            for row in grid_state_q_graphics:
+                row.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 9:
+            # turn the id column of matrix Q face up
+            for card in id_cards_q_graphics.cardset:
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/manifold_adjacency_check/images", f"{card.name}.png"),
+                )
+                
+            stage = 10
+            id_cards_q_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 10:
+            # return the rows of matrix Q to their original ordering
+            if id_cards_q_graphics.cardset[0].name == "2":
+                id_cards_q_graphics.cardset[0].name = "1"
+                id_cards_q_graphics.cardset[0].graphics = IntCardGraphics(
+                    id_cards_q_graphics.cardset[0],
+                    filepath=Path("examples/manifold_adjacency_check/images", "1.png"),
+                )
+                id_cards_q_graphics.cardset[1].name = "2"
+                id_cards_q_graphics.cardset[1].graphics = IntCardGraphics(
+                    id_cards_q_graphics.cardset[1],
+                    filepath=Path("examples/manifold_adjacency_check/images", "2.png"),
+                )
+                if grid_state_q_graphics[0].cardset[0].name == "club":
+                    grid_state_q_graphics[0].cardset[0].name = "diamond"
+                    grid_state_q_graphics[1].cardset[0].name = "club"
+                else:
+                    grid_state_q_graphics[0].cardset[0].name = "club"
+                    grid_state_q_graphics[1].cardset[0].name = "diamond"
+            
+            stage = 11
+            id_cards_q_graphics.clear_cache()
+            for row in grid_state_q_graphics:
+                row.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 11:
+            # return the first row of matrix Q to matrix N
+            for (i, card) in enumerate(grid_state_n_graphics.cardset):
+                card.name = grid_state_q_graphics[0].cardset[i].name
+                card.face_up = False
+                card.graphics = SuitCardGraphics(
+                    card,
+                    filepath=Path("examples/manifold_adjacency_check/images", "card_back.png"),
+                )
+                
+            for i in range(2):
+                grid_state_q_graphics[i].remove_all_cards()
+                
+            id_cards_q_graphics.remove_all_cards()
+            
+            stage = 12
+            grid_state_n_graphics.clear_cache()
+            id_cards_q_graphics.clear_cache()
+            for row in grid_state_q_graphics:
+                row.clear_cache()
 
         manager.process_events(event)
 
