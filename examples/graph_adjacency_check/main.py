@@ -12,7 +12,7 @@ from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
 from suit_set import GRAPH_STATE, AE, AE_Q, AG, AG_Q, ADJACENCY_COL_1, ADJACENCY_COL_2, ADJACENCY_COL_3, ADJACENCY_COL_4, ADJACENCY_COL_5, ADJACENCY_COL_6, ADJACENCY_COL_1_COPY, ADJACENCY_COL_2_COPY, ADJACENCY_COL_3_COPY, ADJACENCY_COL_4_COPY, ADJACENCY_COL_5_COPY, ADJACENCY_COL_6_COPY
-from int_set import ID2, ID6, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_1_COPY, ENCODING_MOVE_2_COPY, ENCODING_MOVE_3_COPY
+from int_set import ID2, ID6, ID6_COPY, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_1_COPY, ENCODING_MOVE_2_COPY, ENCODING_MOVE_3_COPY
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -24,8 +24,7 @@ size = width, height = screen.get_size()
 
 manager = CardsManager()
 
-id_cards_m = ID6
-
+id_cards_m = ID6.copy()
 
 # TO CHANGE INPUT: MODIFY HERE (INPUTS RESTRICTED TO A 6-VERTEX graph)
 grid_state_m = GRAPH_STATE # initial grid state
@@ -472,9 +471,9 @@ while 1: # game loop
                     filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
                 )
                 
+            # discard the rest of matrix Q
             for i in range(2):
                 grid_state_q_graphics[i].remove_all_cards()
-                
             id_cards_q_graphics.remove_all_cards()
             
             stage = 12
@@ -484,7 +483,33 @@ while 1: # game loop
                 row.clear_cache()
                 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 12:
-            # place the identity column to the left of Q
+            # place the identity column to the left of N
+            id_cards_n = ID6_COPY.copy()
+            id_cards_n_graphics = AlignedHandVertical(
+                id_cards_n,
+                card_set_size_long,
+                card_size=card_size,
+            )
+            manager.add_set(
+                id_cards_n_graphics,
+                (8 * (card_set_size_long[0] + 7), card_set_size_wide[1]),
+            )
+            
+            stage = 13
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 13:
+            # turn the id column face down
+            for card in id_cards_n_graphics.cardset:
+                card.face_up = False
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
+                )
+            
+            stage = 14
+            id_cards_n_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 14:
             enc_cards_n = encoding_rows_n[current_move].copy()
             enc_cards_n_graphics = AlignedHandVertical(
                 enc_cards_n,
@@ -494,8 +519,12 @@ while 1: # game loop
             )
             manager.add_set(
                 enc_cards_n_graphics,
-                (8 * (card_set_size_long[0] + 7), card_set_size_wide[1]),
+                (11 * (card_set_size_long[0] + 7), card_set_size_wide[1]),
             )
+            
+            # shuffle the rows of matrix N
+            index_list = [(i + 1) for i in range(len(id_cards_n_graphics.cardset))]
+            random.shuffle(index_list)
 
         manager.process_events(event)
 

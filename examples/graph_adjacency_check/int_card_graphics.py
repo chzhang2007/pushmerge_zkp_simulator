@@ -12,7 +12,7 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from int_set import ID2, ID6, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_1_COPY, ENCODING_MOVE_2_COPY, ENCODING_MOVE_3_COPY
+from int_set import ID2, ID6, ID6_COPY, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_1_COPY, ENCODING_MOVE_2_COPY, ENCODING_MOVE_3_COPY
 from pygame_cards.utils import position_for_centering
 
 
@@ -41,7 +41,7 @@ class IntCardGraphics(AbstractCardGraphics):
 
         return surf
 
-for card in ID2 + ID6 + ENCODING_MOVE_1 + ENCODING_MOVE_2 + ENCODING_MOVE_3 + ENCODING_MOVE_1_COPY + ENCODING_MOVE_2_COPY + ENCODING_MOVE_3_COPY:
+for card in ID2 + ID6 + ID6_COPY + ENCODING_MOVE_1 + ENCODING_MOVE_2 + ENCODING_MOVE_3 + ENCODING_MOVE_1_COPY + ENCODING_MOVE_2_COPY + ENCODING_MOVE_3_COPY:
     match card.name:
         case "0":
             if card.face_up:
