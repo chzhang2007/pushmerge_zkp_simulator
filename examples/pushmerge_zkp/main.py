@@ -707,7 +707,7 @@ while 1: # game loop
                     column.append_card(col_cards_q_graphics[index_list[i] - 1].cardset[j])
             for column in col_cards_q_graphics:
                 for j in range(3):
-                    column.remove_card(column.cardset[0]) 
+                    column.remove_card(column.cardset[0])
                       
             stage = 13
             id_cards_q_graphics.clear_cache()
