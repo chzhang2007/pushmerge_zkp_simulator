@@ -12,12 +12,12 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from letter_set import ADJACENCY_COL_1, ADJACENCY_COL_2, ADJACENCY_COL_3, ADJACENCY_COL_4, ADJACENCY_COL_5, ADJACENCY_COL_6, ADJACENCY_COL_1_COPY, ADJACENCY_COL_2_COPY, ADJACENCY_COL_3_COPY, ADJACENCY_COL_4_COPY, ADJACENCY_COL_5_COPY, ADJACENCY_COL_6_COPY
+from suit_set import GRAPH_STATE, AE, AE_Q, AG, AG_Q, ADJACENCY_COL_1, ADJACENCY_COL_1_COPY, ADJACENCY_COL_2, ADJACENCY_COL_2_COPY, ADJACENCY_COL_3, ADJACENCY_COL_3_COPY, ADJACENCY_COL_4, ADJACENCY_COL_4_COPY, ADJACENCY_COL_5, ADJACENCY_COL_5_COPY, ADJACENCY_COL_6, ADJACENCY_COL_6_COPY
 from pygame_cards.utils import position_for_centering
 
 
 @dataclass
-class LetterCardGraphics(AbstractCardGraphics):
+class SuitCardGraphics(AbstractCardGraphics):
 
     # Specify the type of card that this graphics accept
     card: SuitCard
@@ -42,62 +42,42 @@ class LetterCardGraphics(AbstractCardGraphics):
         return surf
 
 
-for card in ADJACENCY_COL_1 + ADJACENCY_COL_2 + ADJACENCY_COL_3 + ADJACENCY_COL_4 + ADJACENCY_COL_5 + ADJACENCY_COL_6 + ADJACENCY_COL_1_COPY + ADJACENCY_COL_2_COPY + ADJACENCY_COL_3_COPY + ADJACENCY_COL_4_COPY + ADJACENCY_COL_5_COPY + ADJACENCY_COL_6_COPY:
+for card in GRAPH_STATE + AE + AE_Q + AG + AG_Q + ADJACENCY_COL_1 + ADJACENCY_COL_1_COPY + ADJACENCY_COL_2 + ADJACENCY_COL_2_COPY + ADJACENCY_COL_3 + ADJACENCY_COL_3_COPY + ADJACENCY_COL_4 + ADJACENCY_COL_4_COPY + ADJACENCY_COL_5 + ADJACENCY_COL_5_COPY + ADJACENCY_COL_6 + ADJACENCY_COL_6_COPY:
     match card.name:
-        case "N":
+        case "heart":
             if card.face_up:
                 file = (
-                    "N.png"
+                    "heart.png"
                 )
             else:
                 # If the card is face down, we use the back of the card
                 file = (
                     "card_back.png"
                 )
-        case "S":
+        case "spade":
             if card.face_up:
                 file = (
-                    "S.png"
+                    "spade.png"
                 )
             else:
                 # If the card is face down, we use the back of the card
                 file = (
                     "card_back.png"
                 )
-        case "E":
+        case "club":
             if card.face_up:
                 file = (
-                    "E.png"
+                    "club.png"
                 )
             else:
                 # If the card is face down, we use the back of the card
                 file = (
                     "card_back.png"
                 )
-        case "W":
+        case "diamond":
             if card.face_up:
                 file = (
-                    "W.png"
-                )
-            else:
-                # If the card is face down, we use the back of the card
-                file = (
-                    "card_back.png"
-                )
-        case "X":
-            if card.face_up:
-                file = (
-                    "X.png"
-                )
-            else:
-                # If the card is face down, we use the back of the card
-                file = (
-                    "card_back.png"
-                )
-        case "O":
-            if card.face_up:
-                file = (
-                    "O.png"
+                    "diamond.png"
                 )
             else:
                 # If the card is face down, we use the back of the card
@@ -109,11 +89,11 @@ for card in ADJACENCY_COL_1 + ADJACENCY_COL_2 + ADJACENCY_COL_3 + ADJACENCY_COL_
                 "blank.png"
             )
         case _:
-            raise ValueError(f"Unknown character {card.name}")
+            raise ValueError(f"Unkonwn character {card.name}")
 
-    card.graphics = LetterCardGraphics(
+    card.graphics = SuitCardGraphics(
         card,
-        filepath=Path("examples/manifold_adjacency_check/images", file),
+        filepath=Path("examples/graph_adjacency_check/images", file),
     )
 
 if __name__ == "__main__":

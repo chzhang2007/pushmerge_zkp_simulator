@@ -6,15 +6,13 @@ from pathlib import Path
 from suit_card import SuitCard
 from suit_card_graphics import SuitCardGraphics
 from int_card_graphics import IntCardGraphics
-from letter_card_graphics import LetterCardGraphics
 from pygame_cards.abstract import AbstractCard
 from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
-from suit_set import MANIFOLD_STATE, AE, AE_Q, AG, AG_Q
+from suit_set import GRAPH_STATE, AE, AE_Q, AG, AG_Q, ADJACENCY_COL_1, ADJACENCY_COL_2, ADJACENCY_COL_3, ADJACENCY_COL_4, ADJACENCY_COL_5, ADJACENCY_COL_6, ADJACENCY_COL_1_COPY, ADJACENCY_COL_2_COPY, ADJACENCY_COL_3_COPY, ADJACENCY_COL_4_COPY, ADJACENCY_COL_5_COPY, ADJACENCY_COL_6_COPY
 from int_set import ID2, ID6, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3
-from letter_set import ADJACENCY_COL_1, ADJACENCY_COL_2, ADJACENCY_COL_3, ADJACENCY_COL_4, ADJACENCY_COL_5, ADJACENCY_COL_6, ADJACENCY_COL_1_COPY, ADJACENCY_COL_2_COPY, ADJACENCY_COL_3_COPY, ADJACENCY_COL_4_COPY, ADJACENCY_COL_5_COPY, ADJACENCY_COL_6_COPY
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -29,8 +27,8 @@ manager = CardsManager()
 id_cards_m = ID6
 
 
-# TO CHANGE INPUT: MODIFY HERE (INPUTS RESTRICTED TO A 6-VERTEX MANIFOLD)
-grid_state_m = MANIFOLD_STATE # initial grid state
+# TO CHANGE INPUT: MODIFY HERE (INPUTS RESTRICTED TO A 6-VERTEX graph)
+grid_state_m = GRAPH_STATE # initial grid state
 number_of_moves = 3
 # to modify encoding_rows_m, go into int_set.py and modify the sets ENCODING_MOVE_1, ENCODING_MOVE_2, etc.
 encoding_rows_m = [ENCODING_MOVE_1.copy(), ENCODING_MOVE_2.copy(), ENCODING_MOVE_3.copy()]
@@ -40,7 +38,7 @@ encoding_2 = [5, 6, 3]
 # to modify the adjacency matrix, go into letter_set.py and modify the sets
 adjacency_matrix = [ADJACENCY_COL_1.copy(), ADJACENCY_COL_2.copy(), ADJACENCY_COL_3.copy(), ADJACENCY_COL_4.copy(), ADJACENCY_COL_5.copy(), ADJACENCY_COL_6.copy()]
 adjacency_matrix_copy = [ADJACENCY_COL_1_COPY.copy(), ADJACENCY_COL_2_COPY.copy(), ADJACENCY_COL_3_COPY.copy(), ADJACENCY_COL_4_COPY.copy(), ADJACENCY_COL_5_COPY.copy(), ADJACENCY_COL_6_COPY.copy()]
-# modify the target position (1-indexed) to match the manifold reachability instance
+# modify the target position (1-indexed) to match the graph reachability instance
 target_pos = 3
 # if tutorial, face-down cards will be visible
 tutorial = False
@@ -74,7 +72,7 @@ adjacency_matrix_graphics = [AlignedHandVertical(
     adjacency_matrix[i],
     card_set_size_long,
     card_size=card_size,
-    graphics_type=LetterCardGraphics,
+    graphics_type=SuitCardGraphics,
 ) for i in range(len(adjacency_matrix))]
 for (i, adj_graphics) in enumerate(adjacency_matrix_graphics):
     manager.add_set(
@@ -110,20 +108,20 @@ while 1: # game loop
                 card.face_up = False
                 card.graphics = IntCardGraphics(
                     card,
-                    filepath=Path("examples/manifold_adjacency_check/images", "card_back.png"),
+                    filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
                 )
             for card in grid_state_m_graphics.cardset:
                 card.face_up = False
                 card.graphics = SuitCardGraphics(
                     card,
-                    filepath=Path("examples/manifold_adjacency_check/images", "card_back.png"),
+                    filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
                 )
             for adj_graphics in adjacency_matrix_graphics:
                 for card in adj_graphics.cardset:
                     card.face_up = False
-                    card.graphics = LetterCardGraphics(
+                    card.graphics = SuitCardGraphics(
                         card,
-                        filepath=Path("examples/manifold_adjacency_check/images", "card_back.png"),
+                        filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
                     )
             stage = 0
             id_cards_m_graphics.clear_cache()
@@ -137,7 +135,7 @@ while 1: # game loop
                 grid_state_m_graphics.cardset[target_pos - 1].face_up = True
                 grid_state_m_graphics.cardset[target_pos - 1].graphics = SuitCardGraphics(
                     grid_state_m_graphics.cardset[target_pos - 1],
-                    filepath=Path("examples/manifold_adjacency_check/images", f"{grid_state_m_graphics.cardset[target_pos - 1].name}.png"),
+                    filepath=Path("examples/graph_adjacency_check/images", f"{grid_state_m_graphics.cardset[target_pos - 1].name}.png"),
                 )
                 current_move += 1
                 grid_state_m_graphics.clear_cache()
@@ -162,7 +160,7 @@ while 1: # game loop
                 for (i, card) in enumerate(enc_cards_m_graphics.cardset):
                     card.graphics = IntCardGraphics(
                         card,
-                        filepath=Path("examples/manifold_adjacency_check/images", f"{card.name}_tutorial.png"),
+                        filepath=Path("examples/graph_adjacency_check/images", f"{card.name}_tutorial.png"),
                     )
             
             # generate random pile shifting shuffle
@@ -214,7 +212,7 @@ while 1: # game loop
                 card.face_up = True
                 card.graphics = IntCardGraphics(
                     card,
-                    filepath=Path("examples/manifold_adjacency_check/images", f"{card.name}.png"),
+                    filepath=Path("examples/graph_adjacency_check/images", f"{card.name}.png"),
                 )
 
             stage = 2
@@ -231,12 +229,12 @@ while 1: # game loop
                     grid_state_m_graphics.cardset[i].name = "blank"
                     grid_state_m_graphics.cardset[i].graphics = SuitCardGraphics(
                         grid_state_m_graphics.cardset[i],
-                        filepath=Path("examples/manifold_adjacency_check/images", "blank.png"),
+                        filepath=Path("examples/graph_adjacency_check/images", "blank.png"),
                     )
                     for adj_card in adjacency_matrix_graphics[i].cardset:
-                        adj_card.graphics = LetterCardGraphics(
+                        adj_card.graphics = SuitCardGraphics(
                             adj_card,
-                            filepath=Path("examples/manifold_adjacency_check/images", "blank.png"),
+                            filepath=Path("examples/graph_adjacency_check/images", "blank.png"),
                         )
                 elif card.name == "2":
                     if grid_state_m_graphics.cardset[i].name == "spade":
@@ -244,12 +242,12 @@ while 1: # game loop
                     grid_state_m_graphics.cardset[i].name = "blank"
                     grid_state_m_graphics.cardset[i].graphics = SuitCardGraphics(
                         grid_state_m_graphics.cardset[i],
-                        filepath=Path("examples/manifold_adjacency_check/images", "blank.png"),
+                        filepath=Path("examples/graph_adjacency_check/images", "blank.png"),
                     )
                     for adj_card in adjacency_matrix_graphics[i].cardset:
-                        adj_card.graphics = LetterCardGraphics(
+                        adj_card.graphics = SuitCardGraphics(
                             adj_card,
-                            filepath=Path("examples/manifold_adjacency_check/images", "blank.png"),
+                            filepath=Path("examples/graph_adjacency_check/images", "blank.png"),
                         )
 
             grid_state_n_graphics = AlignedHand(
@@ -267,7 +265,7 @@ while 1: # game loop
                 adjacency_matrix_n[i],
                 card_set_size_long,
                 card_size=card_size,
-                graphics_type=LetterCardGraphics,
+                graphics_type=SuitCardGraphics,
             ) for i in range(len(adjacency_matrix_n))]
             
             for i in range(2):
@@ -323,7 +321,7 @@ while 1: # game loop
             for card in grid_state_n_graphics.cardset:
                 card.graphics = SuitCardGraphics(
                     card,
-                    filepath=Path("examples/manifold_adjacency_check/images", "blank.png"),
+                    filepath=Path("examples/graph_adjacency_check/images", "blank.png"),
                 )
                 
             stage = 5
@@ -335,7 +333,7 @@ while 1: # game loop
                 card.face_up = False
                 card.graphics = IntCardGraphics(
                     card,
-                    filepath=Path("examples/manifold_adjacency_check/images", "card_back.png"),
+                    filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
                 )
                 
             # shuffle the rows of matrix Q
@@ -362,7 +360,7 @@ while 1: # game loop
                     card.face_up = True
                     card.graphics = SuitCardGraphics(
                         card,
-                        filepath=Path("examples/manifold_adjacency_check/images", f"{card.name}.png"),
+                        filepath=Path("examples/graph_adjacency_check/images", f"{card.name}.png"),
                     )
                     
             stage = 7
@@ -376,23 +374,23 @@ while 1: # game loop
                     grid_state_q_graphics[i].cardset[0].name = "diamond"
                     grid_state_q_graphics[i].cardset[0].graphics = SuitCardGraphics(
                         grid_state_q_graphics[i].cardset[0],
-                        filepath=Path("examples/manifold_adjacency_check/images", "diamond.png"),
+                        filepath=Path("examples/graph_adjacency_check/images", "diamond.png"),
                     )
                     grid_state_q_graphics[i].cardset[1].name = "heart"
                     grid_state_q_graphics[i].cardset[1].graphics = SuitCardGraphics(
                         grid_state_q_graphics[i].cardset[1],
-                        filepath=Path("examples/manifold_adjacency_check/images", "heart.png"),
+                        filepath=Path("examples/graph_adjacency_check/images", "heart.png"),
                     )
                 else:
                     grid_state_q_graphics[i].cardset[0].name = "club"
                     grid_state_q_graphics[i].cardset[0].graphics = SuitCardGraphics(
                         grid_state_q_graphics[i].cardset[0],
-                        filepath=Path("examples/manifold_adjacency_check/images", "club.png"),
+                        filepath=Path("examples/graph_adjacency_check/images", "club.png"),
                     )
                     grid_state_q_graphics[i].cardset[1].name = "heart"
                     grid_state_q_graphics[i].cardset[1].graphics = SuitCardGraphics(
                         grid_state_q_graphics[i].cardset[1],
-                        filepath=Path("examples/manifold_adjacency_check/images", "heart.png"),
+                        filepath=Path("examples/graph_adjacency_check/images", "heart.png"),
                     )
                     
             stage = 8
@@ -406,7 +404,7 @@ while 1: # game loop
                     card.face_up = False
                     card.graphics = SuitCardGraphics(
                         card,
-                        filepath=Path("examples/manifold_adjacency_check/images", "card_back.png"),
+                        filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
                     )
                     
             # shuffle the rows of matrix Q
@@ -432,7 +430,7 @@ while 1: # game loop
                 card.face_up = True
                 card.graphics = IntCardGraphics(
                     card,
-                    filepath=Path("examples/manifold_adjacency_check/images", f"{card.name}.png"),
+                    filepath=Path("examples/graph_adjacency_check/images", f"{card.name}.png"),
                 )
                 
             stage = 10
@@ -444,12 +442,12 @@ while 1: # game loop
                 id_cards_q_graphics.cardset[0].name = "1"
                 id_cards_q_graphics.cardset[0].graphics = IntCardGraphics(
                     id_cards_q_graphics.cardset[0],
-                    filepath=Path("examples/manifold_adjacency_check/images", "1.png"),
+                    filepath=Path("examples/graph_adjacency_check/images", "1.png"),
                 )
                 id_cards_q_graphics.cardset[1].name = "2"
                 id_cards_q_graphics.cardset[1].graphics = IntCardGraphics(
                     id_cards_q_graphics.cardset[1],
-                    filepath=Path("examples/manifold_adjacency_check/images", "2.png"),
+                    filepath=Path("examples/graph_adjacency_check/images", "2.png"),
                 )
                 if grid_state_q_graphics[0].cardset[0].name == "club":
                     grid_state_q_graphics[0].cardset[0].name = "diamond"
@@ -470,7 +468,7 @@ while 1: # game loop
                 card.face_up = False
                 card.graphics = SuitCardGraphics(
                     card,
-                    filepath=Path("examples/manifold_adjacency_check/images", "card_back.png"),
+                    filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
                 )
                 
             for i in range(2):

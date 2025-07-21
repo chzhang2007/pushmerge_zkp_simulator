@@ -258,7 +258,7 @@ for card in ID2 + ID6 + ENCODING_MOVE_1 + ENCODING_MOVE_2 + ENCODING_MOVE_3:
 
     card.graphics = IntCardGraphics(
         card,
-        filepath=Path("examples/manifold_adjacency_check/images", file),
+        filepath=Path("examples/graph_adjacency_check/images", file),
     )
 
 if __name__ == "__main__":

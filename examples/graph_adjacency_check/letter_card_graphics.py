@@ -12,12 +12,12 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from suit_set import MANIFOLD_STATE, AE, AE_Q, AG, AG_Q
+from letter_set import ADJACENCY_COL_1, ADJACENCY_COL_2, ADJACENCY_COL_3, ADJACENCY_COL_4, ADJACENCY_COL_5, ADJACENCY_COL_6, ADJACENCY_COL_1_COPY, ADJACENCY_COL_2_COPY, ADJACENCY_COL_3_COPY, ADJACENCY_COL_4_COPY, ADJACENCY_COL_5_COPY, ADJACENCY_COL_6_COPY
 from pygame_cards.utils import position_for_centering
 
 
 @dataclass
-class SuitCardGraphics(AbstractCardGraphics):
+class LetterCardGraphics(AbstractCardGraphics):
 
     # Specify the type of card that this graphics accept
     card: SuitCard
@@ -42,42 +42,62 @@ class SuitCardGraphics(AbstractCardGraphics):
         return surf
 
 
-for card in MANIFOLD_STATE + AE + AE_Q + AG + AG_Q:
+for card in ADJACENCY_COL_1 + ADJACENCY_COL_2 + ADJACENCY_COL_3 + ADJACENCY_COL_4 + ADJACENCY_COL_5 + ADJACENCY_COL_6 + ADJACENCY_COL_1_COPY + ADJACENCY_COL_2_COPY + ADJACENCY_COL_3_COPY + ADJACENCY_COL_4_COPY + ADJACENCY_COL_5_COPY + ADJACENCY_COL_6_COPY:
     match card.name:
-        case "heart":
+        case "N":
             if card.face_up:
                 file = (
-                    "heart.png"
+                    "N.png"
                 )
             else:
                 # If the card is face down, we use the back of the card
                 file = (
                     "card_back.png"
                 )
-        case "spade":
+        case "S":
             if card.face_up:
                 file = (
-                    "spade.png"
+                    "S.png"
                 )
             else:
                 # If the card is face down, we use the back of the card
                 file = (
                     "card_back.png"
                 )
-        case "club":
+        case "E":
             if card.face_up:
                 file = (
-                    "club.png"
+                    "E.png"
                 )
             else:
                 # If the card is face down, we use the back of the card
                 file = (
                     "card_back.png"
                 )
-        case "diamond":
+        case "W":
             if card.face_up:
                 file = (
-                    "diamond.png"
+                    "W.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "X":
+            if card.face_up:
+                file = (
+                    "X.png"
+                )
+            else:
+                # If the card is face down, we use the back of the card
+                file = (
+                    "card_back.png"
+                )
+        case "O":
+            if card.face_up:
+                file = (
+                    "O.png"
                 )
             else:
                 # If the card is face down, we use the back of the card
@@ -89,11 +109,11 @@ for card in MANIFOLD_STATE + AE + AE_Q + AG + AG_Q:
                 "blank.png"
             )
         case _:
-            raise ValueError(f"Unkonwn character {card.name}")
+            raise ValueError(f"Unknown character {card.name}")
 
-    card.graphics = SuitCardGraphics(
+    card.graphics = LetterCardGraphics(
         card,
-        filepath=Path("examples/manifold_adjacency_check/images", file),
+        filepath=Path("examples/graph_adjacency_check/images", file),
     )
 
 if __name__ == "__main__":
