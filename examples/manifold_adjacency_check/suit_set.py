@@ -20,7 +20,21 @@ AE = CardsSet(
     ]
 )
 
+AE_Q = CardsSet(
+    [
+        SuitCard("heart", False),
+        SuitCard("club", False),
+    ]
+)
+
 AG = CardsSet(
+    [
+        SuitCard("heart", False),
+        SuitCard("spade", False),
+    ]
+)
+
+AG_Q = CardsSet(
     [
         SuitCard("heart", False),
         SuitCard("spade", False),

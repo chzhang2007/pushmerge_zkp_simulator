@@ -12,7 +12,7 @@ from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
-from suit_set import MANIFOLD_STATE, AE, AG
+from suit_set import MANIFOLD_STATE, AE, AE_Q, AG, AG_Q
 from int_set import ID2, ID6, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3
 from letter_set import ADJACENCY_COL_1, ADJACENCY_COL_2, ADJACENCY_COL_3, ADJACENCY_COL_4, ADJACENCY_COL_5, ADJACENCY_COL_6, ADJACENCY_COL_1_COPY, ADJACENCY_COL_2_COPY, ADJACENCY_COL_3_COPY, ADJACENCY_COL_4_COPY, ADJACENCY_COL_5_COPY, ADJACENCY_COL_6_COPY
 from pygame_cards.set import CardsSet
@@ -287,9 +287,9 @@ while 1: # game loop
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 3:
             # form the id row of matrix Q
             id_cards_q = ID2.copy()
-            id_cards_q_graphics = AlignedHand(
+            id_cards_q_graphics = AlignedHandVertical(
                 id_cards_q,
-                card_set_size_wide,
+                card_set_size_long,
                 card_size=card_size,
                 graphics_type=IntCardGraphics,
             )
@@ -299,6 +299,35 @@ while 1: # game loop
             )
             
             stage = 4
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 4:
+            # form the grid state rows of matrix Q
+            grid_state_q = [AE_Q.copy(), AG_Q.copy()]
+            if grid_state_n_graphics.cardset[1].name == "spade":
+                grid_state_q = [AG_Q.copy(), AE_Q.copy()]
+                
+            grid_state_q_graphics = [AlignedHand(
+                grid_state_q[i],
+                card_set_size_wide,
+                card_size=card_size,
+                graphics_type=SuitCardGraphics,
+            ) for i in range(len(grid_state_q))]
+            
+            for i in range(2):
+                manager.add_set(
+                    grid_state_q_graphics[i],
+                    (10 * (card_set_size_long[0] + 7), (i + 8) * card_set_size_wide[1] - 6),
+                )
+                
+            # remove the grid state row from matrix N
+            for card in grid_state_n_graphics.cardset:
+                card.graphics = SuitCardGraphics(
+                    card,
+                    filepath=Path("examples/manifold_adjacency_check/images", "blank.png"),
+                )
+                
+            stage = 5
+            grid_state_n_graphics.clear_cache()
 
         manager.process_events(event)
 
