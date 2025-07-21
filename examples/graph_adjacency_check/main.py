@@ -12,7 +12,7 @@ from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
 from suit_set import GRAPH_STATE, AE, AE_Q, AG, AG_Q, ADJACENCY_COL_1, ADJACENCY_COL_2, ADJACENCY_COL_3, ADJACENCY_COL_4, ADJACENCY_COL_5, ADJACENCY_COL_6, ADJACENCY_COL_1_COPY, ADJACENCY_COL_2_COPY, ADJACENCY_COL_3_COPY, ADJACENCY_COL_4_COPY, ADJACENCY_COL_5_COPY, ADJACENCY_COL_6_COPY
-from int_set import ID2, ID6, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3
+from int_set import ID2, ID6, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_1_COPY, ENCODING_MOVE_2_COPY, ENCODING_MOVE_3_COPY
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -32,6 +32,7 @@ grid_state_m = GRAPH_STATE # initial grid state
 number_of_moves = 3
 # to modify encoding_rows_m, go into int_set.py and modify the sets ENCODING_MOVE_1, ENCODING_MOVE_2, etc.
 encoding_rows_m = [ENCODING_MOVE_1.copy(), ENCODING_MOVE_2.copy(), ENCODING_MOVE_3.copy()]
+encoding_rows_n = [ENCODING_MOVE_1_COPY.copy(), ENCODING_MOVE_2_COPY.copy(), ENCODING_MOVE_3_COPY.copy()]
 # modify encoding_1_m and encoding_1_n (1-indexed) to match encoding_rows_m and encoding_rows_n
 encoding_1 = [4, 5, 6]
 encoding_2 = [5, 6, 3]
@@ -481,6 +482,20 @@ while 1: # game loop
             id_cards_q_graphics.clear_cache()
             for row in grid_state_q_graphics:
                 row.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 12:
+            # place the identity column to the left of Q
+            enc_cards_n = encoding_rows_n[current_move].copy()
+            enc_cards_n_graphics = AlignedHandVertical(
+                enc_cards_n,
+                card_set_size_long,
+                card_size=card_size,
+                graphics_type=IntCardGraphics,
+            )
+            manager.add_set(
+                enc_cards_n_graphics,
+                (8 * (card_set_size_long[0] + 7), card_set_size_wide[1]),
+            )
 
         manager.process_events(event)
 
