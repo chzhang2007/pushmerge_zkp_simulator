@@ -702,6 +702,48 @@ while 1: # game loop
             id_cards_n_graphics.clear_cache()
             for adj_graphics in adjacency_matrix_n_graphics:
                 adj_graphics.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 23:
+            # return the graph state and adjacency matrix columns to matrix M
+            for (i, enc_card) in enumerate(enc_cards_m_graphics.cardset):
+                if enc_card.name == "1":
+                    grid_state_m_graphics.cardset[i].name = grid_state_n_graphics.cardset[0].name
+                    grid_state_m_graphics.cardset[i].face_up = False
+                    grid_state_m_graphics.cardset[i].graphics = SuitCardGraphics(
+                        grid_state_m_graphics.cardset[i],
+                        filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
+                    )
+                    for (j, card) in enumerate(adjacency_matrix_graphics[i].cardset):
+                        card.name = adjacency_matrix_n[0][j].name
+                        card.face_up = False
+                        card.graphics = SuitCardGraphics(
+                            card,
+                            filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
+                        )
+                if enc_card.name == "2":
+                    grid_state_m_graphics.cardset[i].name = grid_state_n_graphics.cardset[1].name
+                    grid_state_m_graphics.cardset[i].face_up = False
+                    grid_state_m_graphics.cardset[i].graphics = SuitCardGraphics(
+                        grid_state_m_graphics.cardset[i],
+                        filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
+                    )
+                    for (j, card) in enumerate(adjacency_matrix_graphics[i].cardset):
+                        card.name = adjacency_matrix_n[1][j].name
+                        card.face_up = False
+                        card.graphics = SuitCardGraphics(
+                            card,
+                            filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
+                        )
+                      
+            id_cards_n_graphics.remove_all_cards()
+            grid_state_n_graphics.remove_all_cards()
+            for col in adjacency_matrix_n_graphics:
+                col.remove_all_cards()
+                        
+            stage = 24
+            grid_state_m_graphics.clear_cache()
+            for adj_graphics in adjacency_matrix_graphics:
+                adj_graphics.clear_cache()
 
         manager.process_events(event)
 
