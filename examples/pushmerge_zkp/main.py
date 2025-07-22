@@ -924,7 +924,7 @@ while 1: # game loop
             grid_state_m_graphics.clear_cache()
 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 21:
-            # return the grid state of M to its original positions
+            # return the grid state of M to its original configuration
             grid_state_m_temp = [0 for _ in range(20)]
             for (i, card) in enumerate(grid_state_m_graphics.cardset):
                 grid_state_m_temp[id_cards_m[i].number - 1] = card

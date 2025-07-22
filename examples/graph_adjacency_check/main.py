@@ -156,12 +156,6 @@ while 1: # game loop
                 # Position on the screen of the entire set
                 (0, 8 * grid_state_m_graphics.size[1]),
             )
-            if tutorial:
-                for (i, card) in enumerate(enc_cards_m_graphics.cardset):
-                    card.graphics = IntCardGraphics(
-                        card,
-                        filepath=Path("examples/graph_adjacency_check/images", f"{card.name}_tutorial.png"),
-                    )
             
             # generate random pile shifting shuffle
             index_list = [(i + 1) for i in range(len(id_cards_m))]
@@ -170,7 +164,11 @@ while 1: # game loop
             # flip the id cards face down and shuffle them
             for (i, card) in enumerate(id_cards_m):
                 card.name = str(index_list[i])
-                card.number = index_list[i]
+                card.face_up = False
+                card.graphics = SuitCardGraphics(
+                    card,
+                    filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
+                )
 
             # shuffle the columns
             grid_state_m_temp = []
@@ -178,7 +176,7 @@ while 1: # game loop
                 grid_state_m_temp.append(grid_state_m[index_list[i] - 1])
             grid_state_m = grid_state_m_temp
             grid_state_m_graphics.cardset = grid_state_m_temp
-                    
+
             # shuffle the encoding row
             for (i, card) in enumerate(enc_cards_m):
                 if index_list[i] == encoding_1[current_move]:
@@ -190,7 +188,7 @@ while 1: # game loop
                 else:
                     card.name = "0"
                     card.number = 0
-                    
+
             # shuffle the adjacency matrix
             for (i, column) in enumerate(adjacency_matrix_graphics):
                 for j in range(6):
@@ -222,8 +220,9 @@ while 1: # game loop
             
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 2:
             grid_state_n = AE.copy()
-            adjacency_matrix_n = [adjacency_matrix_copy[encoding_1[current_move] - 1], 
-                                  adjacency_matrix_copy[encoding_2[current_move] - 1]]
+            adjacency_matrix_n = [adjacency_matrix_copy[encoding_1[current_move] - 1].copy(), 
+                                  adjacency_matrix_copy[encoding_2[current_move] - 1].copy()]
+
             for (i, card) in enumerate(enc_cards_m_graphics.cardset):
                 if card.name == "1":
                     grid_state_m_graphics.cardset[i].name = "blank"
@@ -266,7 +265,7 @@ while 1: # game loop
                 card_set_size_long,
                 card_size=card_size,
                 graphics_type=SuitCardGraphics,
-            ) for i in range(len(adjacency_matrix_n))]
+            ) for i in range(2)]
             
             for i in range(2):
                 manager.add_set(
@@ -744,6 +743,151 @@ while 1: # game loop
             grid_state_m_graphics.clear_cache()
             for adj_graphics in adjacency_matrix_graphics:
                 adj_graphics.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 24:
+            # discard the encoding row of matrix M
+            enc_cards_m_graphics.remove_all_cards()
+            
+            # shuffle the columns of matrix M
+            index_list = [(i + 1) for i in range(len(id_cards_m_graphics.cardset))]
+            random.shuffle(index_list)
+            
+            # shuffle the id column
+            id_card_numbers = [int(card.name) for card in id_cards_m_graphics.cardset]
+            for (i, card) in enumerate(id_cards_m_graphics.cardset):
+                card.name = str(id_card_numbers[index_list[i] - 1])
+                
+            # shuffle the graph state
+            grid_state_m_temp = []
+            for i in range(len(grid_state_m)):
+                grid_state_m_temp.append(grid_state_m[index_list[i] - 1])
+            grid_state_m = grid_state_m_temp
+            grid_state_m_graphics.cardset = grid_state_m_temp
+                
+            # shuffle the rows of the adjacency matrix
+            adjacency_matrix_temp = [[] for _ in range(6)]
+            for i in range(len(adjacency_matrix)):
+                for j in range(6):
+                    adjacency_matrix_temp[i].append(adjacency_matrix[index_list[i] - 1][j])
+                    
+            for i in range(len(adjacency_matrix_graphics)):
+                adjacency_matrix[i] = adjacency_matrix_temp[i]
+                adjacency_matrix_graphics[i].cardset = adjacency_matrix_temp[i]
+
+            for i in range(len(id_cards_n_graphics.cardset)):
+                adjacency_matrix_graphics[0].append_card(adjacency_matrix_graphics[0].cardset[index_list[i] - 1])
+                adjacency_matrix_graphics[1].append_card(adjacency_matrix_graphics[1].cardset[index_list[i] - 1])
+
+            for i in range(len(id_cards_n_graphics.cardset)):
+                adjacency_matrix_graphics[0].remove_card(adjacency_matrix_graphics[0].cardset[0])
+                adjacency_matrix_graphics[1].remove_card(adjacency_matrix_graphics[1].cardset[0])
+            
+            stage = 25
+            id_cards_m_graphics.clear_cache()
+            grid_state_m_graphics.clear_cache()
+            for adj_graphics in adjacency_matrix_graphics:
+                adj_graphics.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 25:
+            # turn the id row face up
+            for card in id_cards_m_graphics.cardset:
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/graph_adjacency_check/images", f"{card.name}.png"),
+                )
+                
+            stage = 26
+            id_cards_m_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 26:
+            # return the grid state of M to its original configuration
+            grid_state_m_temp = [0 for _ in range(6)]
+            for (i, card) in enumerate(grid_state_m_graphics.cardset):
+                grid_state_m_temp[int(id_cards_m[i].name) - 1] = card
+            grid_state_m = grid_state_m_temp
+            grid_state_m_graphics.cardset = grid_state_m_temp
+            
+            # return the adjacency matrix to its original configuration
+            adjacency_matrix_temp = [[] for _ in range(6)]
+            for i in range(len(adjacency_matrix_graphics)):
+                for j in range(6):
+                    adjacency_matrix_temp[int(id_cards_m[i].name) - 1].append(adjacency_matrix_graphics[i].cardset[j])
+            adjacency_matrix = adjacency_matrix_temp
+            for i in range(len(adjacency_matrix_graphics)):
+                adjacency_matrix_graphics[i].cardset = adjacency_matrix_temp[i]
+                    
+            # return the id row to its original ordering
+            for (i, card) in enumerate(id_cards_m_graphics.cardset):
+                card.name = str(i + 1)
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/graph_adjacency_check/images", f"{card.name}.png"),
+                )
+                    
+            stage = 27
+            id_cards_m_graphics.clear_cache()
+            grid_state_m_graphics.clear_cache()
+            for adj_graphics in adjacency_matrix_graphics:
+                adj_graphics.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 27:
+            # turn the id row face down
+            for card in id_cards_m_graphics.cardset:
+                card.face_up = False
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/graph_adjacency_check/images", "card_back.png"),
+                )
+            
+            stage = 0
+            current_move += 1
+            id_cards_m_graphics.clear_cache()
+            
+            ID2[0].name = "1"
+            ID2[1].name = "2"
+            for card in ID2:
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/graph_adjacency_check/images", f"{card.name}.png"),
+                )
+            
+            AE[0].name = "heart"
+            AE[1].name = "club"
+            for card in AE:
+                card.face_up = False
+                card.graphics = SuitCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                )
+
+            AE_Q[0].name = "heart"
+            AE_Q[1].name = "club"
+            for card in AE_Q:
+                card.face_up = False
+                card.graphics = SuitCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                )
+                
+            AG[0].name = "heart"
+            AG[1].name = "spade"
+            for card in AG:
+                card.face_up = False
+                card.graphics = SuitCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                )
+
+            AG_Q[0].name = "heart"
+            AG_Q[1].name = "spade"
+            for card in AG_Q:
+                card.face_up = False
+                card.graphics = SuitCardGraphics(
+                    card,
+                    filepath=Path("examples/pushmerge_zkp/images", "card_back.png"),
+                )
 
         manager.process_events(event)
 

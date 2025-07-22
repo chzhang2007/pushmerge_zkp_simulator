@@ -27,7 +27,6 @@ class IntCard(AbstractCard):
 
 if __name__ == "__main__":
     card = IntCard(
-        number=1,
         face_up=False,
     )
     print(card)
