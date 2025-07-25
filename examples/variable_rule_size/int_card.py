@@ -8,7 +8,6 @@ from dataclasses import dataclass
 
 @dataclass
 class IntCard(AbstractCard):
-    number: int
     face_up: bool
     
     # def flip_card(self):
@@ -28,7 +27,6 @@ class IntCard(AbstractCard):
 
 if __name__ == "__main__":
     card = IntCard(
-        number=1,
         face_up=False,
     )
     print(card)

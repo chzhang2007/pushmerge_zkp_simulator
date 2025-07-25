@@ -12,7 +12,7 @@ from pygame_emojis import load_emoji
 from pygame_cards.abstract import AbstractCardGraphics
 
 # Import the cards we just created
-from int_set import ID2, ID4, ID5, ID20, DUMMY_ONE, DUMMY_TWO, DUMMY_THREE, DUMMY_FOUR, DUMMY_FIVE, ENCODING, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_4, ENCODING_1_LENGTH_4, ENCODING_2_LENGTH_4, ENCODING_3_LENGTH_4, ENCODING_4_LENGTH_4
+from int_set import ID2, ID2_R, ID4, ID5, ID20, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_4, ENCODING_1_LENGTH_4, ENCODING_2_LENGTH_4, ENCODING_3_LENGTH_4, ENCODING_4_LENGTH_4
 from pygame_cards.utils import position_for_centering
 
 
@@ -41,7 +41,7 @@ class IntCardGraphics(AbstractCardGraphics):
 
         return surf
 
-for card in ID2 + ID4 + ID5 + ID20 + DUMMY_ONE + DUMMY_TWO + DUMMY_THREE + DUMMY_FOUR + DUMMY_FIVE + ENCODING + ENCODING_MOVE_1 + ENCODING_MOVE_2 + ENCODING_MOVE_3 + ENCODING_MOVE_4 + ENCODING_1_LENGTH_4 + ENCODING_2_LENGTH_4 + ENCODING_3_LENGTH_4 + ENCODING_4_LENGTH_4:
+for card in ID2 + ID2_R + ID4 + ID5 + ID20 + ENCODING_MOVE_1 + ENCODING_MOVE_2 + ENCODING_MOVE_3 + ENCODING_MOVE_4 + ENCODING_1_LENGTH_4 + ENCODING_2_LENGTH_4 + ENCODING_3_LENGTH_4 + ENCODING_4_LENGTH_4:
     match card.name:
         case "0":
             if card.face_up:

@@ -349,3 +349,27 @@ GRID_STATE = CardsSet(
         SuitCard("diamond", True),
     ]
 )
+
+B = CardsSet(
+    [
+        SuitCard("spade", False),
+    ]
+)
+
+D = CardsSet(
+    [
+        SuitCard("diamond", False),
+    ]
+)
+
+E = CardsSet(
+    [
+        SuitCard("club", False),
+    ]
+)
+
+DUMMY = CardsSet(
+    [
+        SuitCard("diamond", False),
+    ]
+)

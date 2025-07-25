@@ -11,8 +11,8 @@ from pygame_cards.back import CardBackGraphics
 from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
-from suit_set import GRID_STATE, BB_CARDS, BB_CARDS2, BB_CARDS3, BB_CARDS4, BD_CARDS, BD_CARDS2, BD_CARDS3, BD_CARDS4, BE_CARDS, BE_CARDS2, BE_CARDS3, BE_CARDS4, DB_CARDS, DB_CARDS2, DB_CARDS3, DB_CARDS4, DD_CARDS, DD_CARDS2, DD_CARDS3, DD_CARDS4, DE_CARDS, DE_CARDS2, DE_CARDS3, DE_CARDS4, EB_CARDS, EB_CARDS2, EB_CARDS3, EB_CARDS4, ED_CARDS, ED_CARDS2, ED_CARDS3, ED_CARDS4, EE_CARDS, EE_CARDS2, EE_CARDS3, EE_CARDS4, ABB_CARDSQ, AEB_CARDSQ, AED_CARDSQ, AEE_CARDSQ
-from int_set import ID2, ID4, ID20, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_4, ENCODING_1_LENGTH_4, ENCODING_2_LENGTH_4, ENCODING_3_LENGTH_4, ENCODING_4_LENGTH_4
+from suit_set import GRID_STATE, BB_CARDS, BB_CARDS2, BB_CARDS3, BB_CARDS4, BD_CARDS, BD_CARDS2, BD_CARDS3, BD_CARDS4, BE_CARDS, BE_CARDS2, BE_CARDS3, BE_CARDS4, DB_CARDS, DB_CARDS2, DB_CARDS3, DB_CARDS4, DD_CARDS, DD_CARDS2, DD_CARDS3, DD_CARDS4, DE_CARDS, DE_CARDS2, DE_CARDS3, DE_CARDS4, EB_CARDS, EB_CARDS2, EB_CARDS3, EB_CARDS4, ED_CARDS, ED_CARDS2, ED_CARDS3, ED_CARDS4, EE_CARDS, EE_CARDS2, EE_CARDS3, EE_CARDS4, ABB_CARDSQ, AEB_CARDSQ, AED_CARDSQ, AEE_CARDSQ, B, D, E, DUMMY
+from int_set import ID2, ID2_R, ID4, ID20, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_4, ENCODING_1_LENGTH_4, ENCODING_2_LENGTH_4, ENCODING_3_LENGTH_4, ENCODING_4_LENGTH_4
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -561,614 +561,667 @@ while 1: # game loop
                 column.clear_cache()
             enc_cards_m_graphics.clear_cache()
             enc_cards_n_graphics.clear_cache()
-
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 8:
-            index_list = [(i + 1) for i in range(len(id_cards_q))]
-            random.shuffle(index_list)
-            # shuffle the id row of matrix Q and turn it face-down
-            for (i, card) in enumerate(id_cards_q):
-                card.name = str(index_list[i])
-                card.number = index_list[i]
-                card.face_up = False
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    card.graphics = IntCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
             
-            # shuffle the columns of matrix Q
-            for (i, column) in enumerate(col_cards_q_graphics):
-                for j in range(3):
-                    column.append_card(col_cards_q_graphics[index_list[i] - 1].cardset[j])
-            for column in col_cards_q_graphics:
-                for j in range(3):
-                    column.remove_card(column.cardset[0])
-
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 8:
+            # place the id row of matrix R
+            id_cards_r = ID2_R.copy()
+            id_cards_r_graphics = AlignedHand(
+                id_cards_r,
+                card_set_size_wide,
+                card_size=card_size,
+                graphics_type=IntCardGraphics,
+            )
+            manager.add_set(
+                id_cards_r_graphics,
+                (10 * card_set_size_long[0], 4 * grid_state_m_graphics.size[1]),
+            )
+            
             stage = 9
-            id_cards_q_graphics.clear_cache()
-            for column in col_cards_q_graphics:
-                column.clear_cache()
-
+        
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 9:
-            # turn the rule cards face-up
-            for (i, column) in enumerate(col_cards_q_graphics):
-                for card in column.cardset:
-                    card.face_up = True
-                    card.graphics = SuitCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
-                    )
+            # add the second row of matrix R
+            col_cards_r = []
+            if col_cards_q_graphics[0].cardset[2].name == "spade":
+                col_cards_r.append(B.copy())
+            elif col_cards_q_graphics[0].cardset[2].name == "diamond":
+                col_cards_r.append(D.copy())
+            else:
+                col_cards_r.append(E.copy())
+            col_cards_q_graphics[0].cardset[2].name = "blank"
+            col_cards_q_graphics[0].cardset[2].graphics = SuitCardGraphics(
+                col_cards_q_graphics[0].cardset[2],
+                filepath=Path("examples/variable_rule_size/images", "blank.png"),
+            )
+            col_cards_r.append(DUMMY.copy())
+
+            col_cards_r_graphics = [(AlignedHandVertical(
+                                    col_cards_r[i],
+                                    card_set_size_long,
+                                    card_size=card_size,
+                                    graphics_type=SuitCardGraphics,
+                                )) for i in range(len(col_cards_r))]
+            manager.add_set(
+                col_cards_r_graphics[0],
+                # Position on the screen of the entire set
+                (10 * card_set_size_long[0], 5 * id_cards_n_graphics.size[1] + 10),
+            )
+            manager.add_set(
+                col_cards_r_graphics[1],
+                # Position on the screen of the entire set
+                (10 * card_set_size_long[0] + width / 20 + 6, 5 * id_cards_n_graphics.size[1] + 10),
+            )
+            
             stage = 10
             for column in col_cards_q_graphics:
                 column.clear_cache()
+
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 8:
+        #     index_list = [(i + 1) for i in range(len(id_cards_q))]
+        #     random.shuffle(index_list)
+        #     # shuffle the id row of matrix Q and turn it face-down
+        #     for (i, card) in enumerate(id_cards_q):
+        #         card.name = str(index_list[i])
+        #         card.number = index_list[i]
+        #         card.face_up = False
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             card.graphics = IntCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
+            
+        #     # shuffle the columns of matrix Q
+        #     for (i, column) in enumerate(col_cards_q_graphics):
+        #         for j in range(3):
+        #             column.append_card(col_cards_q_graphics[index_list[i] - 1].cardset[j])
+        #     for column in col_cards_q_graphics:
+        #         for j in range(3):
+        #             column.remove_card(column.cardset[0])
+
+        #     stage = 9
+        #     id_cards_q_graphics.clear_cache()
+        #     for column in col_cards_q_graphics:
+        #         column.clear_cache()
+
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 9:
+        #     # turn the rule cards face-up
+        #     for (i, column) in enumerate(col_cards_q_graphics):
+        #         for card in column.cardset:
+        #             card.face_up = True
+        #             card.graphics = SuitCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
+        #             )
+        #     stage = 10
+        #     for column in col_cards_q_graphics:
+        #         column.clear_cache()
         
-        # simulate all legal moves
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 10:
-            for i in range(2):
-                if col_cards_q_graphics[i].cardset[1].name == "spade" and col_cards_q_graphics[i].cardset[2].name == "spade":
-                    col_cards_q_graphics[i].cardset[1].name = "club"
-                    col_cards_q_graphics[i].cardset[1].graphics = SuitCardGraphics(
-                        col_cards_q_graphics[i].cardset[1],
-                        filepath=Path("examples/variable_rule_size/images", "club.png"),
-                    )
-                else:
-                    col_cards_q_graphics[i].cardset[0].name = "club"
-                    col_cards_q_graphics[i].cardset[0].graphics = SuitCardGraphics(
-                        col_cards_q_graphics[i].cardset[0],
-                        filepath=Path("examples/variable_rule_size/images", "club.png"),
-                    )
-                    col_cards_q_graphics[i].cardset[1].name = "heart"
-                    col_cards_q_graphics[i].cardset[1].graphics = SuitCardGraphics(
-                        col_cards_q_graphics[i].cardset[1],
-                        filepath=Path("examples/variable_rule_size/images", "heart.png"),
-                    )
-            stage = 11
-            for column in col_cards_q_graphics:
-                column.clear_cache()
+        # # simulate all legal moves
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 10:
+        #     for i in range(2):
+        #         if col_cards_q_graphics[i].cardset[1].name == "spade" and col_cards_q_graphics[i].cardset[2].name == "spade":
+        #             col_cards_q_graphics[i].cardset[1].name = "club"
+        #             col_cards_q_graphics[i].cardset[1].graphics = SuitCardGraphics(
+        #                 col_cards_q_graphics[i].cardset[1],
+        #                 filepath=Path("examples/variable_rule_size/images", "club.png"),
+        #             )
+        #         else:
+        #             col_cards_q_graphics[i].cardset[0].name = "club"
+        #             col_cards_q_graphics[i].cardset[0].graphics = SuitCardGraphics(
+        #                 col_cards_q_graphics[i].cardset[0],
+        #                 filepath=Path("examples/variable_rule_size/images", "club.png"),
+        #             )
+        #             col_cards_q_graphics[i].cardset[1].name = "heart"
+        #             col_cards_q_graphics[i].cardset[1].graphics = SuitCardGraphics(
+        #                 col_cards_q_graphics[i].cardset[1],
+        #                 filepath=Path("examples/variable_rule_size/images", "heart.png"),
+        #             )
+        #     stage = 11
+        #     for column in col_cards_q_graphics:
+        #         column.clear_cache()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 11:
-            index_list = [(i + 1) for i in range(len(id_cards_q))]
-            random.shuffle(index_list)
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 11:
+        #     index_list = [(i + 1) for i in range(len(id_cards_q))]
+        #     random.shuffle(index_list)
             
-            # flip the rule cards face down
-            for (i, column) in enumerate(col_cards_q_graphics):
-                for card in column.cardset:
-                    card.face_up = False
-                    card.graphics = SuitCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                    )
-                    if tutorial:
-                        card.graphics = SuitCardGraphics(
-                            card,
-                            filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                        )
+        #     # flip the rule cards face down
+        #     for (i, column) in enumerate(col_cards_q_graphics):
+        #         for card in column.cardset:
+        #             card.face_up = False
+        #             card.graphics = SuitCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #             )
+        #             if tutorial:
+        #                 card.graphics = SuitCardGraphics(
+        #                     card,
+        #                     filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #                 )
             
-            stage = 12
-            for column in col_cards_q_graphics:
-                column.clear_cache()
+        #     stage = 12
+        #     for column in col_cards_q_graphics:
+        #         column.clear_cache()
 
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 12:
-            # shuffle the id cards
-            int_card_numbers = [card.number for card in id_cards_q]
-            for (i, card) in enumerate(id_cards_q_graphics.cardset):
-                card.name = str(int_card_numbers[index_list[i] - 1])
-                card.number = int_card_numbers[index_list[i] - 1]
-                card.face_up = True
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
-                )
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 12:
+        #     # shuffle the id cards
+        #     int_card_numbers = [card.number for card in id_cards_q]
+        #     for (i, card) in enumerate(id_cards_q_graphics.cardset):
+        #         card.name = str(int_card_numbers[index_list[i] - 1])
+        #         card.number = int_card_numbers[index_list[i] - 1]
+        #         card.face_up = True
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
+        #         )
                 
-            # shuffle the columns
-            for (i, column) in enumerate(col_cards_q_graphics):
-                for j in range(3):
-                    column.append_card(col_cards_q_graphics[index_list[i] - 1].cardset[j])
-            for column in col_cards_q_graphics:
-                for j in range(3):
-                    column.remove_card(column.cardset[0])
+        #     # shuffle the columns
+        #     for (i, column) in enumerate(col_cards_q_graphics):
+        #         for j in range(3):
+        #             column.append_card(col_cards_q_graphics[index_list[i] - 1].cardset[j])
+        #     for column in col_cards_q_graphics:
+        #         for j in range(3):
+        #             column.remove_card(column.cardset[0])
                       
-            stage = 13
-            id_cards_q_graphics.clear_cache()
-            for column in col_cards_q_graphics:
-                column.clear_cache()
+        #     stage = 13
+        #     id_cards_q_graphics.clear_cache()
+        #     for column in col_cards_q_graphics:
+        #         column.clear_cache()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 13:
-            # return rule cards to their original positions
-            for (i, column) in enumerate(col_cards_q_graphics):
-                for j in range(3):
-                    col_cards_q_graphics[id_cards_q[i].number - 1].append_card(column.cardset[j])
-            for column in col_cards_q_graphics:
-                for j in range(3):
-                    column.remove_card(column.cardset[0])
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 13:
+        #     # return rule cards to their original positions
+        #     for (i, column) in enumerate(col_cards_q_graphics):
+        #         for j in range(3):
+        #             col_cards_q_graphics[id_cards_q[i].number - 1].append_card(column.cardset[j])
+        #     for column in col_cards_q_graphics:
+        #         for j in range(3):
+        #             column.remove_card(column.cardset[0])
             
-            # return id cards to (1, 2, 3, 4)
-            for (i, card) in enumerate(id_cards_q):
-                card.name = str(i + 1)
-                card.number = i + 1
-                card.face_up = True
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
-                )
+        #     # return id cards to (1, 2, 3, 4)
+        #     for (i, card) in enumerate(id_cards_q):
+        #         card.name = str(i + 1)
+        #         card.number = i + 1
+        #         card.face_up = True
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
+        #         )
             
-            stage = 14
-            id_cards_q_graphics.clear_cache()
-            for column in col_cards_q_graphics:
-                column.clear_cache()
+        #     stage = 14
+        #     id_cards_q_graphics.clear_cache()
+        #     for column in col_cards_q_graphics:
+        #         column.clear_cache()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 14:
-            # return the cards in column 1 of matrix Q to their original positions in matrix N
-            col_cards_n_graphics[removed_col_n].remove_all_cards()
-            col_cards_n_graphics[removed_col_n].append_card(
-                col_cards_q_graphics[0].cardset[1]
-            )
-            col_cards_n_graphics[removed_col_n].append_card(
-                col_cards_q_graphics[0].cardset[2]
-            )
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 14:
+        #     # return the cards in column 1 of matrix Q to their original positions in matrix N
+        #     col_cards_n_graphics[removed_col_n].remove_all_cards()
+        #     col_cards_n_graphics[removed_col_n].append_card(
+        #         col_cards_q_graphics[0].cardset[1]
+        #     )
+        #     col_cards_n_graphics[removed_col_n].append_card(
+        #         col_cards_q_graphics[0].cardset[2]
+        #     )
 
-            # return q[0][0] to the agent's original position in matrix M
-            grid_state_m_graphics.cardset[p_shuffled].name = col_cards_q_graphics[0].cardset[0].name
-            grid_state_m_graphics.cardset[p_shuffled].face_up = False
-            grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
-                grid_state_m_graphics.cardset[p_shuffled],
-                filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-            )
-            if tutorial:
-                grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
-                    grid_state_m_graphics.cardset[p_shuffled],
-                    filepath=Path("examples/variable_rule_size/images", f"{grid_state_m_graphics.cardset[p_shuffled].name}_tutorial.png"),
-                )
+        #     # return q[0][0] to the agent's original position in matrix M
+        #     grid_state_m_graphics.cardset[p_shuffled].name = col_cards_q_graphics[0].cardset[0].name
+        #     grid_state_m_graphics.cardset[p_shuffled].face_up = False
+        #     grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
+        #         grid_state_m_graphics.cardset[p_shuffled],
+        #         filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #     )
+        #     if tutorial:
+        #         grid_state_m_graphics.cardset[p_shuffled].graphics = SuitCardGraphics(
+        #             grid_state_m_graphics.cardset[p_shuffled],
+        #             filepath=Path("examples/variable_rule_size/images", f"{grid_state_m_graphics.cardset[p_shuffled].name}_tutorial.png"),
+        #         )
 
-            # discard matrix Q
-            for i in range(2):
-                id_cards_q_graphics.remove_card(id_cards_q_graphics.cardset[0])
-            for column in col_cards_q_graphics:
-                for j in range(3):
-                    column.remove_card(column.cardset[0])
+        #     # discard matrix Q
+        #     for i in range(2):
+        #         id_cards_q_graphics.remove_card(id_cards_q_graphics.cardset[0])
+        #     for column in col_cards_q_graphics:
+        #         for j in range(3):
+        #             column.remove_card(column.cardset[0])
 
-            stage = 15
-            id_cards_q_graphics.clear_cache()
-            grid_state_m_graphics.clear_cache()
-            for column in col_cards_n_graphics:
-                column.clear_cache()
+        #     stage = 15
+        #     id_cards_q_graphics.clear_cache()
+        #     grid_state_m_graphics.clear_cache()
+        #     for column in col_cards_n_graphics:
+        #         column.clear_cache()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 15:
-            # discard the encoding row of matrix N
-            for i in range(4):
-                enc_cards_n_graphics.remove_card(enc_cards_n_graphics.cardset[0])
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 15:
+        #     # discard the encoding row of matrix N
+        #     for i in range(4):
+        #         enc_cards_n_graphics.remove_card(enc_cards_n_graphics.cardset[0])
 
-            # shuffle the id cards of N
-            index_list = [(i + 1) for i in range(len(id_cards_n))]
-            random.shuffle(index_list)
+        #     # shuffle the id cards of N
+        #     index_list = [(i + 1) for i in range(len(id_cards_n))]
+        #     random.shuffle(index_list)
             
-            int_card_numbers = [card.number for card in id_cards_n]
-            for (i, card) in enumerate(id_cards_n_graphics.cardset):
-                card.name = str(int_card_numbers[index_list[i] - 1])
-                card.number = int_card_numbers[index_list[i] - 1]
-                card.face_up = False
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    card.graphics = IntCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
+        #     int_card_numbers = [card.number for card in id_cards_n]
+        #     for (i, card) in enumerate(id_cards_n_graphics.cardset):
+        #         card.name = str(int_card_numbers[index_list[i] - 1])
+        #         card.number = int_card_numbers[index_list[i] - 1]
+        #         card.face_up = False
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             card.graphics = IntCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
 
-            # shuffle the columns of N
-            for (i, column) in enumerate(col_cards_n_graphics):
-                for j in range(2):
-                    column.append_card(col_cards_n_graphics[index_list[i] - 1].cardset[j])
-            for column in col_cards_n_graphics:
-                for j in range(2):
-                    column.remove_card(column.cardset[0])
+        #     # shuffle the columns of N
+        #     for (i, column) in enumerate(col_cards_n_graphics):
+        #         for j in range(2):
+        #             column.append_card(col_cards_n_graphics[index_list[i] - 1].cardset[j])
+        #     for column in col_cards_n_graphics:
+        #         for j in range(2):
+        #             column.remove_card(column.cardset[0])
 
-            stage = 16
-            id_cards_n_graphics.clear_cache()
-            for column in col_cards_n_graphics:
-                column.clear_cache()
+        #     stage = 16
+        #     id_cards_n_graphics.clear_cache()
+        #     for column in col_cards_n_graphics:
+        #         column.clear_cache()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 16:
-            # turn the id cards of N face-up
-            for card in id_cards_n_graphics.cardset:
-                card.face_up = True
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
-                )
-            stage = 17
-            id_cards_n_graphics.clear_cache()
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 16:
+        #     # turn the id cards of N face-up
+        #     for card in id_cards_n_graphics.cardset:
+        #         card.face_up = True
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
+        #         )
+        #     stage = 17
+        #     id_cards_n_graphics.clear_cache()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 17:
-            # return rule cards to their original positions
-            for (i, column) in enumerate(col_cards_n_graphics):
-                for j in range(2):
-                    col_cards_n_graphics[id_cards_n[i].number - 1].append_card(column.cardset[j])
-            for column in col_cards_n_graphics:
-                for j in range(2):
-                    column.remove_card(column.cardset[0])
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 17:
+        #     # return rule cards to their original positions
+        #     for (i, column) in enumerate(col_cards_n_graphics):
+        #         for j in range(2):
+        #             col_cards_n_graphics[id_cards_n[i].number - 1].append_card(column.cardset[j])
+        #     for column in col_cards_n_graphics:
+        #         for j in range(2):
+        #             column.remove_card(column.cardset[0])
             
-            # return id cards to (1, 2, 3, 4)
-            for (i, card) in enumerate(id_cards_n):
-                card.name = str(i + 1)
-                card.number = i + 1
-                card.face_up = True
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
-                )
+        #     # return id cards to (1, 2, 3, 4)
+        #     for (i, card) in enumerate(id_cards_n):
+        #         card.name = str(i + 1)
+        #         card.number = i + 1
+        #         card.face_up = True
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
+        #         )
 
-            stage = 18
-            id_cards_n_graphics.clear_cache()
-            for column in col_cards_n_graphics:
-                column.clear_cache()
+        #     stage = 18
+        #     id_cards_n_graphics.clear_cache()
+        #     for column in col_cards_n_graphics:
+        #         column.clear_cache()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 18:
-            p0 = [(p_shuffled - 5) % 20, (p_shuffled - 1) % 20, (p_shuffled + 1) % 20, (p_shuffled + 5) % 20]
-            p1 = [(p_shuffled - 10) % 20, (p_shuffled - 2) % 20, (p_shuffled + 2) % 20, (p_shuffled + 10) % 20]
-            # return the cards in column 1 of matrix N to their original positions in matrix M
-            for i in range(4):
-                grid_state_m_graphics.cardset[p0[i]].name = col_cards_n_graphics[i].cardset[0].name
-                grid_state_m_graphics.cardset[p0[i]].face_up = False
-                grid_state_m_graphics.cardset[p0[i]].graphics = SuitCardGraphics(
-                    grid_state_m_graphics.cardset[p0[i]],
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    grid_state_m_graphics.cardset[p0[i]].graphics = SuitCardGraphics(
-                        grid_state_m_graphics.cardset[p0[i]],
-                        filepath=Path("examples/variable_rule_size/images", f"{grid_state_m_graphics.cardset[p0[i]].name}_tutorial.png"),
-                    )
-                grid_state_m_graphics.cardset[p1[i]].name = col_cards_n_graphics[i].cardset[1].name
-                grid_state_m_graphics.cardset[p1[i]].face_up = False
-                grid_state_m_graphics.cardset[p1[i]].graphics = SuitCardGraphics(
-                    grid_state_m_graphics.cardset[p1[i]],
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    grid_state_m_graphics.cardset[p1[i]].graphics = SuitCardGraphics(
-                        grid_state_m_graphics.cardset[p1[i]],
-                        filepath=Path("examples/variable_rule_size/images", f"{grid_state_m_graphics.cardset[p1[i]].name}_tutorial.png"),
-                    )
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 18:
+        #     p0 = [(p_shuffled - 5) % 20, (p_shuffled - 1) % 20, (p_shuffled + 1) % 20, (p_shuffled + 5) % 20]
+        #     p1 = [(p_shuffled - 10) % 20, (p_shuffled - 2) % 20, (p_shuffled + 2) % 20, (p_shuffled + 10) % 20]
+        #     # return the cards in column 1 of matrix N to their original positions in matrix M
+        #     for i in range(4):
+        #         grid_state_m_graphics.cardset[p0[i]].name = col_cards_n_graphics[i].cardset[0].name
+        #         grid_state_m_graphics.cardset[p0[i]].face_up = False
+        #         grid_state_m_graphics.cardset[p0[i]].graphics = SuitCardGraphics(
+        #             grid_state_m_graphics.cardset[p0[i]],
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             grid_state_m_graphics.cardset[p0[i]].graphics = SuitCardGraphics(
+        #                 grid_state_m_graphics.cardset[p0[i]],
+        #                 filepath=Path("examples/variable_rule_size/images", f"{grid_state_m_graphics.cardset[p0[i]].name}_tutorial.png"),
+        #             )
+        #         grid_state_m_graphics.cardset[p1[i]].name = col_cards_n_graphics[i].cardset[1].name
+        #         grid_state_m_graphics.cardset[p1[i]].face_up = False
+        #         grid_state_m_graphics.cardset[p1[i]].graphics = SuitCardGraphics(
+        #             grid_state_m_graphics.cardset[p1[i]],
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             grid_state_m_graphics.cardset[p1[i]].graphics = SuitCardGraphics(
+        #                 grid_state_m_graphics.cardset[p1[i]],
+        #                 filepath=Path("examples/variable_rule_size/images", f"{grid_state_m_graphics.cardset[p1[i]].name}_tutorial.png"),
+        #             )
             
-            # discard matrix N
-            for i in range(4):
-                id_cards_n_graphics.remove_card(id_cards_n_graphics.cardset[0])
-            for column in col_cards_n_graphics:
-                for j in range(2):
-                    column.remove_card(column.cardset[0])
-            stage = 19
-            grid_state_m_graphics.clear_cache()
+        #     # discard matrix N
+        #     for i in range(4):
+        #         id_cards_n_graphics.remove_card(id_cards_n_graphics.cardset[0])
+        #     for column in col_cards_n_graphics:
+        #         for j in range(2):
+        #             column.remove_card(column.cardset[0])
+        #     stage = 19
+        #     grid_state_m_graphics.clear_cache()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 19:
-            # discard the encoding row of matrix M
-            for i in range(20):
-                enc_cards_m_graphics.remove_card(enc_cards_m_graphics.cardset[0])
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 19:
+        #     # discard the encoding row of matrix M
+        #     for i in range(20):
+        #         enc_cards_m_graphics.remove_card(enc_cards_m_graphics.cardset[0])
 
-            stage = 20
-            id_cards_m_graphics.clear_cache()
-            enc_cards_m_graphics.clear_cache()
-            for column in col_cards_n_graphics:
-                column.clear_cache()
+        #     stage = 20
+        #     id_cards_m_graphics.clear_cache()
+        #     enc_cards_m_graphics.clear_cache()
+        #     for column in col_cards_n_graphics:
+        #         column.clear_cache()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 20:
-            index_list = [(i + 1) for i in range(len(id_cards_m))]
-            random.shuffle(index_list)
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 20:
+        #     index_list = [(i + 1) for i in range(len(id_cards_m))]
+        #     random.shuffle(index_list)
             
-            # shuffle the id cards of M and turn them face-up
-            int_card_numbers = [card.number for card in id_cards_m]
-            for (i, card) in enumerate(id_cards_m_graphics.cardset):
-                card.name = str(int_card_numbers[index_list[i] - 1])
-                card.number = int_card_numbers[index_list[i] - 1]
-                card.face_up = True
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", f"{card.number}.png"),
-                )
+        #     # shuffle the id cards of M and turn them face-up
+        #     int_card_numbers = [card.number for card in id_cards_m]
+        #     for (i, card) in enumerate(id_cards_m_graphics.cardset):
+        #         card.name = str(int_card_numbers[index_list[i] - 1])
+        #         card.number = int_card_numbers[index_list[i] - 1]
+        #         card.face_up = True
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", f"{card.number}.png"),
+        #         )
                 
-            # shuffle the grid state of M
-            grid_state_m_temp = []
-            for i in range(len(grid_state_m)):
-                grid_state_m_temp.append(grid_state_m[index_list[i] - 1])
-            grid_state_m = grid_state_m_temp
-            grid_state_m_graphics.cardset = grid_state_m_temp
-            if tutorial:
-                for (i, card) in enumerate(grid_state_m_graphics.cardset):
-                    card.graphics = SuitCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
+        #     # shuffle the grid state of M
+        #     grid_state_m_temp = []
+        #     for i in range(len(grid_state_m)):
+        #         grid_state_m_temp.append(grid_state_m[index_list[i] - 1])
+        #     grid_state_m = grid_state_m_temp
+        #     grid_state_m_graphics.cardset = grid_state_m_temp
+        #     if tutorial:
+        #         for (i, card) in enumerate(grid_state_m_graphics.cardset):
+        #             card.graphics = SuitCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
 
-            stage = 21
-            id_cards_m_graphics.clear_cache()
-            grid_state_m_graphics.clear_cache()
+        #     stage = 21
+        #     id_cards_m_graphics.clear_cache()
+        #     grid_state_m_graphics.clear_cache()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 21:
-            # return the grid state of M to its original configuration
-            grid_state_m_temp = [0 for _ in range(20)]
-            for (i, card) in enumerate(grid_state_m_graphics.cardset):
-                grid_state_m_temp[id_cards_m[i].number - 1] = card
-                if tutorial:
-                    card.graphics = SuitCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
-            grid_state_m = grid_state_m_temp
-            grid_state_m_graphics.cardset = grid_state_m_temp
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 21:
+        #     # return the grid state of M to its original configuration
+        #     grid_state_m_temp = [0 for _ in range(20)]
+        #     for (i, card) in enumerate(grid_state_m_graphics.cardset):
+        #         grid_state_m_temp[id_cards_m[i].number - 1] = card
+        #         if tutorial:
+        #             card.graphics = SuitCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
+        #     grid_state_m = grid_state_m_temp
+        #     grid_state_m_graphics.cardset = grid_state_m_temp
             
-            # return the id cards of M to (1, 2, ..., 20)
-            for (i, card) in enumerate(id_cards_m):
-                card.name = str(i + 1)
-                card.number = i + 1
-                card.face_up = True
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
-                )
+        #     # return the id cards of M to (1, 2, ..., 20)
+        #     for (i, card) in enumerate(id_cards_m):
+        #         card.name = str(i + 1)
+        #         card.number = i + 1
+        #         card.face_up = True
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
+        #         )
             
-            stage = 22
-            id_cards_m_graphics.clear_cache()
-            grid_state_m_graphics.clear_cache()
+        #     stage = 22
+        #     id_cards_m_graphics.clear_cache()
+        #     grid_state_m_graphics.clear_cache()
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 22:
-            for card in id_cards_m_graphics.cardset:
-                card.face_up = False
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    card.graphics = IntCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
+        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 22:
+        #     for card in id_cards_m_graphics.cardset:
+        #         card.face_up = False
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             card.graphics = IntCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
                 
-            stage = 0
-            current_move += 1
-            id_cards_m_graphics.clear_cache()
+        #     stage = 0
+        #     current_move += 1
+        #     id_cards_m_graphics.clear_cache()
             
-            for i in range(4):
-                bb_cards[i][0].name = "spade"
-                bb_cards[i][1].name = "spade"
-                bd_cards[i][0].name = "spade"
-                bd_cards[i][1].name = "diamond"
-                be_cards[i][0].name = "spade"
-                be_cards[i][1].name = "club"
-                db_cards[i][0].name = "diamond"
-                db_cards[i][1].name = "spade"
-                dd_cards[i][0].name = "diamond"
-                dd_cards[i][1].name = "diamond"
-                de_cards[i][0].name = "diamond"
-                de_cards[i][1].name = "club"
-                eb_cards[i][0].name = "club"
-                eb_cards[i][1].name = "spade"
-                ed_cards[i][0].name = "club"
-                ed_cards[i][1].name = "diamond"
-                ee_cards[i][0].name = "club"
-                ee_cards[i][1].name = "club"
-                for j in range(2):
-                    bb_cards[i][j].face_up = False
-                    bb_cards[i][j].graphics = SuitCardGraphics(
-                        bb_cards[i][j],
-                        filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                    )
-                    if tutorial:
-                        bb_cards[i][j].graphics = SuitCardGraphics(
-                            bb_cards[i][j],
-                            filepath=Path("examples/variable_rule_size/images", f"{bb_cards[i][j].name}_tutorial.png"),
-                        )
-                    bd_cards[i][j].face_up = False
-                    bd_cards[i][j].graphics = SuitCardGraphics(
-                        bd_cards[i][j],
-                        filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                    )
-                    if tutorial:
-                        bd_cards[i][j].graphics = SuitCardGraphics(
-                            bd_cards[i][j],
-                            filepath=Path("examples/variable_rule_size/images", f"{bd_cards[i][j].name}_tutorial.png"),
-                        )
-                    be_cards[i][j].face_up = False
-                    be_cards[i][j].graphics = SuitCardGraphics(
-                        be_cards[i][j],
-                        filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                    )
-                    if tutorial:
-                        be_cards[i][j].graphics = SuitCardGraphics(
-                            be_cards[i][j],
-                            filepath=Path("examples/variable_rule_size/images", f"{be_cards[i][j].name}_tutorial.png"),
-                        )
-                    db_cards[i][j].face_up = False
-                    db_cards[i][j].graphics = SuitCardGraphics(
-                        db_cards[i][j],
-                        filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                    )
-                    if tutorial:
-                        db_cards[i][j].graphics = SuitCardGraphics(
-                            db_cards[i][j],
-                            filepath=Path("examples/variable_rule_size/images", f"{db_cards[i][j].name}_tutorial.png"),
-                        )
-                    dd_cards[i][j].face_up = False
-                    dd_cards[i][j].graphics = SuitCardGraphics(
-                        dd_cards[i][j],
-                        filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                    )
-                    if tutorial:
-                        dd_cards[i][j].graphics = SuitCardGraphics(
-                            dd_cards[i][j],
-                            filepath=Path("examples/variable_rule_size/images", f"{dd_cards[i][j].name}_tutorial.png"),
-                        )
-                    de_cards[i][j].face_up = False
-                    de_cards[i][j].graphics = SuitCardGraphics(
-                        de_cards[i][j],
-                        filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                    )
-                    if tutorial:
-                        de_cards[i][j].graphics = SuitCardGraphics(
-                            de_cards[i][j],
-                            filepath=Path("examples/variable_rule_size/images", f"{de_cards[i][j].name}_tutorial.png"),
-                        )
-                    eb_cards[i][j].face_up = False
-                    eb_cards[i][j].graphics = SuitCardGraphics(
-                        eb_cards[i][j],
-                        filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                    )
-                    if tutorial:
-                        eb_cards[i][j].graphics = SuitCardGraphics(
-                            eb_cards[i][j],
-                            filepath=Path("examples/variable_rule_size/images", f"{eb_cards[i][j].name}_tutorial.png"),
-                        )
-                    ed_cards[i][j].face_up = False
-                    ed_cards[i][j].graphics = SuitCardGraphics(
-                        ed_cards[i][j],
-                        filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                    )
-                    if tutorial:
-                        ed_cards[i][j].graphics = SuitCardGraphics(
-                            ed_cards[i][j],
-                            filepath=Path("examples/variable_rule_size/images", f"{ed_cards[i][j].name}_tutorial.png"),
-                        )
-                    ee_cards[i][j].face_up = False
-                    ee_cards[i][j].graphics = SuitCardGraphics(
-                        ee_cards[i][j],
-                        filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                    )
-                    if tutorial:
-                        ee_cards[i][j].graphics = SuitCardGraphics(
-                            ee_cards[i][j],
-                            filepath=Path("examples/variable_rule_size/images", f"{ee_cards[i][j].name}_tutorial.png"),
-                        )
+        #     for i in range(4):
+        #         bb_cards[i][0].name = "spade"
+        #         bb_cards[i][1].name = "spade"
+        #         bd_cards[i][0].name = "spade"
+        #         bd_cards[i][1].name = "diamond"
+        #         be_cards[i][0].name = "spade"
+        #         be_cards[i][1].name = "club"
+        #         db_cards[i][0].name = "diamond"
+        #         db_cards[i][1].name = "spade"
+        #         dd_cards[i][0].name = "diamond"
+        #         dd_cards[i][1].name = "diamond"
+        #         de_cards[i][0].name = "diamond"
+        #         de_cards[i][1].name = "club"
+        #         eb_cards[i][0].name = "club"
+        #         eb_cards[i][1].name = "spade"
+        #         ed_cards[i][0].name = "club"
+        #         ed_cards[i][1].name = "diamond"
+        #         ee_cards[i][0].name = "club"
+        #         ee_cards[i][1].name = "club"
+        #         for j in range(2):
+        #             bb_cards[i][j].face_up = False
+        #             bb_cards[i][j].graphics = SuitCardGraphics(
+        #                 bb_cards[i][j],
+        #                 filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #             )
+        #             if tutorial:
+        #                 bb_cards[i][j].graphics = SuitCardGraphics(
+        #                     bb_cards[i][j],
+        #                     filepath=Path("examples/variable_rule_size/images", f"{bb_cards[i][j].name}_tutorial.png"),
+        #                 )
+        #             bd_cards[i][j].face_up = False
+        #             bd_cards[i][j].graphics = SuitCardGraphics(
+        #                 bd_cards[i][j],
+        #                 filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #             )
+        #             if tutorial:
+        #                 bd_cards[i][j].graphics = SuitCardGraphics(
+        #                     bd_cards[i][j],
+        #                     filepath=Path("examples/variable_rule_size/images", f"{bd_cards[i][j].name}_tutorial.png"),
+        #                 )
+        #             be_cards[i][j].face_up = False
+        #             be_cards[i][j].graphics = SuitCardGraphics(
+        #                 be_cards[i][j],
+        #                 filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #             )
+        #             if tutorial:
+        #                 be_cards[i][j].graphics = SuitCardGraphics(
+        #                     be_cards[i][j],
+        #                     filepath=Path("examples/variable_rule_size/images", f"{be_cards[i][j].name}_tutorial.png"),
+        #                 )
+        #             db_cards[i][j].face_up = False
+        #             db_cards[i][j].graphics = SuitCardGraphics(
+        #                 db_cards[i][j],
+        #                 filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #             )
+        #             if tutorial:
+        #                 db_cards[i][j].graphics = SuitCardGraphics(
+        #                     db_cards[i][j],
+        #                     filepath=Path("examples/variable_rule_size/images", f"{db_cards[i][j].name}_tutorial.png"),
+        #                 )
+        #             dd_cards[i][j].face_up = False
+        #             dd_cards[i][j].graphics = SuitCardGraphics(
+        #                 dd_cards[i][j],
+        #                 filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #             )
+        #             if tutorial:
+        #                 dd_cards[i][j].graphics = SuitCardGraphics(
+        #                     dd_cards[i][j],
+        #                     filepath=Path("examples/variable_rule_size/images", f"{dd_cards[i][j].name}_tutorial.png"),
+        #                 )
+        #             de_cards[i][j].face_up = False
+        #             de_cards[i][j].graphics = SuitCardGraphics(
+        #                 de_cards[i][j],
+        #                 filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #             )
+        #             if tutorial:
+        #                 de_cards[i][j].graphics = SuitCardGraphics(
+        #                     de_cards[i][j],
+        #                     filepath=Path("examples/variable_rule_size/images", f"{de_cards[i][j].name}_tutorial.png"),
+        #                 )
+        #             eb_cards[i][j].face_up = False
+        #             eb_cards[i][j].graphics = SuitCardGraphics(
+        #                 eb_cards[i][j],
+        #                 filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #             )
+        #             if tutorial:
+        #                 eb_cards[i][j].graphics = SuitCardGraphics(
+        #                     eb_cards[i][j],
+        #                     filepath=Path("examples/variable_rule_size/images", f"{eb_cards[i][j].name}_tutorial.png"),
+        #                 )
+        #             ed_cards[i][j].face_up = False
+        #             ed_cards[i][j].graphics = SuitCardGraphics(
+        #                 ed_cards[i][j],
+        #                 filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #             )
+        #             if tutorial:
+        #                 ed_cards[i][j].graphics = SuitCardGraphics(
+        #                     ed_cards[i][j],
+        #                     filepath=Path("examples/variable_rule_size/images", f"{ed_cards[i][j].name}_tutorial.png"),
+        #                 )
+        #             ee_cards[i][j].face_up = False
+        #             ee_cards[i][j].graphics = SuitCardGraphics(
+        #                 ee_cards[i][j],
+        #                 filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #             )
+        #             if tutorial:
+        #                 ee_cards[i][j].graphics = SuitCardGraphics(
+        #                     ee_cards[i][j],
+        #                     filepath=Path("examples/variable_rule_size/images", f"{ee_cards[i][j].name}_tutorial.png"),
+        #                 )
             
-            ABB_CARDSQ[0].name = "heart"
-            ABB_CARDSQ[1].name = "spade"
-            ABB_CARDSQ[2].name = "spade"
-            for card in ABB_CARDSQ:
-                card.face_up = False
-                card.graphics = SuitCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    card.graphics = SuitCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
-            AEB_CARDSQ[0].name = "heart"
-            AEB_CARDSQ[1].name = "club"
-            AEB_CARDSQ[2].name = "spade"
-            for card in AEB_CARDSQ:
-                card.face_up = False
-                card.graphics = SuitCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    card.graphics = SuitCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
-            AED_CARDSQ[0].name = "heart"
-            AED_CARDSQ[1].name = "club"
-            AED_CARDSQ[2].name = "diamond"
-            for card in AED_CARDSQ:
-                card.face_up = False
-                card.graphics = SuitCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    card.graphics = SuitCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
-            AEE_CARDSQ[0].name = "heart"
-            AEE_CARDSQ[1].name = "club"
-            AEE_CARDSQ[2].name = "club"
-            for card in AEE_CARDSQ:
-                card.face_up = False
-                card.graphics = SuitCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    card.graphics = SuitCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
-            for (i, card) in enumerate(ENCODING_1_LENGTH_4):
-                if i == 0:
-                    card.name = "1"
-                    card.number = 1
-                else:
-                    card.name = "0"
-                    card.number = 0
-                card.face_up = False
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    card.graphics = IntCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
-            for (i, card) in enumerate(ENCODING_2_LENGTH_4):
-                if i == 1:
-                    card.name = "1"
-                    card.number = 1
-                else:
-                    card.name = "0"
-                    card.number = 0
-                card.face_up = False
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    card.graphics = IntCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
-            for (i, card) in enumerate(ENCODING_3_LENGTH_4):
-                if i == 2:
-                    card.name = "1"
-                    card.number = 1
-                else:
-                    card.name = "0"
-                    card.number = 0
-                card.face_up = False
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    card.graphics = IntCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
-            for (i, card) in enumerate(ENCODING_4_LENGTH_4):
-                if i == 3:
-                    card.name = "1"
-                    card.number = 1
-                else:
-                    card.name = "0"
-                    card.number = 0
-                card.face_up = False
-                card.graphics = IntCardGraphics(
-                    card,
-                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
-                )
-                if tutorial:
-                    card.graphics = IntCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
+        #     ABB_CARDSQ[0].name = "heart"
+        #     ABB_CARDSQ[1].name = "spade"
+        #     ABB_CARDSQ[2].name = "spade"
+        #     for card in ABB_CARDSQ:
+        #         card.face_up = False
+        #         card.graphics = SuitCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             card.graphics = SuitCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
+        #     AEB_CARDSQ[0].name = "heart"
+        #     AEB_CARDSQ[1].name = "club"
+        #     AEB_CARDSQ[2].name = "spade"
+        #     for card in AEB_CARDSQ:
+        #         card.face_up = False
+        #         card.graphics = SuitCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             card.graphics = SuitCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
+        #     AED_CARDSQ[0].name = "heart"
+        #     AED_CARDSQ[1].name = "club"
+        #     AED_CARDSQ[2].name = "diamond"
+        #     for card in AED_CARDSQ:
+        #         card.face_up = False
+        #         card.graphics = SuitCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             card.graphics = SuitCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
+        #     AEE_CARDSQ[0].name = "heart"
+        #     AEE_CARDSQ[1].name = "club"
+        #     AEE_CARDSQ[2].name = "club"
+        #     for card in AEE_CARDSQ:
+        #         card.face_up = False
+        #         card.graphics = SuitCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             card.graphics = SuitCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
+        #     for (i, card) in enumerate(ENCODING_1_LENGTH_4):
+        #         if i == 0:
+        #             card.name = "1"
+        #             card.number = 1
+        #         else:
+        #             card.name = "0"
+        #             card.number = 0
+        #         card.face_up = False
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             card.graphics = IntCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
+        #     for (i, card) in enumerate(ENCODING_2_LENGTH_4):
+        #         if i == 1:
+        #             card.name = "1"
+        #             card.number = 1
+        #         else:
+        #             card.name = "0"
+        #             card.number = 0
+        #         card.face_up = False
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             card.graphics = IntCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
+        #     for (i, card) in enumerate(ENCODING_3_LENGTH_4):
+        #         if i == 2:
+        #             card.name = "1"
+        #             card.number = 1
+        #         else:
+        #             card.name = "0"
+        #             card.number = 0
+        #         card.face_up = False
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             card.graphics = IntCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
+        #     for (i, card) in enumerate(ENCODING_4_LENGTH_4):
+        #         if i == 3:
+        #             card.name = "1"
+        #             card.number = 1
+        #         else:
+        #             card.name = "0"
+        #             card.number = 0
+        #         card.face_up = False
+        #         card.graphics = IntCardGraphics(
+        #             card,
+        #             filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+        #         )
+        #         if tutorial:
+        #             card.graphics = IntCardGraphics(
+        #                 card,
+        #                 filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
+        #             )
 
         manager.process_events(event)
 
