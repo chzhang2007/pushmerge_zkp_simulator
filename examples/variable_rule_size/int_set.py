@@ -2,16 +2,14 @@ from int_card import IntCard
 from pygame_cards.set import CardsSet
 
 
-ID4 = CardsSet(
+ID2 = CardsSet(
     [
         IntCard("1", 1, True),
         IntCard("2", 2, True),
-        IntCard("3", 3, True),
-        IntCard("4", 4, True),
     ]
 )
 
-ID4Q = CardsSet(
+ID4 = CardsSet(
     [
         IntCard("1", 1, True),
         IntCard("2", 2, True),

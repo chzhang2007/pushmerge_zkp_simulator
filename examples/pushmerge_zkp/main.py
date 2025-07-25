@@ -780,6 +780,9 @@ while 1: # game loop
                 enc_cards_n_graphics.remove_card(enc_cards_n_graphics.cardset[0])
 
             # shuffle the id cards of N
+            index_list = [(i + 1) for i in range(len(id_cards_n))]
+            random.shuffle(index_list)
+            
             int_card_numbers = [card.number for card in id_cards_n]
             for (i, card) in enumerate(id_cards_n_graphics.cardset):
                 card.name = str(int_card_numbers[index_list[i] - 1])

@@ -12,7 +12,7 @@ from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
 from suit_set import GRID_STATE, BB_CARDS, BB_CARDS2, BB_CARDS3, BB_CARDS4, BD_CARDS, BD_CARDS2, BD_CARDS3, BD_CARDS4, BE_CARDS, BE_CARDS2, BE_CARDS3, BE_CARDS4, DB_CARDS, DB_CARDS2, DB_CARDS3, DB_CARDS4, DD_CARDS, DD_CARDS2, DD_CARDS3, DD_CARDS4, DE_CARDS, DE_CARDS2, DE_CARDS3, DE_CARDS4, EB_CARDS, EB_CARDS2, EB_CARDS3, EB_CARDS4, ED_CARDS, ED_CARDS2, ED_CARDS3, ED_CARDS4, EE_CARDS, EE_CARDS2, EE_CARDS3, EE_CARDS4, ABB_CARDSQ, AEB_CARDSQ, AED_CARDSQ, AEE_CARDSQ
-from int_set import ID4, ID4Q, ID20, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_4, ENCODING_1_LENGTH_4, ENCODING_2_LENGTH_4, ENCODING_3_LENGTH_4, ENCODING_4_LENGTH_4
+from int_set import ID2, ID4, ID20, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_4, ENCODING_1_LENGTH_4, ENCODING_2_LENGTH_4, ENCODING_3_LENGTH_4, ENCODING_4_LENGTH_4
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -366,7 +366,7 @@ while 1: # game loop
 
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 4:
             # place the id row of matrix Q
-            id_cards_q = ID4Q.copy()
+            id_cards_q = ID2.copy()
             id_cards_q_graphics = AlignedHand(
                 id_cards_q,
                 card_set_size_wide,
@@ -516,24 +516,10 @@ while 1: # game loop
                     )
                     if name0 == "spade" and name1 == "spade":
                         col_cards_q.append(ABB_CARDSQ.copy())
-                        col_cards_q.append(AEB_CARDSQ.copy())
                         col_cards_q.append(AED_CARDSQ.copy())
-                        col_cards_q.append(AEE_CARDSQ.copy())
-                    elif name0 == "club" and name1 == "spade":
-                        col_cards_q.append(AEB_CARDSQ.copy())
-                        col_cards_q.append(ABB_CARDSQ.copy())
-                        col_cards_q.append(AED_CARDSQ.copy())
-                        col_cards_q.append(AEE_CARDSQ.copy())
-                    elif name0 == "club" and name1 == "diamond":
-                        col_cards_q.append(AED_CARDSQ.copy())
-                        col_cards_q.append(ABB_CARDSQ.copy())
-                        col_cards_q.append(AEB_CARDSQ.copy())
-                        col_cards_q.append(AEE_CARDSQ.copy())
                     else:
-                        col_cards_q.append(AEE_CARDSQ.copy())
-                        col_cards_q.append(ABB_CARDSQ.copy())
-                        col_cards_q.append(AEB_CARDSQ.copy())
                         col_cards_q.append(AED_CARDSQ.copy())
+                        col_cards_q.append(ABB_CARDSQ.copy())
 
             col_cards_q_graphics = [(AlignedHandVertical(
                                     col_cards_q[i],
@@ -559,28 +545,6 @@ while 1: # game loop
             )
             if tutorial:
                 for (i, card) in enumerate(col_cards_q_graphics[1].cardset):
-                    card.graphics = SuitCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
-            manager.add_set(
-                col_cards_q_graphics[2],
-                # Position on the screen of the entire set
-                (6 * card_set_size_long[0] + width / 10 + 12, 5 * id_cards_n_graphics.size[1] + 10),
-            )
-            if tutorial:
-                for (i, card) in enumerate(col_cards_q_graphics[2].cardset):
-                    card.graphics = SuitCardGraphics(
-                        card,
-                        filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
-                    )
-            manager.add_set(
-                col_cards_q_graphics[3],
-                # Position on the screen of the entire set
-                (6 * card_set_size_long[0] + width * 3 / 20 + 20, 5 * id_cards_n_graphics.size[1] + 10),
-            )
-            if tutorial:
-                for (i, card) in enumerate(col_cards_q_graphics[3].cardset):
                     card.graphics = SuitCardGraphics(
                         card,
                         filepath=Path("examples/variable_rule_size/images", f"{card.name}_tutorial.png"),
@@ -644,7 +608,7 @@ while 1: # game loop
         
         # simulate all legal moves
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 10:
-            for i in range(4):
+            for i in range(2):
                 if col_cards_q_graphics[i].cardset[1].name == "spade" and col_cards_q_graphics[i].cardset[2].name == "spade":
                     col_cards_q_graphics[i].cardset[1].name = "club"
                     col_cards_q_graphics[i].cardset[1].graphics = SuitCardGraphics(
@@ -762,7 +726,7 @@ while 1: # game loop
                 )
 
             # discard matrix Q
-            for i in range(4):
+            for i in range(2):
                 id_cards_q_graphics.remove_card(id_cards_q_graphics.cardset[0])
             for column in col_cards_q_graphics:
                 for j in range(3):
@@ -780,6 +744,9 @@ while 1: # game loop
                 enc_cards_n_graphics.remove_card(enc_cards_n_graphics.cardset[0])
 
             # shuffle the id cards of N
+            index_list = [(i + 1) for i in range(len(id_cards_n))]
+            random.shuffle(index_list)
+            
             int_card_numbers = [card.number for card in id_cards_n]
             for (i, card) in enumerate(id_cards_n_graphics.cardset):
                 card.name = str(int_card_numbers[index_list[i] - 1])
