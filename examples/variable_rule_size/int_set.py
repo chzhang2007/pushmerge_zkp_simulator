@@ -195,3 +195,17 @@ ENCODING_4_LENGTH_4 = CardsSet(
         IntCard("1", False),
     ]
 )
+
+ENCODING_1_LENGTH_2 = CardsSet(
+    [
+        IntCard("1", False),
+        IntCard("0", False),
+    ]
+)
+
+ENCODING_2_LENGTH_2 = CardsSet(
+    [
+        IntCard("0", False),
+        IntCard("1", False),
+    ]
+)

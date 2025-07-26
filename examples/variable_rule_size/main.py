@@ -12,7 +12,7 @@ from pygame_cards.hands import AlignedHand, AlignedHandVertical
 from pygame_cards.manager import CardSetRights, CardsManager
 
 from suit_set import GRID_STATE, BB_CARDS, BB_CARDS2, BB_CARDS3, BB_CARDS4, BD_CARDS, BD_CARDS2, BD_CARDS3, BD_CARDS4, BE_CARDS, BE_CARDS2, BE_CARDS3, BE_CARDS4, DB_CARDS, DB_CARDS2, DB_CARDS3, DB_CARDS4, DD_CARDS, DD_CARDS2, DD_CARDS3, DD_CARDS4, DE_CARDS, DE_CARDS2, DE_CARDS3, DE_CARDS4, EB_CARDS, EB_CARDS2, EB_CARDS3, EB_CARDS4, ED_CARDS, ED_CARDS2, ED_CARDS3, ED_CARDS4, EE_CARDS, EE_CARDS2, EE_CARDS3, EE_CARDS4, ABB_CARDSQ, AEB_CARDSQ, AED_CARDSQ, AEE_CARDSQ, B, D, E, DUMMY
-from int_set import ID2, ID2_R, ID4, ID20, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_4, ENCODING_1_LENGTH_4, ENCODING_2_LENGTH_4, ENCODING_3_LENGTH_4, ENCODING_4_LENGTH_4
+from int_set import ID2, ID2_R, ID4, ID20, ENCODING_MOVE_1, ENCODING_MOVE_2, ENCODING_MOVE_3, ENCODING_MOVE_4, ENCODING_1_LENGTH_4, ENCODING_2_LENGTH_4, ENCODING_3_LENGTH_4, ENCODING_4_LENGTH_4, ENCODING_1_LENGTH_2, ENCODING_2_LENGTH_2
 from pygame_cards.set import CardsSet
 
 pygame.init()
@@ -34,9 +34,12 @@ number_of_moves = 4
 encoding_rows_m = [ENCODING_MOVE_1.copy(), ENCODING_MOVE_2.copy(), ENCODING_MOVE_3.copy(), ENCODING_MOVE_4.copy()]
 # to modify encoding_rows_n, simply modify this array
 encoding_rows_n = [ENCODING_3_LENGTH_4.copy(), ENCODING_3_LENGTH_4.copy(), ENCODING_1_LENGTH_4.copy(), ENCODING_3_LENGTH_4.copy()]
-# modify encoding_1_m and encoding_1_n (1-indexed) to match encoding_rows_m and encoding_rows_n
+# to modify encoding_rows_r, simply modify this array
+encoding_rows_r = [ENCODING_1_LENGTH_2.copy(), ENCODING_2_LENGTH_2.copy(), ENCODING_2_LENGTH_2.copy(), ENCODING_2_LENGTH_2.copy()]
+# modify encoding_1_m, encoding_1_n, and encoding_1_r (1-indexed) to match encoding_rows_m, encoding_rows_n, and encoding_rows_r
 encoding_1_m = [12, 12, 13, 8]
 encoding_1_n = [3, 3, 1, 3]
+encoding_1_r = [1, 2, 2, 2]
 # modify the target position (1-indexed) to match the Push Merge instance
 target_pos = 9
 # if tutorial, face-down cards will be visible
@@ -614,6 +617,47 @@ while 1: # game loop
             stage = 10
             for column in col_cards_q_graphics:
                 column.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 10:
+            # place the encoding row for matrix R
+            enc_cards_r = encoding_rows_r[current_move].copy()
+            enc_cards_r_graphics = AlignedHand(
+                enc_cards_r,
+                card_set_size_wide,
+                card_size=card_size,
+                graphics_type=IntCardGraphics,
+            )
+            manager.add_set(
+                enc_cards_r_graphics,
+                (10 * card_set_size_long[0], 6 * grid_state_m_graphics.size[1] + 10),
+            )
+            
+            stage = 11
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 11:
+            # turn the id row of matrix R face-down
+            for card in id_cards_r:
+                card.face_up = False
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+                )
+                
+            # shuffle the columns of R
+            shuffle = random.choice([0, 1])
+            if shuffle == 1:
+                id_cards_r_graphics.cardset[0].name = "2"
+                id_cards_r_graphics.cardset[1].name = "1"
+                col_cards_r_graphics[1].cardset[0].name = col_cards_r_graphics[0].cardset[0].name
+                col_cards_r_graphics[0].cardset[0].name = "diamond"
+                enc_cards_r[1 - (encoding_1_r[current_move] - 1)].name = "1"
+                enc_cards_r[encoding_1_r[current_move] - 1].name = "0"
+
+            stage = 12
+            id_cards_r_graphics.clear_cache()
+            for col in col_cards_r_graphics:
+                col.clear_cache()
+            enc_cards_r_graphics.clear_cache()
 
         # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 8:
         #     index_list = [(i + 1) for i in range(len(id_cards_q))]
