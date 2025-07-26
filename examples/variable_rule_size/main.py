@@ -658,6 +658,49 @@ while 1: # game loop
             for col in col_cards_r_graphics:
                 col.clear_cache()
             enc_cards_r_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 12:
+            # turn the encoding row for matrix R face-up
+            for card in enc_cards_r_graphics.cardset:
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
+                )
+                
+            stage = 13
+            enc_cards_r_graphics.clear_cache()
+            
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 13:
+            # place the chosen card into the empty space in matrix Q
+            if enc_cards_r_graphics.cardset[0] == "1":
+                col_cards_q_graphics[0].cardset[2].name = col_cards_r_graphics[0].cardset[0].name
+                col_cards_q_graphics[0].cardset[2].graphics = SuitCardGraphics(
+                    col_cards_q_graphics[0].cardset[2],
+                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+                )
+                col_cards_r_graphics[0].cardset[0].name = "blank"
+                col_cards_r_graphics[0].cardset[0].graphics = SuitCardGraphics(
+                    col_cards_r_graphics[0].cardset[0],
+                    filepath=Path("examples/variable_rule_size/images", "blank.png"),
+                )
+            else:
+                col_cards_q_graphics[0].cardset[2].name = col_cards_r_graphics[1].cardset[0].name
+                col_cards_q_graphics[0].cardset[2].graphics = SuitCardGraphics(
+                    col_cards_q_graphics[0].cardset[2],
+                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+                )
+                col_cards_r_graphics[1].cardset[0].name = "blank"
+                col_cards_r_graphics[1].cardset[0].graphics = SuitCardGraphics(
+                    col_cards_r_graphics[1].cardset[0],
+                    filepath=Path("examples/variable_rule_size/images", "blank.png"),
+                )
+
+            stage = 14
+            for column in col_cards_q_graphics:
+                column.clear_cache()
+            for column in col_cards_r_graphics:
+                column.clear_cache()
 
         # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 8:
         #     index_list = [(i + 1) for i in range(len(id_cards_q))]
