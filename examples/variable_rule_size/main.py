@@ -793,7 +793,7 @@ while 1: # game loop
                 column.clear_cache()
 
 
-        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 19:
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 18:
             # shuffle the id cards
             int_card_numbers = [card.number for card in id_cards_q]
             for (i, card) in enumerate(id_cards_q_graphics.cardset):
@@ -818,29 +818,59 @@ while 1: # game loop
             for column in col_cards_q_graphics:
                 column.clear_cache()
 
-        # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 13:
-        #     # return rule cards to their original positions
-        #     for (i, column) in enumerate(col_cards_q_graphics):
-        #         for j in range(3):
-        #             col_cards_q_graphics[id_cards_q[i].number - 1].append_card(column.cardset[j])
-        #     for column in col_cards_q_graphics:
-        #         for j in range(3):
-        #             column.remove_card(column.cardset[0])
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 19:
+            # return rule cards to their original positions
+            for (i, column) in enumerate(col_cards_q_graphics):
+                for j in range(3):
+                    col_cards_q_graphics[id_cards_q[i].number - 1].append_card(column.cardset[j])
+            for column in col_cards_q_graphics:
+                for j in range(3):
+                    column.remove_card(column.cardset[0])
             
-        #     # return id cards to (1, 2, 3, 4)
-        #     for (i, card) in enumerate(id_cards_q):
-        #         card.name = str(i + 1)
-        #         card.number = i + 1
-        #         card.face_up = True
-        #         card.graphics = IntCardGraphics(
-        #             card,
-        #             filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
-        #         )
+            # return id cards to (1, 2, 3, 4)
+            for (i, card) in enumerate(id_cards_q):
+                card.name = str(i + 1)
+                card.number = i + 1
+                card.face_up = True
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/variable_rule_size/images", f"{card.name}.png"),
+                )
             
-        #     stage = 14
-        #     id_cards_q_graphics.clear_cache()
-        #     for column in col_cards_q_graphics:
-        #         column.clear_cache()
+            stage = 20
+            id_cards_q_graphics.clear_cache()
+            for column in col_cards_q_graphics:
+                column.clear_cache()
+                
+        elif event.type == pygame.MOUSEBUTTONDOWN and stage == 20:
+            # return the card from matrix Q to the blank spot in matrix R
+            if enc_cards_r_graphics.cardset[0].name == "1":
+                col_cards_r_graphics[0].cardset[0].name = col_cards_q_graphics[0].cardset[2].name
+                col_cards_r_graphics[0].cardset[0].graphics = SuitCardGraphics(
+                    col_cards_r_graphics[0].cardset[0],
+                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+                )
+                col_cards_q_graphics[0].cardset[2].name = "blank"
+                col_cards_q_graphics[0].cardset[2].graphics = SuitCardGraphics(
+                    col_cards_q_graphics[0].cardset[2],
+                    filepath=Path("examples/variable_rule_size/images", "blank.png"),
+                )
+            else:
+                col_cards_r_graphics[1].cardset[0].name = col_cards_q_graphics[0].cardset[2].name
+                col_cards_r_graphics[1].cardset[0].graphics = SuitCardGraphics(
+                    col_cards_r_graphics[1].cardset[0],
+                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+                )
+                col_cards_q_graphics[0].cardset[2].name = "blank"
+                col_cards_q_graphics[0].cardset[2].graphics = SuitCardGraphics(
+                    col_cards_q_graphics[0].cardset[2],
+                    filepath=Path("examples/variable_rule_size/images", "blank.png"),
+                )
+                
+            stage = 21
+            for column in col_cards_q_graphics:
+                column.clear_cache()
+            enc_cards_r_graphics.clear_cache()
 
         # elif event.type == pygame.MOUSEBUTTONDOWN and stage == 14:
         #     # return the cards in column 1 of matrix Q to their original positions in matrix N
