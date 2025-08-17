@@ -635,14 +635,19 @@ while 1: # game loop
             stage = 11
             
         elif event.type == pygame.MOUSEBUTTONDOWN and stage == 11:
-            # turn the id row of matrix R face-down
+            # turn the id row and dummy of matrix R face-down
             for card in id_cards_r:
                 card.face_up = False
                 card.graphics = IntCardGraphics(
                     card,
                     filepath=Path("examples/variable_rule_size/images", "card_back.png"),
                 )
-                
+
+            col_cards_r_graphics[1].cardset[0].graphics = SuitCardGraphics(
+                col_cards_r_graphics[1].cardset[0],
+                filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+            )
+
             # shuffle the id row and columns of R
             shuffle = random.choice([0, 1])
             if shuffle == 1:
@@ -1314,6 +1319,32 @@ while 1: # game loop
                     card,
                     filepath=Path("examples/variable_rule_size/images", "card_back.png"),
                 )
+
+            for (i, card) in enumerate(ENCODING_1_LENGTH_4):
+                if i == 0:
+                    card.name = "1"
+                    card.number = 1
+                else:
+                    card.name = "0"
+                    card.number = 0
+                card.face_up = False
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+                )
+                
+            for (i, card) in enumerate(ENCODING_2_LENGTH_2):
+                if i == 1:
+                    card.name = "1"
+                    card.number = 1
+                else:
+                    card.name = "0"
+                    card.number = 0
+                card.face_up = False
+                card.graphics = IntCardGraphics(
+                    card,
+                    filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+                )
             
             for card in B:
                 card.name = "spade"
@@ -1337,6 +1368,14 @@ while 1: # game loop
                 card.graphics = SuitCardGraphics(
                     card,
                     filepath=Path("examples/variable_rule_size/images", "card_back.png"),
+                )
+            
+            for card in DUMMY:
+                card.name = "diamond"
+                card.face_up = True
+                card.graphics = SuitCardGraphics(
+                    card,
+                    filepath=Path("examples/variable_rule_size/images", "diamond.png"),
                 )
 
         manager.process_events(event)

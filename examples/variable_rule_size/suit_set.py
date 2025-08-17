@@ -370,6 +370,6 @@ E = CardsSet(
 
 DUMMY = CardsSet(
     [
-        SuitCard("diamond", False),
+        SuitCard("diamond", True),
     ]
 )
