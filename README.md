@@ -16,3 +16,7 @@ Some simulations offer "tutorial mode," in which the identities of any face-down
 
 ## Additional Information:
 For a formal description of these and other protocols, see [here](https://www.cee.org/sites/default/files/rsi/Papers/zhangceline_193939_5453198_Zhang_Celine_Sendova_Final.pdf).
+
+## Mistakes:
+* The final shuffle of matrix M should be a pile-shifting shuffle, not a pile-scramble shuffle
+* Some of the videos should say "cyclic shift" instead of "shuffle" for some shuffles
